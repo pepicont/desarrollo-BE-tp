@@ -2,7 +2,9 @@
 
 ## Grupo
 ### Integrantes
-* legajo - Apellido(s), Nombre(s)
+* 52479 - Brizio, Augusto
+* 52850 - Conti, Stefano
+* 53137 - Vitali, Bruno
 
 ### Repositorios
 * [frontend app](http://hyperlinkToGihubOrGitlab)
@@ -11,7 +13,7 @@
 
 ## Tema
 ### Descripción
-*2 a 6 líneas describiendo el negocio (menos es más)*
+El negocio consiste de un portal de videojuegos donde un usuario luego de iniciar sesión con su cuenta en el sitio podrá acceder al catálogo de los mismos, ampliar sobre los detalles de estos pudiendo visualizar sus requisitos físicos, comentarios, reseñas diversas de otros usuarios, compañía desarrolladora entre otras cosas. A su vez, también podrá acceder a un catálogo de complementos sobre estos videojuegos o membresías mensuales de los canales de streaming del momento. Cualquiera sea el producto al que el usuario desee acceder, este seleccionará el mismo y se le mostrará un código de cupón junto a las instrucciones para poder canjearlo y hacer uso de su producto.
 
 ### Modelo
 ![imagen del modelo]()
