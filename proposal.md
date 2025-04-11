@@ -34,7 +34,7 @@ Regularidad:
 |CRUD simple|1. CRUD Usuario<br>2. CRUD Compañía<br>3. CRUD Categoría|
 |CRUD dependiente|1. CRUD  Juego {depende de} CRUD Categoría y CRUD Compañía<br>2. CRUD Venta {depende de} CRUD Producto y CRUD Usuario <br>3. CRUD Reseña {depende de} CRUD Venta y CRUD Usuario|
 |Listado<br>+<br>detalle| 1. Listado de productos filtrado por categoría, compañía, tipo producto, nombre, edad mínima => detalle CRUD Producto <br> 2. Listado de ventas filtrado por rango de fecha, producto, compañía, juego (si es complemento), categoría => detalle muestra datos completos de la reserva y del cliente|
-|CUU/Epic|1. Hacer una compra de un producto (usuario)<br>2. Realizar una reseña sobre una venta|
+|CUU/Epic|1. Hacer una compra de un producto <br>2. Realizar una reseña sobre una venta|
 
 
 Adicionales para Aprobación
