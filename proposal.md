@@ -29,10 +29,10 @@ El negocio consiste de un portal de videojuegos donde un usuario luego de inicia
 Regularidad:
 |Req|Detalle|
 |:-|:-|
-|CRUD simple|1. CRUD Tipo Habitacion<br>2. CRUD Servicio<br>3. CRUD Localidad|
-|CRUD dependiente|1. CRUD Habitación {depende de} CRUD Tipo Habitacion<br>2. CRUD Cliente {depende de} CRUD Localidad|
-|Listado<br>+<br>detalle| 1. Listado de habitaciones filtrado por tipo de habitación, muestra nro y tipo de habitación => detalle CRUD Habitacion<br> 2. Listado de reservas filtrado por rango de fecha, muestra nro de habitación, fecha inicio y fin estadía, estado y nombre del cliente => detalle muestra datos completos de la reserva y del cliente|
-|CUU/Epic|1. Reservar una habitación para la estadía<br>2. Realizar el check-in de una reserva|
+|CRUD simple|1. CRUD Usuario<br>2. CRUD Compañía<br>3. CRUD Categoría|
+|CRUD dependiente|1. CRUD  Producto {depende de} CRUD Categorìa y CRUD Compañía<br>2. CRUD Venta {depende de} CRUD Producto y CRUD Usuario <br>CRUD de Reseña {depende de} CRUD Venta<br>CRUD Compra {depende de} CRUD Producto (posible)|
+|Listado<br>+<br>detalle| 1. Listado de productos filtrado por categoría, compañía, tipo producto, nombre, edad mínima => detalle CRUD Producto <br> 2. Listado de ventas filtrado por rango de fecha, (lo dejé acá)ión, fecha inicio y fin estadía, estado y nombre del cliente => detalle muestra datos completos de la reserva y del cliente|
+|CUU/Epic|1. Hacer una compra de un producto<br>2. Realizar una reseña sobre una venta<br>3.Moderar reseña (con API de IA o Libreriía)<br>4. Realizar compra de un producto (sin api, stock iliimitado para comprar)<br>5. Subir desafío para desbloquear contenido exclusivo u oculto|
 
 
 Adicionales para Aprobación
