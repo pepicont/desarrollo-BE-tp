@@ -19,7 +19,7 @@ El negocio consiste de un portal de videojuegos donde un usuario luego de inicia
 
 ![image](https://github.com/user-attachments/assets/2d5c0ee0-4b6f-46ce-b0c2-c849e92be907)
 
-Link: https://app.diagrams.net/#G1Yka-HRDaMmvCM-fxjBvCx36k_-_MT6Z0#%7B%22pageId%22%3A%22sNbZ68nbUnZuby-T5Sv%22%7D
+Link: https://drive.google.com/file/d/1Yka-HRDaMmvCM-fxjBVcX36k_-_MT6ZQ/view?usp=sharing
 
 
 *Nota*: incluir un link con la imagen de un modelo, puede ser modelo de dominio, diagrama de clases, DER. Si lo prefieren pueden utilizar diagramas con [Mermaid](https://mermaid.js.org) en lugar de imágenes.
