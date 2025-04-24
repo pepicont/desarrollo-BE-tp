@@ -17,7 +17,8 @@ El negocio consiste de un portal de videojuegos donde un usuario luego de inicia
 
 ### Modelo
 
-![image](https://github.com/user-attachments/assets/2d5c0ee0-4b6f-46ce-b0c2-c849e92be907)
+![image](https://github.com/user-attachments/assets/ddb9655b-07e0-4a18-b7b8-e6010fa36a79)
+
 
 Link: https://drive.google.com/file/d/1Yka-HRDaMmvCM-fxjBVcX36k_-_MT6ZQ/view?usp=sharing
 
