@@ -42,7 +42,7 @@ Adicionales para Aprobación
 |:-|:-|
 |CRUD Dependiente|1. CRUD Compra {depende de} CRUD Producto y CRUD Usuario<br>2. CRUD Complemento {depende de} CRUD Juego |
 |Listado<br>+<br>detalle| 1. Listado Reseña filtrado fecha, producto|
-|CUU/Epic|1. Moderar reseña (con API de IA o Librería)<br>2. Realizar compra de un producto (solicitar stock)|
+|CUU/Epic|1. Moderar reseña (con API de IA o Librería)<br>2. Realizar compra de un producto (solicitar stock- pago)|
 
 
 ### Alcance Adicional Voluntario
