@@ -17,7 +17,8 @@ El negocio consiste de un portal de videojuegos donde un usuario luego de inicia
 
 ### Modelo
 
-![image](https://github.com/user-attachments/assets/ddb9655b-07e0-4a18-b7b8-e6010fa36a79)
+![image](https://github.com/user-attachments/assets/66ac326e-8931-4574-9b72-2c68cc523c3c)
+
 
 
 Link: https://drive.google.com/file/d/1Yka-HRDaMmvCM-fxjBVcX36k_-_MT6ZQ/view?usp=sharing
@@ -41,7 +42,7 @@ Regularidad:
 Adicionales para Aprobación
 |Req|Detalle|
 |:-|:-|
-|CRUD Dependiente|1. CRUD Compra {depende de} CRUD Producto y CRUD Usuario<br>2. CRUD Complemento {depende de} CRUD Juego |
+|CRUD Dependiente| - |
 |Listado<br>+<br>detalle| 1. Listado Reseña filtrado fecha, producto|
 |CUU/Epic|1. Moderar reseña (con API de IA o Librería)<br>2. Realizar compra de un producto (pago, con API (ej: MercadoPago))|
 
