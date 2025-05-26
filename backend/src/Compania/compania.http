@@ -1,0 +1,32 @@
+### obtener todos los characters
+GET http://localhost:3000/api/compania
+
+### crear un nuevo character
+POST http://localhost:3000/api/compania
+Content-Type: application/json
+
+{
+  "name": "Blizzard",
+  "detalle": "Ni idea, solo tiene el OW",
+}
+
+### Modificar un character (Put - recurso completo e idempotente)
+PUT http://localhost:3000/api/compania/
+Content-Type: application/json
+
+{
+  
+  "name": "Anakin",
+  "detalle": "Fallen jedi",
+}
+
+### Modificar un character (Patch - recurso parcial) 
+PATCH http://localhost:3000/api/compania/a02b91bc-3769-4221-beb1-d7a3aeba7das
+Content-Type: application/json
+
+{
+  "detalle": "sadasdasda",
+}
+
+### borrar un character 
+DELETE http://localhost:3000/api/compania/a02b91bc-3769-4221-beb1-d7a3aeba7das
