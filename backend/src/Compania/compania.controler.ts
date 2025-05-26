@@ -18,7 +18,7 @@ function findOne(req: Request, res: Response) {
   return;
 }
 
-function sanitizeCharacterInput(
+function sanitizeCompaniaInput(
   req: Request,
   res: Response,
   next: NextFunction
@@ -74,4 +74,4 @@ function remove(req: Request, res: Response) {
     res.status(200).send({ message: 'Compania borrada con exito' });
   }
 }
-export { sanitizeCharacterInput, findAll, findOne, add,  update, remove};
+export { sanitizeCompaniaInput, findAll, findOne, add,  update, remove};
