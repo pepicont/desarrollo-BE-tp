@@ -6,27 +6,26 @@ POST http://localhost:3000/api/compania
 Content-Type: application/json
 
 {
-  "name": "Blizzard",
-  "detalle": "Ni idea, solo tiene el OW",
+  "nombre": "Blizzard",
+  "detalle": "Ni idea, solo tiene el OW"
 }
 
 ### Modificar un character (Put - recurso completo e idempotente)
-PUT http://localhost:3000/api/compania/
+PUT http://localhost:3000/api/compania/4ea2591a-81e4-4360-b938-f78dc37d71e1
 Content-Type: application/json
 
-{
-  
-  "name": "Anakin",
-  "detalle": "Fallen jedi",
+{  
+  "nombre": "EA Games",	
+  "detalle": "Battlefront 3"
 }
 
 ### Modificar un character (Patch - recurso parcial) 
-PATCH http://localhost:3000/api/compania/a02b91bc-3769-4221-beb1-d7a3aeba7das
+PATCH http://localhost:3000/api/compania/fe75ebef-0448-4b4a-babc-853a2c7c9a0a
 Content-Type: application/json
 
-{
-  "detalle": "sadasdasda",
+{ 
+  "detalle": "es buena"
 }
 
 ### borrar un character 
-DELETE http://localhost:3000/api/compania/a02b91bc-3769-4221-beb1-d7a3aeba7das
+DELETE http://localhost:3000/api/compania/4ea2591a-81e4-4360-b938-f78dc37d71e1
