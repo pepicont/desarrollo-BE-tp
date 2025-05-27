@@ -29,3 +29,6 @@ Content-Type: application/json
 
 ### borrar un character 
 DELETE http://localhost:3000/api/compania/4ea2591a-81e4-4360-b938-f78dc37d71e1
+
+### peticion error
+GET http://localhost:3000/
