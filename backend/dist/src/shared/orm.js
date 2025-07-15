@@ -1,8 +1,18 @@
 import { MikroORM } from '@mikro-orm/core';
+import { MySqlDriver } from '@mikro-orm/mysql';
+import { Categoria } from '../Categoria/categoria.entity.js';
+import { Compania } from '../Compania/compania.entity.js';
 export const orm = await MikroORM.init({
-    entities: ['dist/**/*.entity.js'],
-    entitiesTs: ['src/**/*.entity.ts'],
+    //entities: ['dist/**/*.entity.js'],
+    //entitiesTs: ['src/**/*.entity.ts'],
+    entities: [
+        Categoria, Compania
+    ],
+    entitiesTs: [
+        Categoria, Compania
+    ],
     dbName: 'portalvideojuegos',
+    driver: MySqlDriver,
     clientUrl: 'mysql://dsw:dsw@localhost:3307/portalvideojuegos',
     debug: true,
     schemaGenerator: {

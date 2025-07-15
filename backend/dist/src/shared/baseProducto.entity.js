@@ -7,22 +7,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, } from '@mikro-orm/core';
-import { BaseEntity } from '../shared/baseEntity.entity.js';
-//import {Juego} from '../Producto/Juego/juego.entity.js'
-//import {Complemento} from '../Producto/Complemento/complemento.entity.js'
-//import {Servicio} from '../Producto/Servicio/servicio.entity.js';
-export let Compania = class Compania extends BaseEntity {
-};
+import { ManyToOne, Property, PrimaryKey, } from '@mikro-orm/core';
+import { Compania } from '../Compania/compania.entity.js';
+export class BaseProducto {
+}
+__decorate([
+    PrimaryKey(),
+    __metadata("design:type", Number)
+], BaseProducto.prototype, "id", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "nombre", void 0);
+], BaseProducto.prototype, "nombre", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "detalle", void 0);
-Compania = __decorate([
-    Entity()
-], Compania);
-//# sourceMappingURL=compania.entity.js.map
+], BaseProducto.prototype, "detalle", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Number)
+], BaseProducto.prototype, "monto", void 0);
+__decorate([
+    ManyToOne(() => Compania, { nullable: false }),
+    __metadata("design:type", Object)
+], BaseProducto.prototype, "compania", void 0);
+//# sourceMappingURL=baseProducto.entity.js.map

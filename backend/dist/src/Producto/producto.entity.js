@@ -7,22 +7,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, } from '@mikro-orm/core';
+import { Entity, ManyToOne, Property, ManyToMany, Cascade, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-//import {Juego} from '../Producto/Juego/juego.entity.js'
-//import {Complemento} from '../Producto/Complemento/complemento.entity.js'
-//import {Servicio} from '../Producto/Servicio/servicio.entity.js';
-export let Compania = class Compania extends BaseEntity {
+import { Compania } from '../Compania/compania.entity.js';
+import { Categoria } from '../Categoria/categoria.entity.js';
+export let Producto = class Producto extends BaseEntity {
 };
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "nombre", void 0);
+], Producto.prototype, "nombre", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "detalle", void 0);
-Compania = __decorate([
+], Producto.prototype, "detalle", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Number)
+], Producto.prototype, "monto", void 0);
+__decorate([
+    ManyToOne(() => Compania, { nullable: false }),
+    __metadata("design:type", Object)
+], Producto.prototype, "compania", void 0);
+__decorate([
+    ManyToMany(() => Categoria, (categoria) => categoria.productos, {
+        cascade: [Cascade.ALL],
+        owner: true,
+    }),
+    __metadata("design:type", Array)
+], Producto.prototype, "categoria", void 0);
+Producto = __decorate([
     Entity()
-], Compania);
-//# sourceMappingURL=compania.entity.js.map
+], Producto);
+//# sourceMappingURL=producto.entity.js.map

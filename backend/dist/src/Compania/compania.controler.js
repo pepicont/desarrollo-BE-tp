@@ -1,18 +1,28 @@
-import { companiaRepository } from './compania.repository.js';
 import { Compania } from './compania.entity.js';
-const repository = new companiaRepository();
-function findAll(req, res, next) {
-    res.json({ data: repository.findAll() });
-}
-function findOne(req, res, next) {
-    const id = req.params.id;
-    const compania = repository.findOne({ id });
-    if (!compania) {
-        res.status(404).send({ message: 'Compania not found' });
-        return;
+import { orm } from '../shared/orm.js';
+const em = orm.em;
+async function findAll(req, res) {
+    try {
+        const companias = await em.find(Compania, {});
+        res
+            .status(200)
+            .json({ message: 'found all companies', data: companias });
     }
-    res.json({ data: compania });
-    return;
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+async function findOne(req, res) {
+    try {
+        const id = Number.parseInt(req.params.id);
+        const compania = await em.findOneOrFail(Compania, { id });
+        res
+            .status(200)
+            .json({ message: 'found company', data: compania });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 }
 function sanitizeCompaniaInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -26,31 +36,39 @@ function sanitizeCompaniaInput(req, res, next) {
     });
     next();
 }
-function add(req, res, next) {
-    const input = req.body.sanitizedInput;
-    const companiaInput = new Compania(input.nombre, input.detalle);
-    const compania = repository.add(companiaInput);
-    res.status(201).send({ message: 'Compania creada', data: compania });
-}
-function update(req, res, next) {
-    req.body.sanitizedInput.id = req.params.id;
-    const compania = repository.update(req.body.sanitizedInput);
-    if (!compania) {
-        res.status(404).send({ message: 'Compania no encontrada' });
-        return;
+async function add(req, res) {
+    try {
+        const compania = em.create(Compania, req.body);
+        await em.flush();
+        res
+            .status(201)
+            .json({ message: 'company created', data: compania });
     }
-    res
-        .status(200)
-        .send({ message: 'Compania actualizada con exito', data: compania });
-}
-function remove(req, res, next) {
-    const id = req.params.id;
-    const compania = repository.delete({ id });
-    if (!compania) {
-        res.status(404).send({ message: 'Compania no encontrada' });
+    catch (error) {
+        res.status(500).json({ message: error.message });
     }
-    else {
-        res.status(200).send({ message: 'Compania borrada con exito' });
+}
+async function update(req, res) {
+    try {
+        const id = Number.parseInt(req.params.id);
+        const compania = em.getReference(Compania, id);
+        em.assign(compania, req.body);
+        await em.flush();
+        res.status(200).json({ message: 'company updated' });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+async function remove(req, res) {
+    try {
+        const id = Number.parseInt(req.params.id);
+        const compania = em.getReference(Compania, id);
+        await em.removeAndFlush(compania);
+        res.status(200).send({ message: 'company class deleted' });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
     }
 }
 export { sanitizeCompaniaInput, findAll, findOne, add, update, remove };

@@ -9,20 +9,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Entity, Property, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-//import {Juego} from '../Producto/Juego/juego.entity.js'
-//import {Complemento} from '../Producto/Complemento/complemento.entity.js'
-//import {Servicio} from '../Producto/Servicio/servicio.entity.js';
-export let Compania = class Compania extends BaseEntity {
+/*import { Juego } from '../Producto/Juego/juego.entity.js';
+import { Complemento } from '../Producto/Complemento/complemento.entity.js';
+import { Servicio } from '../Producto/Servicio/servicio.entity.js';*/
+export let Categoria = class Categoria extends BaseEntity {
 };
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "nombre", void 0);
+], Categoria.prototype, "nombre", void 0);
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
-], Compania.prototype, "detalle", void 0);
-Compania = __decorate([
+], Categoria.prototype, "detalle", void 0);
+Categoria = __decorate([
     Entity()
-], Compania);
-//# sourceMappingURL=compania.entity.js.map
+], Categoria);
+//# sourceMappingURL=categoria.entity.js.map
