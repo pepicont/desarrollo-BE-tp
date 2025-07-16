@@ -7,12 +7,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, } from '@mikro-orm/core';
+import { Entity, Property, ManyToMany, Collection, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-/*import { Juego } from '../Producto/Juego/juego.entity.js';
-import { Complemento } from '../Producto/Complemento/complemento.entity.js';
-import { Servicio } from '../Producto/Servicio/servicio.entity.js';*/
-export let Categoria = class Categoria extends BaseEntity {
+let Categoria = class Categoria extends BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.juegos = new Collection(this);
+        this.complementos = new Collection(this);
+        this.servicios = new Collection(this);
+    }
 };
 __decorate([
     Property({ nullable: false }),
@@ -22,7 +25,20 @@ __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
 ], Categoria.prototype, "detalle", void 0);
+__decorate([
+    ManyToMany(() => 'Juego', 'categoria'),
+    __metadata("design:type", Object)
+], Categoria.prototype, "juegos", void 0);
+__decorate([
+    ManyToMany(() => 'Complemento', 'categoria'),
+    __metadata("design:type", Object)
+], Categoria.prototype, "complementos", void 0);
+__decorate([
+    ManyToMany(() => 'Servicio', 'categoria'),
+    __metadata("design:type", Object)
+], Categoria.prototype, "servicios", void 0);
 Categoria = __decorate([
     Entity()
 ], Categoria);
+export { Categoria };
 //# sourceMappingURL=categoria.entity.js.map

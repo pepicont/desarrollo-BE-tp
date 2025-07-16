@@ -1,5 +1,6 @@
 import express from 'express'
 import { companiaRouter } from './src/Compania/compania.routes.js'
+import { categoriaRouter } from './src/Categoria/categoria.routes.js'
 import 'reflect-metadata'
 import { orm, syncSchema } from './src/shared/orm.js'
 import { RequestContext } from '@mikro-orm/core'
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
 //antes de las rutas y middlewares de negocio
 
 app.use('/api/compania', companiaRouter)
+app.use('/api/categoria', categoriaRouter)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' })

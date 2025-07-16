@@ -6,9 +6,9 @@ import {
   Collection,
 } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-//import {Juego} from '../Producto/Juego/juego.entity.js'
-//import {Complemento} from '../Producto/Complemento/complemento.entity.js'
-//import {Servicio} from '../Producto/Servicio/servicio.entity.js';
+import {Juego} from '../Producto/Juego/juego.entity.js'
+import {Complemento} from '../Producto/Complemento/complemento.entity.js'
+import {Servicio} from '../Producto/Servicio/servicio.entity.js';
 
 @Entity()
 export class Compania extends BaseEntity {
@@ -18,7 +18,7 @@ export class Compania extends BaseEntity {
   @Property({ nullable: false })
   detalle!: string;
 
-  /*@OneToMany(() => Juego, (juego) => juego.compania, {
+  @OneToMany(() => Juego, (juego) => juego.compania, {
     cascade: [Cascade.ALL],
   })
   juegos = new Collection<Juego>(this);
@@ -31,5 +31,5 @@ export class Compania extends BaseEntity {
   @OneToMany(() => Servicio, (servicio) => servicio.compania, {
     cascade: [Cascade.ALL],
   })
-  servicios = new Collection<Servicio>(this);*/
+  servicios = new Collection<Servicio>(this);
 }

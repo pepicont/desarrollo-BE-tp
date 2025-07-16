@@ -1,20 +1,45 @@
-"use strict";
-/*import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, Property, OneToMany, Cascade, Collection } from '@mikro-orm/core';
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { BaseProducto } from '../../shared/baseProducto.entity.js';
+import { Entity, Property, OneToMany, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
 import { Complemento } from '../Complemento/complemento.entity.js';
-
-@Entity()
-export class Juego extends BaseProducto {
-  @Property({ nullable: false })
-  fechaLanzamiento!: Date;
-
-  @Property({ nullable: false })
-  edadPermitida!: number;
-
-  @OneToMany(() => Complemento, (complemento) => complemento.juego, {
-    cascade: [Cascade.ALL],
-  })
-  complementos = new Collection<Complemento>(this);
-}
-*/ 
+let Juego = class Juego extends BaseProducto {
+    constructor() {
+        super(...arguments);
+        this.complementos = new Collection(this);
+        this.categoria = new Collection(this);
+    }
+};
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Date)
+], Juego.prototype, "fechaLanzamiento", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", Number)
+], Juego.prototype, "edadPermitida", void 0);
+__decorate([
+    OneToMany(() => Complemento, (complemento) => complemento.juego, {
+        cascade: [Cascade.ALL],
+    }),
+    __metadata("design:type", Object)
+], Juego.prototype, "complementos", void 0);
+__decorate([
+    ManyToMany(() => 'Categoria', (categoria) => categoria.juegos, {
+        cascade: [Cascade.ALL],
+        owner: true,
+    }),
+    __metadata("design:type", Object)
+], Juego.prototype, "categoria", void 0);
+Juego = __decorate([
+    Entity()
+], Juego);
+export { Juego };
 //# sourceMappingURL=juego.entity.js.map

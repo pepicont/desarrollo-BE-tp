@@ -6,8 +6,8 @@ POST http://localhost:3000/api/compania
 Content-Type: application/json
 
 {
-  "nombre": "Riot Games",
-  "detalle": "Lol juego nefasto"
+  "nombre": "EA games",
+  "detalle": "vacio"
 }
 
 ### Modificar un character (Put - recurso completo e idempotente)
