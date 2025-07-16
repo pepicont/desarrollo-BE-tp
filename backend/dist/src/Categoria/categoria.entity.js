@@ -26,15 +26,15 @@ __decorate([
     __metadata("design:type", String)
 ], Categoria.prototype, "detalle", void 0);
 __decorate([
-    ManyToMany(() => 'Juego', 'categoria'),
+    ManyToMany(() => 'Juego', 'categorias'),
     __metadata("design:type", Object)
 ], Categoria.prototype, "juegos", void 0);
 __decorate([
-    ManyToMany(() => 'Complemento', 'categoria'),
+    ManyToMany(() => 'Complemento', 'categorias'),
     __metadata("design:type", Object)
 ], Categoria.prototype, "complementos", void 0);
 __decorate([
-    ManyToMany(() => 'Servicio', 'categoria'),
+    ManyToMany(() => 'Servicio', 'categorias'),
     __metadata("design:type", Object)
 ], Categoria.prototype, "servicios", void 0);
 Categoria = __decorate([

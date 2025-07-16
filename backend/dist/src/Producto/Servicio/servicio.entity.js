@@ -12,7 +12,7 @@ import { Entity, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
 let Servicio = class Servicio extends BaseProducto {
     constructor() {
         super(...arguments);
-        this.categoria = new Collection(this);
+        this.categorias = new Collection(this);
     }
 };
 __decorate([
@@ -21,7 +21,7 @@ __decorate([
         owner: true,
     }),
     __metadata("design:type", Object)
-], Servicio.prototype, "categoria", void 0);
+], Servicio.prototype, "categorias", void 0);
 Servicio = __decorate([
     Entity()
 ], Servicio);

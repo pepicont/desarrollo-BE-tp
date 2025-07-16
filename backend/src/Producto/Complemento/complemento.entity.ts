@@ -11,5 +11,5 @@ export class Complemento extends BaseProducto {
     cascade: [Cascade.ALL],
     owner: true,
   })
-  categoria = new Collection<any>(this);
+  categorias = new Collection<any>(this);
 }

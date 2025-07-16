@@ -1,0 +1,36 @@
+### obtener todos los characters
+GET http://localhost:3000/api/servicio
+
+### crear un nuevo character
+POST http://localhost:3000/api/servicio
+Content-Type: application/json
+
+{
+  "nombre": "Prime video 1 mes",
+  "detalle": "Un mes de Prime Video",
+  "monto": 15,
+  
+}
+
+### Modificar un character (Put - recurso completo e idempotente)
+PUT http://localhost:3000/api/servicio/1
+Content-Type: application/json
+
+{  
+  "nombre": "EA Games",	
+  "detalle": "Battlefront 3"
+}
+
+### Modificar un character (Patch - recurso parcial) 
+PATCH http://localhost:3000/api/servicio/1
+Content-Type: application/json
+
+{ 
+  "detalle": "es buena"
+}
+
+### borrar un character 
+DELETE http://localhost:3000/api/servicio/1
+
+### peticion error
+GET http://localhost:3000/api/servicio/1

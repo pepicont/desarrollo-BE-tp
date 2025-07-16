@@ -14,7 +14,7 @@ let Juego = class Juego extends BaseProducto {
     constructor() {
         super(...arguments);
         this.complementos = new Collection(this);
-        this.categoria = new Collection(this);
+        this.categorias = new Collection(this);
     }
 };
 __decorate([
@@ -37,7 +37,7 @@ __decorate([
         owner: true,
     }),
     __metadata("design:type", Object)
-], Juego.prototype, "categoria", void 0);
+], Juego.prototype, "categorias", void 0);
 Juego = __decorate([
     Entity()
 ], Juego);

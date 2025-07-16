@@ -13,7 +13,7 @@ import { Juego } from '../Juego/juego.entity.js';
 let Complemento = class Complemento extends BaseProducto {
     constructor() {
         super(...arguments);
-        this.categoria = new Collection(this);
+        this.categorias = new Collection(this);
     }
 };
 __decorate([
@@ -26,7 +26,7 @@ __decorate([
         owner: true,
     }),
     __metadata("design:type", Object)
-], Complemento.prototype, "categoria", void 0);
+], Complemento.prototype, "categorias", void 0);
 Complemento = __decorate([
     Entity()
 ], Complemento);

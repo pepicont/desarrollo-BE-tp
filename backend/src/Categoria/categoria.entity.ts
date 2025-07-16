@@ -17,12 +17,12 @@ export class Categoria extends BaseEntity {
   @Property({ nullable: false })
   detalle!: string;
 
-  @ManyToMany(() => 'Juego', 'categoria')
+  @ManyToMany(() => 'Juego', 'categorias') 
   juegos = new Collection<any>(this);
 
-  @ManyToMany(() => 'Complemento', 'categoria')
+  @ManyToMany(() => 'Complemento', 'categorias')
   complementos = new Collection<any>(this);
   
-  @ManyToMany(() => 'Servicio', 'categoria')
+  @ManyToMany(() => 'Servicio', 'categorias')
   servicios = new Collection<any>(this);
 }
