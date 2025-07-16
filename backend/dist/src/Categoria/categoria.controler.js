@@ -51,10 +51,10 @@ async function add(req, res) {
 async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const categoria = em.getReference(Categoria, id);
-        em.assign(categoria, req.body);
+        const categoriaToUpdate = await em.findOneOrFail(Categoria, { id });
+        em.assign(categoriaToUpdate, req.body);
         await em.flush();
-        res.status(200).json({ message: 'category updated' });
+        res.status(200).json({ message: 'category updated', data: categoriaToUpdate });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

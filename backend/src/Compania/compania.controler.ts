@@ -60,10 +60,10 @@ async function add(req: Request, res: Response) {
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const compania = em.getReference(Compania, id);
-    em.assign(compania, req.body);
+    const companiaToUpdate = await em.findOneOrFail(Compania, {id});
+    em.assign(companiaToUpdate, req.body);
     await em.flush();
-    res.status(200).json({ message: 'company updated' });
+    res.status(200).json({ message: 'company updated',data: companiaToUpdate });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
