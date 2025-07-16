@@ -6,8 +6,8 @@ POST http://localhost:3000/api/servicio
 Content-Type: application/json
 
 {
-  "nombre": "Prime video 2 meses",
-  "detalle": "Dos meses de Prime Video",
+  "nombre": "Netflix 2 meses",
+  "detalle": "Dos meses de Netflix",
   "monto": 30.6,
   "categorias":[1],
   "compania":2
@@ -15,24 +15,27 @@ Content-Type: application/json
 }
 
 ### Modificar un character (Put - recurso completo e idempotente)
-PUT http://localhost:3000/api/servicio/1
+PUT http://localhost:3000/api/servicio/5
 Content-Type: application/json
 
-{  
-  "nombre": "EA Games",	
-  "detalle": "Battlefront 3"
+{
+  "nombre": "Netflix 1 año",
+  "detalle": "1 año de Prime Video",
+  "monto": 10000,
+  "categorias":[1,2],
+  "compania":2
 }
 
 ### Modificar un character (Patch - recurso parcial) 
-PATCH http://localhost:3000/api/servicio/1
+PATCH http://localhost:3000/api/servicio/3
 Content-Type: application/json
 
 { 
-  "detalle": "es buena"
+  "categorias": [2]
 }
 
 ### borrar un character 
-DELETE http://localhost:3000/api/servicio/1
+DELETE http://localhost:3000/api/servicio/5
 
 ### peticion error
 GET http://localhost:3000/api/servicio/1

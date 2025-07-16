@@ -6,8 +6,8 @@ POST http://localhost:3000/api/categoria
 Content-Type: application/json
 
 {
-  "nombre": "Acción",
-  "detalle": "Juegos de acción"
+  "nombre": "Terror",
+  "detalle": "miedoso"
 }
 
 ### Modificar una categoria (Put - recurso completo e idempotente)
@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ### borrar una categoria 
-DELETE http://localhost:3000/api/categoria/1
+DELETE http://localhost:3000/api/categoria/4
 
 ### peticion error
 GET http://localhost:3000/api/categoria/1
