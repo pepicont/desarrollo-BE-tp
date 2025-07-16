@@ -14,7 +14,9 @@ function sanitizeServicioInput(
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     detalle: req.body.detalle,
-    monto: req.body.monto,   
+    monto: req.body.monto, 
+    categorias: req.body.categorias,
+    compania: req.body.compania
   };
   //more checks here
 

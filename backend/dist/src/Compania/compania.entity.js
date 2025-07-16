@@ -12,7 +12,7 @@ import { BaseEntity } from '../shared/baseEntity.entity.js';
 import { Juego } from '../Producto/Juego/juego.entity.js';
 import { Complemento } from '../Producto/Complemento/complemento.entity.js';
 import { Servicio } from '../Producto/Servicio/servicio.entity.js';
-let Compania = class Compania extends BaseEntity {
+export let Compania = class Compania extends BaseEntity {
     constructor() {
         super(...arguments);
         this.juegos = new Collection(this);
@@ -49,5 +49,4 @@ __decorate([
 Compania = __decorate([
     Entity()
 ], Compania);
-export { Compania };
 //# sourceMappingURL=compania.entity.js.map

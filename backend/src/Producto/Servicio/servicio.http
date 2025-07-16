@@ -6,9 +6,11 @@ POST http://localhost:3000/api/servicio
 Content-Type: application/json
 
 {
-  "nombre": "Prime video 1 mes",
-  "detalle": "Un mes de Prime Video",
-  "monto": 15,
+  "nombre": "Prime video 2 meses",
+  "detalle": "Dos meses de Prime Video",
+  "monto": 30.6,
+  "categorias":[1],
+  "compania":2
   
 }
 

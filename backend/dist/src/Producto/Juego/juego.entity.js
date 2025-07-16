@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
 import { Entity, Property, OneToMany, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
 import { Complemento } from '../Complemento/complemento.entity.js';
-let Juego = class Juego extends BaseProducto {
+export let Juego = class Juego extends BaseProducto {
     constructor() {
         super(...arguments);
         this.complementos = new Collection(this);
@@ -41,5 +41,4 @@ __decorate([
 Juego = __decorate([
     Entity()
 ], Juego);
-export { Juego };
 //# sourceMappingURL=juego.entity.js.map
