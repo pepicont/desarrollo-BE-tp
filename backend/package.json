@@ -7,7 +7,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"node dist/app.js\""
-  
   },
   "keywords": [],
   "author": "",
@@ -19,6 +18,9 @@
     "tsc-watch": "^7.0.0"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "@mikro-orm/core": "6.4.16",
+    "@mikro-orm/mysql": "6.4.16",
+    "express": "^5.1.0",
+    "reflect-metadata": "0.2.2"
   }
 }
