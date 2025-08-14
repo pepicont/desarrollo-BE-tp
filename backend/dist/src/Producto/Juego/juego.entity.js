@@ -15,6 +15,7 @@ let Juego = class Juego extends BaseProducto {
         super(...arguments);
         this.complementos = new Collection(this);
         this.categorias = new Collection(this);
+        this.ventas = new Collection(this);
     }
 };
 __decorate([
@@ -38,6 +39,10 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], Juego.prototype, "categorias", void 0);
+__decorate([
+    OneToMany(() => 'Venta', (venta) => venta.juego),
+    __metadata("design:type", Object)
+], Juego.prototype, "ventas", void 0);
 Juego = __decorate([
     Entity()
 ], Juego);

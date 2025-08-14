@@ -1,9 +1,8 @@
 import {
   Entity,
   Property,
-  ManyToMany,
+  OneToMany,
   Collection,
-  Cascade,
   BeforeCreate,
   BeforeUpdate,
 } from '@mikro-orm/core';
@@ -29,6 +28,9 @@ export class Usuario extends BaseEntity {
 
   @Property({ nullable: false, unique: true })
   mail!: string;
+
+  @OneToMany(() => 'Venta', (venta: any) => venta.usuario)
+  ventas = new Collection<any>(this);
 
   // Hook para hashear contraseña antes de crear
   @BeforeCreate()

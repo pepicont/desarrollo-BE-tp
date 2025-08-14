@@ -1,0 +1,44 @@
+### Obtener todas las ventas
+GET http://localhost:3000/api/venta
+
+### Crear una venta
+POST http://localhost:3000/api/venta
+Content-Type: application/json
+
+{
+  "usuario": 1,
+  "juego": 1,
+  "complemento": null,
+  "servicio": null,
+  "fecha": "2025-08-14T12:00:00.000Z",
+  "idVenta": 1001,
+  "codActivacion": "ABC123XYZ"
+}
+
+### Obtener una venta por id
+GET http://localhost:3000/api/venta/1
+
+### Actualizar una venta (PUT)
+PUT http://localhost:3000/api/venta/1
+Content-Type: application/json
+
+{
+  "usuario": 1,
+  "juego": 1,
+  "complemento": null,
+  "servicio": null,
+  "fecha": "2025-08-15T12:00:00.000Z",
+  "idVenta": 1001,
+  "codActivacion": "XYZ789ABC"
+}
+
+### Actualización parcial (PATCH)
+PATCH http://localhost:3000/api/venta/1
+Content-Type: application/json
+
+{
+  "codActivacion": "NUEVO-456"
+}
+
+### Eliminar una venta
+DELETE http://localhost:3000/api/venta/1

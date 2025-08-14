@@ -1,15 +1,15 @@
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, ManyToOne, ManyToMany, Rel, Cascade, Collection } from '@mikro-orm/core';
-import { Juego } from '../Juego/juego.entity.js';
+import { Entity, Property, ManyToOne, OneToMany, ManyToMany, Collection } from '@mikro-orm/core';
+import { Categoria } from '../../Categoria/categoria.entity.js';
 
 @Entity()
 export class Complemento extends BaseProducto {
-  @ManyToOne(() => Juego, { nullable: false })
-  juego!: Rel<Juego>;
+  @ManyToOne(() => 'Juego', { nullable: false })
+  juego!: any;
 
-  @ManyToMany(() => 'Categoria', (categoria: any) => categoria.complementos, {
-    cascade: [Cascade.ALL],
-    owner: true,
-  })
-  categorias = new Collection<any>(this);
+  @OneToMany(() => 'Venta', (venta: any) => venta.complemento)
+  ventas = new Collection<any>(this);
+
+  @ManyToMany(() => Categoria, categoria => categoria.complementos, { owner: true })
+  categorias = new Collection<Categoria>(this);
 }

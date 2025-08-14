@@ -8,23 +8,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, ManyToOne, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
-import { Juego } from '../Juego/juego.entity.js';
+import { Entity, ManyToOne, OneToMany, ManyToMany, Collection } from '@mikro-orm/core';
+import { Categoria } from '../../Categoria/categoria.entity.js';
 let Complemento = class Complemento extends BaseProducto {
     constructor() {
         super(...arguments);
+        this.ventas = new Collection(this);
         this.categorias = new Collection(this);
     }
 };
 __decorate([
-    ManyToOne(() => Juego, { nullable: false }),
+    ManyToOne(() => 'Juego', { nullable: false }),
     __metadata("design:type", Object)
 ], Complemento.prototype, "juego", void 0);
 __decorate([
-    ManyToMany(() => 'Categoria', (categoria) => categoria.complementos, {
-        cascade: [Cascade.ALL],
-        owner: true,
-    }),
+    OneToMany(() => 'Venta', (venta) => venta.complemento),
+    __metadata("design:type", Object)
+], Complemento.prototype, "ventas", void 0);
+__decorate([
+    ManyToMany(() => Categoria, categoria => categoria.complementos, { owner: true }),
     __metadata("design:type", Object)
 ], Complemento.prototype, "categorias", void 0);
 Complemento = __decorate([
