@@ -1,0 +1,43 @@
+### Obtener todos los usuarios
+GET http://localhost:3000/api/usuario
+
+### Obtener usuario por ID
+GET http://localhost:3000/api/usuario/1
+
+### Crear nuevo usuario
+POST http://localhost:3000/api/usuario
+Content-Type: application/json
+
+{
+  "nombreUsuario": "brunoVitali",
+  "contrasenia": "bruno",
+  "nombre": "Bruno Vitali",
+  "fechaNacimiento": "2005-01-20",
+  "fechaCreacion": "2025-08-14",
+  "mail": "bruno@gmail.com"
+}
+
+### Actualizar usuario completo
+PUT http://localhost:3000/api/usuario/1
+Content-Type: application/json
+
+{
+  "nombreUsuario": "brunoVitaliMASTER",
+  "contrasenia": "bruno",
+  "nombre": "Bruno Vitali",
+  "fechaNacimiento": "2005-01-20",
+  "fechaCreacion": "2025-08-14",
+  "mail": "bruno@gmail.com"
+}
+
+### Actualizar usuario parcial
+PATCH http://localhost:3000/api/usuario/1
+Content-Type: application/json
+
+{
+  "nombre": "Bruno Vitali Modificado",
+  "fechaCreacion": "2024-08-14"
+}
+
+### Eliminar usuario
+DELETE http://localhost:3000/api/usuario/1
