@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, ManyToOne, OneToMany, ManyToMany, Collection } from '@mikro-orm/core';
+import { Entity, ManyToOne, OneToMany, ManyToMany, Collection, Cascade } from '@mikro-orm/core';
 import { Categoria } from '../../Categoria/categoria.entity.js';
 export let Complemento = class Complemento extends BaseProducto {
     constructor() {
@@ -22,7 +22,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Complemento.prototype, "juego", void 0);
 __decorate([
-    OneToMany(() => 'Venta', (venta) => venta.complemento),
+    OneToMany(() => 'Venta', (venta) => venta.complemento, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Complemento.prototype, "ventas", void 0);
 __decorate([

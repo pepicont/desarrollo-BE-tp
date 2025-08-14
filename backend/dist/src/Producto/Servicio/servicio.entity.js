@@ -24,7 +24,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Servicio.prototype, "categorias", void 0);
 __decorate([
-    OneToMany(() => 'Venta', (venta) => venta.servicio),
+    OneToMany(() => 'Venta', (venta) => venta.servicio, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Servicio.prototype, "ventas", void 0);
 Servicio = __decorate([

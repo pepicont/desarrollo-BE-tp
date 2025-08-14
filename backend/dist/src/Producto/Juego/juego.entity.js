@@ -40,7 +40,7 @@ __decorate([
     __metadata("design:type", Object)
 ], Juego.prototype, "categorias", void 0);
 __decorate([
-    OneToMany(() => 'Venta', (venta) => venta.juego),
+    OneToMany(() => 'Venta', (venta) => venta.juego, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Juego.prototype, "ventas", void 0);
 Juego = __decorate([

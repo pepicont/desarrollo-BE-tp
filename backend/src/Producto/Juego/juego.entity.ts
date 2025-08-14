@@ -21,6 +21,6 @@ export class Juego extends BaseProducto {
   })
   categorias = new Collection<any>(this);
 
-  @OneToMany(() => 'Venta', (venta: any) => venta.juego)
+  @OneToMany(() => 'Venta', (venta: any) => venta.juego, { cascade: [Cascade.ALL] })
   ventas = new Collection<any>(this);
 }
