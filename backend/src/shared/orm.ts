@@ -7,15 +7,16 @@ import { Juego } from '../Producto/Juego/juego.entity.js';
 import { Complemento } from '../Producto/Complemento/complemento.entity.js';
 import { Usuario } from '../Usuario/usuario.entity.js';
 import {Venta} from '../Venta/venta.entity.js'
+import { Resenia } from '../Resenia/resenia.entity.js';
 
 export const orm = await MikroORM.init({
   //entities: ['dist/**/*.entity.js'],
   //entitiesTs: ['src/**/*.entity.ts'],
   entities: [
-    Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta
+    Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia
   ],
   entitiesTs: [
-    Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta
+    Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia
   ],
   dbName: 'portalvideojuegos',
   driver: MySqlDriver,

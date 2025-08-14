@@ -1,0 +1,125 @@
+### Obtener todas las reseñas
+GET http://localhost:3000/api/resenia
+
+### Obtener reseña por ID
+GET http://localhost:3000/api/resenia/1
+
+### Crear nueva reseña graciosa #1
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 1,
+  "venta": 2,
+  "detalle": "Este juego me hizo llorar... de risa. Mi personaje murió 47 veces en el tutorial. 10/10 recomiendo para practicar la paciencia zen.",
+  "puntaje": 8,
+  "fecha": "2025-08-14T15:30:00.000Z"
+}
+
+### Actualizar reseña parcial
+PATCH http://localhost:3000/api/resenia/2
+Content-Type: application/json
+
+{
+  "detalle": "Plot twist: Mi ex también jugaba este juego. Ahora entiendo por qué me dejó... mi build era terrible.",
+  "puntaje": 6
+}
+
+### Eliminar reseña
+DELETE http://localhost:3000/api/resenia/1
+
+### Crear nueva reseña graciosa #2
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 2,
+  "venta": 2,
+  "detalle": "Compré este juego para impresionar a mi crush gamer. Ahora soy soltero pero tengo 200 horas jugadas. Worth it? 🤔",
+  "puntaje": 9,
+  "fecha": "2025-08-14T16:45:00.000Z"
+}
+
+### Crear nueva reseña graciosa #3
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 3,
+  "venta": 3,
+  "detalle": "Mi gato pisó el teclado y logró un speedrun mejor que el mío. Ahora el gato tiene su propio stream de Twitch. Gracias por destruir mi autoestima, juego.",
+  "puntaje": 7,
+  "fecha": "2025-08-14T18:20:00.000Z"
+}
+
+### Actualizar reseña completa
+PUT http://localhost:3000/api/resenia/1
+Content-Type: application/json
+
+{
+  "usuario": 1,
+  "venta": 1,
+  "detalle": "ACTUALIZACIÓN: Después de 500 horas, por fin entendí cómo caminar. Resulta que WASD no son solo letras del abecedario. Quien lo hubiera pensado.",
+  "puntaje": 10,
+  "fecha": "2025-08-14T20:00:00.000Z"
+}
+
+### Actualizar reseña parcial
+PATCH http://localhost:3000/api/resenia/2
+Content-Type: application/json
+
+{
+  "detalle": "Plot twist: Mi ex también jugaba este juego. Ahora entiendo por qué me dejó... mi build era terrible.",
+  "puntaje": 6
+}
+
+### Crear reseña de rage quit
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 4,
+  "venta": 4,
+  "detalle": "Rompí 3 controles, 1 teclado y mi dignidad. El juego está perfecto, el problema soy yo. Mamá tenías razón, debí estudiar medicina.",
+  "puntaje": 9,
+  "fecha": "2025-08-14T22:15:00.000Z"
+}
+
+### Crear reseña de adicción
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 5,
+  "venta": 5,
+  "detalle": "Perdí mi trabajo, mi casa y mi esposa, pero llegué al nivel máximo. Prioridades, gente. PRIORIDADES. ¿Alguien tiene un sofá donde dormir?",
+  "puntaje": 10,
+  "fecha": "2025-08-14T23:45:00.000Z"
+}
+
+### Eliminar reseña
+DELETE http://localhost:3000/api/resenia/1
+
+### Crear reseña de newbie
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 6,
+  "venta": 6,
+  "detalle": "Pensé que era multijugador cooperativo. Estuve saludando a los NPCs durante 2 horas esperando que me respondieran. Muy antisociales los robots.",
+  "puntaje": 5,
+  "fecha": "2025-08-15T08:30:00.000Z"
+}
+
+### Crear reseña de pro gamer
+POST http://localhost:3000/api/resenia
+Content-Type: application/json
+
+{
+  "usuario": 7,
+  "venta": 7,
+  "detalle": "Fácil. Lo completé con los ojos cerrados, una mano atada y comiendo cereal. Mi abuela de 87 años lo encontró challenging. Git gud, developers.",
+  "puntaje": 3,
+  "fecha": "2025-08-15T10:00:00.000Z"
+}

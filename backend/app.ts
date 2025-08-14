@@ -10,6 +10,7 @@ import {ventaRouter} from './src/Venta/venta.routes.js'
 import 'reflect-metadata'
 import { orm, syncSchema } from './src/shared/orm.js'
 import { RequestContext } from '@mikro-orm/core'
+import { reseniaRouter } from './src/Resenia/resenia.routes.js'
 const app = express()
 app.use(express.json())
 
@@ -26,6 +27,7 @@ app.use('/api/usuario', usuarioRouter)
 app.use('/api/juego', juegoRouter)
 app.use('/api/complemento', complementoRouter)
 app.use('/api/venta', ventaRouter)
+app.use('/api/resenia', reseniaRouter)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' })
