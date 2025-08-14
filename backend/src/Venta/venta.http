@@ -7,12 +7,11 @@ Content-Type: application/json
 
 {
   "usuario": 1,
-  "juego": 1,
+  "juego": null,
   "complemento": null,
-  "servicio": null,
+  "servicio": 4,
   "fecha": "2025-08-14T12:00:00.000Z",
-  "idVenta": 1001,
-  "codActivacion": "ABC123XYZ"
+  "codActivacion": "ABC123XYZd"
 }
 
 ### Obtener una venta por id
@@ -41,4 +40,4 @@ Content-Type: application/json
 }
 
 ### Eliminar una venta
-DELETE http://localhost:3000/api/venta/1
+DELETE http://localhost:3000/api/venta/2

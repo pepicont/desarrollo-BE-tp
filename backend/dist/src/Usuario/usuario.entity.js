@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, OneToMany, Collection, BeforeCreate, BeforeUpdate, } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, Collection, BeforeCreate, BeforeUpdate, Cascade, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import * as bcrypt from 'bcrypt';
 export let Usuario = class Usuario extends BaseEntity {
@@ -60,7 +60,7 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "mail", void 0);
 __decorate([
-    OneToMany(() => 'Venta', (venta) => venta.usuario),
+    OneToMany(() => 'Venta', (venta) => venta.usuario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Usuario.prototype, "ventas", void 0);
 __decorate([

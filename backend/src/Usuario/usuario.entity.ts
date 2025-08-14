@@ -5,6 +5,7 @@ import {
   Collection,
   BeforeCreate,
   BeforeUpdate,
+  Cascade,
 } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import * as bcrypt from 'bcrypt';
@@ -29,7 +30,7 @@ export class Usuario extends BaseEntity {
   @Property({ nullable: false, unique: true })
   mail!: string;
 
-  @OneToMany(() => 'Venta', (venta: any) => venta.usuario)
+  @OneToMany(() => 'Venta', (venta: any) => venta.usuario,{cascade:[Cascade.ALL]})
   ventas = new Collection<any>(this);
 
   // Hook para hashear contraseña antes de crear

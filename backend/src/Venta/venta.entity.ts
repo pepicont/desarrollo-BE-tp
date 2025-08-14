@@ -1,28 +1,28 @@
-import { Entity, PrimaryKey, ManyToOne, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, ManyToOne, Property, Rel } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
+import { Usuario } from '../Usuario/usuario.entity.js';
+import { Juego } from '../Producto/Juego/juego.entity.js';
+import { Servicio } from '../Producto/Servicio/servicio.entity.js';
+import { Complemento } from '../Producto/Complemento/complemento.entity.js';
 
 @Entity()
 export class Venta extends BaseEntity {
-  @PrimaryKey()
-  id!: number;
 
   @ManyToOne(() => 'Usuario')
-  usuario!: any;
+  usuario!: Rel<Usuario>;
 
   @ManyToOne(() => 'Juego', { nullable: true })
-  juego!: any;
+  juego!: Rel<Juego>;
 
   @ManyToOne(() => 'Complemento', { nullable: true })
-  complemento?: any;
+  complemento?: Rel<Complemento>;
 
   @ManyToOne(() => 'Servicio', { nullable: true })
-  servicio?: any;
+  servicio?: Rel<Servicio>;
 
   @Property({ nullable: false })
   fecha!: Date;
 
-  @Property({ nullable: false, unique: true })
-  idVenta!: number;
 
   @Property({ nullable: false, unique: true })
   codActivacion!: string;

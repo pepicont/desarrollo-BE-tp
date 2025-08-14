@@ -6,8 +6,8 @@ POST http://localhost:3000/api/servicio
 Content-Type: application/json
 
 {
-  "nombre": "Netflix 2 meses",
-  "detalle": "Dos meses de Netflix",
+  "nombre": "Magis tv",
+  "detalle": "Dos meses de magis tv",
   "monto": 30.6,
   "categorias":[1],
   "compania":2
