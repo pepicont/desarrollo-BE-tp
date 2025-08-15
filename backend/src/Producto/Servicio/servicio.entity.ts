@@ -9,4 +9,7 @@ export class Servicio extends BaseProducto {
     owner: true,
   })
   categorias = new Collection<any>(this);
+
+  @OneToMany(() => 'Venta', (venta: any) => venta.servicio, { cascade: [Cascade.ALL] })
+  ventas = new Collection<any>(this);
 }

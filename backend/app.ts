@@ -4,11 +4,9 @@ import { companiaRouter } from './src/Compania/compania.routes.js'
 import { categoriaRouter } from './src/Categoria/categoria.routes.js'
 import { servicioRouter } from './src/Producto/Servicio/servicio.routes.js'
 import { usuarioRouter } from './src/Usuario/usuario.routes.js'
-import { authRouter } from './src/Auth/auth.routes.js'
 import 'reflect-metadata'
 import { orm, syncSchema } from './src/shared/orm.js'
 import { RequestContext } from '@mikro-orm/core'
-
 const app = express()
 
 // Configurar CORS manualmente
@@ -38,6 +36,10 @@ app.use('/api/compania', companiaRouter)
 app.use('/api/categoria', categoriaRouter)
 app.use('/api/servicio',servicioRouter)
 app.use('/api/usuario', usuarioRouter)
+app.use('/api/juego', juegoRouter)
+app.use('/api/complemento', complementoRouter)
+app.use('/api/venta', ventaRouter)
+app.use('/api/resenia', reseniaRouter)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' })

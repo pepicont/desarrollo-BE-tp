@@ -7,10 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, BeforeCreate, BeforeUpdate, } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, Collection, BeforeCreate, BeforeUpdate, Cascade, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import * as bcrypt from 'bcrypt';
-let Usuario = class Usuario extends BaseEntity {
+export let Usuario = class Usuario extends BaseEntity {
+    constructor() {
+        super(...arguments);
+        this.ventas = new Collection(this);
+    }
     // Hook para hashear contraseña antes de crear
     async hashPasswordOnCreate() {
         if (this.contrasenia) {
@@ -56,6 +60,10 @@ __decorate([
     __metadata("design:type", String)
 ], Usuario.prototype, "mail", void 0);
 __decorate([
+    OneToMany(() => 'Venta', (venta) => venta.usuario, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Usuario.prototype, "ventas", void 0);
+__decorate([
     BeforeCreate(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -70,5 +78,4 @@ __decorate([
 Usuario = __decorate([
     Entity()
 ], Usuario);
-export { Usuario };
 //# sourceMappingURL=usuario.entity.js.map

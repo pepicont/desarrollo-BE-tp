@@ -7,37 +7,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, ManyToMany, Collection, } from '@mikro-orm/core';
+import { Entity, ManyToOne, Property } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
-export let Categoria = class Categoria extends BaseEntity {
-    constructor() {
-        super(...arguments);
-        this.juegos = new Collection(this);
-        this.complementos = new Collection(this);
-        this.servicios = new Collection(this);
-    }
+export let Venta = class Venta extends BaseEntity {
 };
 __decorate([
+    ManyToOne(() => 'Usuario'),
+    __metadata("design:type", Object)
+], Venta.prototype, "usuario", void 0);
+__decorate([
+    ManyToOne(() => 'Juego', { nullable: true }),
+    __metadata("design:type", Object)
+], Venta.prototype, "juego", void 0);
+__decorate([
+    ManyToOne(() => 'Complemento', { nullable: true }),
+    __metadata("design:type", Object)
+], Venta.prototype, "complemento", void 0);
+__decorate([
+    ManyToOne(() => 'Servicio', { nullable: true }),
+    __metadata("design:type", Object)
+], Venta.prototype, "servicio", void 0);
+__decorate([
     Property({ nullable: false }),
+    __metadata("design:type", Date)
+], Venta.prototype, "fecha", void 0);
+__decorate([
+    Property({ nullable: false, unique: true }),
     __metadata("design:type", String)
-], Categoria.prototype, "nombre", void 0);
-__decorate([
-    Property({ nullable: false }),
-    __metadata("design:type", String)
-], Categoria.prototype, "detalle", void 0);
-__decorate([
-    ManyToMany(() => 'Juego', 'categorias'),
-    __metadata("design:type", Object)
-], Categoria.prototype, "juegos", void 0);
-__decorate([
-    ManyToMany(() => 'Complemento', 'categorias'),
-    __metadata("design:type", Object)
-], Categoria.prototype, "complementos", void 0);
-__decorate([
-    ManyToMany(() => 'Servicio', 'categorias'),
-    __metadata("design:type", Object)
-], Categoria.prototype, "servicios", void 0);
-Categoria = __decorate([
+], Venta.prototype, "codActivacion", void 0);
+Venta = __decorate([
     Entity()
-], Categoria);
-//# sourceMappingURL=categoria.entity.js.map
+], Venta);
+//# sourceMappingURL=venta.entity.js.map

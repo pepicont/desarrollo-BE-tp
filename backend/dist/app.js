@@ -33,6 +33,10 @@ app.use('/api/compania', companiaRouter);
 app.use('/api/categoria', categoriaRouter);
 app.use('/api/servicio', servicioRouter);
 app.use('/api/usuario', usuarioRouter);
+app.use('/api/juego', juegoRouter);
+app.use('/api/complemento', complementoRouter);
+app.use('/api/venta', ventaRouter);
+app.use('/api/resenia', reseniaRouter);
 app.use((_, res) => {
     res.status(404).send({ message: 'Resource not found' });
     return;
