@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Entity, Property, OneToMany, Collection, BeforeCreate, BeforeUpdate, Cascade, } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import * as bcrypt from 'bcrypt';
-export let Usuario = class Usuario extends BaseEntity {
+let Usuario = class Usuario extends BaseEntity {
     constructor() {
         super(...arguments);
         this.ventas = new Collection(this);
@@ -78,4 +78,5 @@ __decorate([
 Usuario = __decorate([
     Entity()
 ], Usuario);
+export { Usuario };
 //# sourceMappingURL=usuario.entity.js.map

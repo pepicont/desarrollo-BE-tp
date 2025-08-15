@@ -5,11 +5,15 @@ import { categoriaRouter } from './src/Categoria/categoria.routes.js';
 import { servicioRouter } from './src/Producto/Servicio/servicio.routes.js';
 import { usuarioRouter } from './src/Usuario/usuario.routes.js';
 import { authRouter } from './src/Auth/auth.routes.js';
+import { juegoRouter } from './src/Producto/Juego/juego.routes.js';
+import { complementoRouter } from './src/Producto/Complemento/complemento.routes.js';
+import { ventaRouter } from './src/Venta/venta.routes.js';
+import { reseniaRouter } from './src/Resenia/resenia.routes.js';
 import 'reflect-metadata';
 import { orm, syncSchema } from './src/shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
 const app = express();
-// Configurar CORS manualmente
+// CORS
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
