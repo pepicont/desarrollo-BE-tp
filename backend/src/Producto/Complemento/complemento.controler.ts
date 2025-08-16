@@ -17,6 +17,7 @@ function sanitizeComplementoInput(
     monto: req.body.monto,
     categorias: req.body.categorias,
     compania: req.body.compania,
+    juego: req.body.juego
   };
   //more checks here
 
@@ -33,7 +34,7 @@ async function findAll(req: Request, res: Response) {
     const complementos = await em.find(
       Complemento,
       {},
-      { populate: ["categorias", "compania"] }
+      { populate: ["categorias", "compania", "juego"] }
     );
     res.status(200).json({ message: "found all complementos", data: complementos });
   } catch (error: any) {
@@ -47,7 +48,7 @@ async function findOne(req: Request, res: Response) {
     const complementos = await em.findOneOrFail(
       Complemento,
       { id },
-      { populate: ["categorias", "compania"] }
+      { populate: ["categorias", "compania", "juego"] }
     );
     res.status(200).json({ message: "found complemento", data: complementos });
   } catch (error: any) {

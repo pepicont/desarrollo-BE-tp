@@ -1,0 +1,47 @@
+### Obtener todos los complementos
+GET http://localhost:3000/api/complemento
+
+### Crear un nuevo complemento
+###ver de cargar mismas categorias y
+###compania que el juego 
+POST http://localhost:3000/api/complemento
+Content-Type: application/json
+
+{
+  "nombre": "Mod de Hypixel",
+  "detalle": "Mod de Hypixel para Minecraft, lo que siempre soñaste pequeño Timmy",
+  "monto": 9.99,
+  "juego": 1,
+  "categorias": [1], 
+  "compania": 1 
+}
+
+### Modificar un complemento (PUT - recurso completo e idempotente)
+PUT http://localhost:3000/api/complemento/2
+Content-Type: application/json
+
+{
+  "nombre": "Complemento Modificado",
+  "detalle": "Detalle modificado",
+  "monto": 12.99,
+  "juego": 1,
+  "categorias": [1],
+  "compania": 1
+}
+
+### Modificar un complemento (PATCH - recurso parcial)
+PATCH http://localhost:3000/api/complemento/2
+Content-Type: application/json
+
+{
+  "detalle": "Detalle actualizado",
+  "monto": 10.99,
+  "categorias": [2],
+  "compania": 2
+}
+
+### Borrar un complemento
+DELETE http://localhost:3000/api/complemento/1
+
+### Obtener un complemento específico
+GET http://localhost:3000/api/complemento/1
