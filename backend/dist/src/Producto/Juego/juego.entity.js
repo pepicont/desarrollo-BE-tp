@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, Property, OneToMany, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, Cascade, Collection, ManyToMany } from '@mikro-orm/core';
 import { Complemento } from '../Complemento/complemento.entity.js';
 export let Juego = class Juego extends BaseProducto {
     constructor() {

@@ -26,13 +26,6 @@ export abstract class BaseProducto {
   @ManyToOne(() => Compania, { nullable: false })
   compania!: Rel<Compania>;
   
-  @ManyToMany(() => 'Categoria', (categoria: any) => categoria.servicios, {
-  cascade: [Cascade.ALL],
-  owner: true,
-  })
-  categorias = new Collection<any>(this);
 
-  @OneToMany(() => 'Venta', (venta: any) => venta.servicio, { cascade: [Cascade.ALL] })
-  ventas = new Collection<any>(this);
 }
 

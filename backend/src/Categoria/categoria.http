@@ -6,8 +6,8 @@ POST http://localhost:3000/api/categoria
 Content-Type: application/json
 
 {
-  "nombre": "Terror",
-  "detalle": "miedoso"
+  "nombre": "Diversion",
+  "detalle": "divertido"
 }
 
 ### Modificar una categoria (Put - recurso completo e idempotente)

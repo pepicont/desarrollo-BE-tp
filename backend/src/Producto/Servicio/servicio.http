@@ -6,11 +6,11 @@ POST http://localhost:3000/api/servicio
 Content-Type: application/json
 
 {
-  "nombre": "Magis tv",
-  "detalle": "Dos meses de magis tv",
+  "nombre": "Star +",
+  "detalle": "Dos meses de Star +",
   "monto": 30.6,
-  "categorias":[1],
-  "compania":2
+  "categorias":[1,2],
+  "compania":3
   
 }
 

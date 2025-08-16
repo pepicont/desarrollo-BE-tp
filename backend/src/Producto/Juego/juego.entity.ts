@@ -1,5 +1,5 @@
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Entity, Property, OneToMany, ManyToMany, Cascade, Collection } from '@mikro-orm/core';
+import { Entity, Property, OneToMany, Cascade, Collection, ManyToMany } from '@mikro-orm/core';
 import { Complemento } from '../Complemento/complemento.entity.js';
 
 @Entity()
@@ -13,7 +13,7 @@ export class Juego extends BaseProducto {
   @OneToMany(() => Complemento, (complemento) => complemento.juego, {
     cascade: [Cascade.ALL],
   })
-  complementos = new Collection<Complemento>(this);
+  complementos = new Collection<any>(this);
 
   @ManyToMany(() => 'Categoria', (categoria: any) => categoria.juegos, {
     cascade: [Cascade.ALL],
@@ -23,4 +23,6 @@ export class Juego extends BaseProducto {
 
   @OneToMany(() => 'Venta', (venta: any) => venta.juego, { cascade: [Cascade.ALL] })
   ventas = new Collection<any>(this);
+
+  
 }
