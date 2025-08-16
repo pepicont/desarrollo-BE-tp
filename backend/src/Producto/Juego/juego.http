@@ -9,7 +9,7 @@ Content-Type: application/json
   "nombre": "Minecraft",
   "detalle": "cubito maincra",
   "monto": 24.99,
-  "fechaLanzamiento": 2008,
+  "fechaLanzamiento": "2008-12-12",
   "edadPermitida": 0,
   "compania":1,
   "categorias":[1]
