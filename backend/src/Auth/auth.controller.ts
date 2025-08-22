@@ -22,7 +22,7 @@ class AuthController {
       }
 
       // Buscar usuario por mail
-      const em = orm.em.fork();
+      const em = orm.em.fork(); //esto crea una entidad separada por cada request para que no haya interferencia entre datos de los diferentes usuarios
       const usuario = await em.findOne(Usuario, { mail: mail });
 
       if (!usuario) {

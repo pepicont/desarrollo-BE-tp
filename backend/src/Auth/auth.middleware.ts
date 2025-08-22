@@ -48,6 +48,7 @@ export const authenticateToken = (
   }
 };
 
+//IGNORAR
 // Middleware opcional que no falla si no hay token (útil para rutas semi-públicas)
 export const optionalAuth = (
   req: AuthenticatedRequest, 

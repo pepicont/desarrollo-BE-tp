@@ -17,11 +17,12 @@ const app = express()
 
 // CORS
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-  
-  // Manejar preflight requests
+  res.header('Access-Control-Allow-Origin', '*') //a veces express bloquea peticiones de otras ip por seguridad, acá decimos que acepte todos los origenes
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS') //además que acepte todos los métodos
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization') //y estos headers
+
+  // Manejar preflight requests. Según Copilot el navegador envía una petición OPTIONS antes de la petición real al backend.
+  //Acá le decimos OK, podes mandar peticiones al back. No bloquees esto por seguridad
   if (req.method === 'OPTIONS') {
     res.sendStatus(200)
   } else {
@@ -52,7 +53,7 @@ app.use((_, res) => {
   return
 })
 
-await syncSchema() //nunca en producción
+await syncSchema() //nunca en producción. cambia los datos del schema según nuestro código automáticamente
 
 const PORT = process.env.PORT || 3000;
 
