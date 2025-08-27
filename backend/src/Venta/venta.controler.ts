@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { AuthenticatedRequest } from "../Auth/auth.types.js";
 import { Venta } from './venta.entity.js';
 import { orm } from '../shared/orm.js';
 
@@ -74,4 +75,21 @@ async function remove(req: Request, res: Response) {
 	}
 }
 
-export { sanitizeVentaInput, findAll, findOne, add, update, remove };
+// NUEVA FUNCIÓN: Obtener ventas del usuario autenticado (sus compras)
+async function getMyVentas(req: AuthenticatedRequest, res: Response): Promise<void> {
+	try {
+		const userId = req.user?.id;
+		
+		if (!userId) {
+			res.status(401).json({ message: 'Usuario no autenticado' });
+			return;
+		}
+
+		const ventas = await em.find(Venta, { usuario: userId }, { populate: ['usuario', 'complemento', 'juego', 'servicio'] });
+		res.status(200).json({ message: "found user purchases", data: ventas });
+	} catch (error: any) {
+		res.status(500).json({ message: error.message });
+	}
+}
+
+export { sanitizeVentaInput, findAll, findOne, add, update, remove, getMyVentas };

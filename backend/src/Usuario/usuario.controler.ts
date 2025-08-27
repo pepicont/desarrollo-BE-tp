@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/orm.js";
 import { Usuario } from "./usuario.entity.js";
+import { AuthenticatedRequest } from "../Auth/auth.types.js";
 
 const em = orm.em;
 
@@ -73,6 +74,37 @@ async function remove(req: Request, res: Response) {
     const usuario = em.getReference(Usuario, id);
     await em.removeAndFlush(usuario);
     res.status(200).json({ message: "user removed" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function getProfile(req: AuthenticatedRequest, res: Response) {
+  try {
+    // El middleware de autenticación debe haber agregado el user al request
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      return res.status(401).json({ message: 'Usuario no autenticado' });
+    }
+
+    const usuario = await em.findOne(Usuario, { id: userId });
+    
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Enviar datos del perfil sin la contraseña
+    const perfil = {
+      id: usuario.id,
+      nombreUsuario: usuario.nombreUsuario,
+      nombre: usuario.nombre,
+      mail: usuario.mail,
+      fechaNacimiento: usuario.fechaNacimiento,
+      fechaCreacion: usuario.fechaCreacion
+    };
+
+    res.status(200).json(perfil);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

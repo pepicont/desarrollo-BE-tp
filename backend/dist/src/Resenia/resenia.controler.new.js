@@ -68,13 +68,12 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-//NUEVA FUNCIÓN: Obtener reseñas del usuario autenticado
+// NUEVA FUNCIÓN: Obtener reseñas del usuario autenticado
 async function getMyResenias(req, res) {
     try {
         const userId = req.user?.id;
         if (!userId) {
-            res.status(401).json({ message: 'Usuario no autenticado' });
-            return;
+            return res.status(401).json({ message: 'Usuario no autenticado' });
         }
         const resenias = await em.find(Resenia, { usuario: userId }, { populate: ['usuario', 'venta'] });
         res.status(200).json({ message: "found user reviews", data: resenias });
@@ -84,4 +83,4 @@ async function getMyResenias(req, res) {
     }
 }
 export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias };
-//# sourceMappingURL=resenia.controler.js.map
+//# sourceMappingURL=resenia.controler.new.js.map

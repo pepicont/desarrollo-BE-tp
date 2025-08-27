@@ -19,6 +19,10 @@ authRouter.post('/register', (authController.register as any).bind(authControlle
 /*Esto lo que hace es verificar si el token JWT enviado en la cabecera de la petición es válido y, en caso afirmativo, recién ahí se ejecuta el verifyToken (RUTA PROTEGIDA) */
 authRouter.get('/verify', authenticateToken as any, (authController.verifyToken as any).bind(authController));
 
+// GET /api/auth/profile - Obtener perfil del usuario autenticado (ruta protegida) (profile no tiene sus modulos de routes, resenias y ventas si)
+/* http://localhost:3000/api/auth/profile */
+authRouter.get('/profile', authenticateToken as any, (authController.getProfile as any).bind(authController));
+
 /* Flujo completo de una petición:
 1. Cliente envía: POST /api/auth/login
 2. Express busca: authRouter.post('/login', ...)

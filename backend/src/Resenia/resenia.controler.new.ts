@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "../Auth/auth.types.js";
 import { orm } from "../shared/orm.js";
 import { Resenia } from "./resenia.entity.js";
 
@@ -78,14 +77,13 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-//NUEVA FUNCIÓN: Obtener reseñas del usuario autenticado
-async function getMyResenias(req: AuthenticatedRequest, res: Response): Promise<void> {
+// NUEVA FUNCIÓN: Obtener reseñas del usuario autenticado
+async function getMyResenias(req: Request, res: Response) {
   try {
-    const userId = req.user?.id;
+    const userId = (req as any).user?.id;
     
     if (!userId) {
-      res.status(401).json({ message: 'Usuario no autenticado' });
-      return;
+      return res.status(401).json({ message: 'Usuario no autenticado' });
     }
 
     const resenias = await em.find(Resenia, { usuario: userId }, { populate: ['usuario', 'venta'] });

@@ -8,9 +8,9 @@ export interface LoginRequest {
 export interface RegisterRequest {
     mail: string;
     contrasenia: string;
+    nombreUsuario: string;
     nombre: string;
-    nombreUsuario?: string; // Opcional, se puede generar automáticamente
-    fechaNacimiento?: string; // Opcional, se puede poner fecha por defecto
+    fechaNacimiento: string;
 }
 
 /*Define qué responde el backend cuando el login es exitoso.*/

@@ -4,6 +4,7 @@ import { Usuario } from '../Usuario/usuario.entity.js';
 class AuthController {
     async login(req, res) {
         console.log('🔍 Login request recibido:', req.body);
+        console.log('🔑 JWT_SECRET está configurado:', !!process.env.JWT_SECRET);
         try {
             const { mail, contrasenia } = req.body;
             console.log('📧 Mail:', mail, '🔒 Password length:', contrasenia ? contrasenia.length : 'undefined');
@@ -68,9 +69,9 @@ class AuthController {
         try {
             const { mail, contrasenia, nombre, nombreUsuario, fechaNacimiento } = req.body;
             // Validaciones básicas
-            if (!mail || !contrasenia || !nombre) {
+            if (!mail || !contrasenia || !nombre || !nombreUsuario || !fechaNacimiento) {
                 return res.status(400).json({
-                    message: 'Email, contraseña y nombre son requeridos'
+                    message: 'Todos los campos son requeridos'
                 });
             }
             // Validar formato de email
@@ -86,12 +87,46 @@ class AuthController {
                     message: 'La contraseña debe tener al menos 6 caracteres'
                 });
             }
-            // Verificar si el usuario ya existe
+            // Validar longitud de nombre de usuario
+            if (nombreUsuario.length < 3) {
+                return res.status(400).json({
+                    message: 'El nombre de usuario debe tener al menos 3 caracteres'
+                });
+            }
+            // Validar longitud de nombre
+            if (nombre.length < 2) {
+                return res.status(400).json({
+                    message: 'El nombre debe tener al menos 2 caracteres'
+                });
+            }
+            // Verificar si el email ya existe
             const em = orm.em.fork();
-            const existingUser = await em.findOne(Usuario, { mail: mail });
-            if (existingUser) {
+            const existingUserByEmail = await em.findOne(Usuario, { mail: mail });
+            if (existingUserByEmail) {
                 return res.status(409).json({
-                    message: 'El usuario ya existe'
+                    message: 'El email ya está registrado'
+                });
+            }
+            // Verificar si el nombre de usuario ya existe
+            const existingUserByUsername = await em.findOne(Usuario, { nombreUsuario: nombreUsuario });
+            if (existingUserByUsername) {
+                return res.status(409).json({
+                    message: 'El nombre de usuario ya está en uso'
+                });
+            }
+            // Validar y parsear fecha de nacimiento
+            const birthDate = new Date(fechaNacimiento);
+            if (isNaN(birthDate.getTime())) {
+                return res.status(400).json({
+                    message: 'Formato de fecha de nacimiento inválido'
+                });
+            }
+            // Verificar que la fecha de nacimiento sea válida (mayor de 13 años)
+            const today = new Date();
+            const minAge = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+            if (birthDate > minAge) {
+                return res.status(400).json({
+                    message: 'Debes ser mayor de 13 años para registrarte'
                 });
             }
             // Crear nuevo usuario con todos los campos requeridos
@@ -99,8 +134,8 @@ class AuthController {
                 mail: mail,
                 contrasenia: contrasenia,
                 nombre: nombre,
-                nombreUsuario: nombreUsuario || mail.split('@')[0],
-                fechaNacimiento: fechaNacimiento ? new Date(fechaNacimiento) : new Date('2000-01-01'),
+                nombreUsuario: nombreUsuario,
+                fechaNacimiento: birthDate,
                 fechaCreacion: new Date()
             });
             await em.persistAndFlush(nuevoUsuario);
@@ -152,6 +187,36 @@ class AuthController {
             res.status(500).json({
                 message: 'Error interno del servidor'
             });
+        }
+    }
+    // Endpoint para obtener el perfil completo del usuario autenticado
+    //🛡️ "¿Tienes credencial válida?" ✅ "Sí, pasa" (esto es lo que hizo el middleware)
+    //"¿Tu cuenta existe realmente?" "¿No fue cerrada?" "¿Los datos son correctos?" (esto es lo que hace el principio de getProfile)
+    async getProfile(req, res) {
+        try {
+            const userId = req.user?.id;
+            if (!userId) {
+                return res.status(401).json({ message: 'Usuario no autenticado' });
+            }
+            const em = orm.em.fork();
+            const usuario = await em.findOne(Usuario, { id: userId });
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuario no encontrado' }); //Todas estas validaciones las hace porque si el
+            }
+            // Enviar datos del perfil sin la contraseña
+            const perfil = {
+                id: usuario.id,
+                nombreUsuario: usuario.nombreUsuario,
+                nombre: usuario.nombre,
+                mail: usuario.mail,
+                fechaNacimiento: usuario.fechaNacimiento,
+                fechaCreacion: usuario.fechaCreacion
+            };
+            res.status(200).json(perfil);
+        }
+        catch (error) {
+            console.error('Error al obtener perfil:', error);
+            res.status(500).json({ message: 'Error interno del servidor' });
         }
     }
 }

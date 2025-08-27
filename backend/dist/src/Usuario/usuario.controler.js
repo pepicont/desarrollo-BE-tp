@@ -69,5 +69,31 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
+async function getProfile(req, res) {
+    try {
+        // El middleware de autenticación debe haber agregado el user al request
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: 'Usuario no autenticado' });
+        }
+        const usuario = await em.findOne(Usuario, { id: userId });
+        if (!usuario) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        // Enviar datos del perfil sin la contraseña
+        const perfil = {
+            id: usuario.id,
+            nombreUsuario: usuario.nombreUsuario,
+            nombre: usuario.nombre,
+            mail: usuario.mail,
+            fechaNacimiento: usuario.fechaNacimiento,
+            fechaCreacion: usuario.fechaCreacion
+        };
+        res.status(200).json(perfil);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 export { sanitizeUsuarioInput, findAll, findOne, add, update, remove };
 //# sourceMappingURL=usuario.controler.js.map

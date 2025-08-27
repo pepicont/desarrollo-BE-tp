@@ -1,6 +1,9 @@
 import { Router } from 'express';
-import { sanitizeReseniaInput, findAll, findOne, add, update, remove, } from './resenia.controler.js';
+import { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, } from './resenia.controler.js';
+import { authenticateToken } from '../Auth/auth.middleware.js';
 export const reseniaRouter = Router();
+// NUEVA RUTA: Obtener reseñas del usuario autenticado
+reseniaRouter.get('/my-resenias', authenticateToken, getMyResenias);
 reseniaRouter.get('/', findAll);
 reseniaRouter.get('/:id', findOne);
 reseniaRouter.post('/', sanitizeReseniaInput, add);
