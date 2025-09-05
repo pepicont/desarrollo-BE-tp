@@ -11,7 +11,7 @@ import { Entity, Property, OneToOne } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import { Usuario } from "../Usuario/usuario.entity.js";
 import { Venta } from "../Venta/venta.entity.js";
-let Resenia = class Resenia extends BaseEntity {
+export let Resenia = class Resenia extends BaseEntity {
 };
 __decorate([
     OneToOne(() => Usuario),
@@ -36,5 +36,4 @@ __decorate([
 Resenia = __decorate([
     Entity()
 ], Resenia);
-export { Resenia };
 //# sourceMappingURL=resenia.entity.js.map

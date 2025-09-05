@@ -79,7 +79,7 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-async function getProfile(req: AuthenticatedRequest, res: Response) {
+  async function getProfile(req: AuthenticatedRequest, res: Response) {
   try {
     // El middleware de autenticación debe haber agregado el user al request
     const userId = req.user?.id;
