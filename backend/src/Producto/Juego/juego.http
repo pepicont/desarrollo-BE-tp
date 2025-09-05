@@ -10,9 +10,9 @@ Content-Type: application/json
   "detalle": "cubito maincra",
   "monto": 24.99,
   "fechaLanzamiento": "2008-12-12",
-  "edadPermitida": 0,
-  "compania":1,
-  "categorias":[1]
+  "edadPermitida": 7,
+  "compania":2,
+  "categorias":[3]
 }
 
 ### Modificar un juego (PUT - recurso completo e idempotente)

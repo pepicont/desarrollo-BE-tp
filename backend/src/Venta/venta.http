@@ -7,9 +7,9 @@ Content-Type: application/json
 
 {
   "usuario": 1,
-  "juego": null,
+  "juego": 3,
   "complemento": null,
-  "servicio": 4,
+  "servicio": null,
   "fecha": "2025-08-14T12:00:00.000Z",
   "codActivacion": "ABC123XYZd"
 }
