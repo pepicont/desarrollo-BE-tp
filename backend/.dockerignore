@@ -1,0 +1,21 @@
+# Dependencies and build cache
+node_modules
+.pnpm
+.pnpm-store
+.pnpm-* 
+
+# Output
+/dist
+
+# Env files (compose will mount if needed)
+.env
+.env.*
+
+# VCS and editor
+.git
+.gitignore
+.vscode
+
+# OS files
+.DS_Store
+Thumbs.db
