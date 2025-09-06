@@ -1,0 +1,17 @@
+### Búsqueda básica por texto
+GET http://localhost:3000/api/search?q=fifa
+
+### Filtrar por tipo
+GET http://localhost:3000/api/search?tipo=juego&q=call
+
+### Filtros combinados
+GET http://localhost:3000/api/search?q=pass&tipo=servicio&priceMin=5&priceMax=50
+
+### Filtro por compañía
+GET http://localhost:3000/api/search?companiaId=1
+
+### Filtro por categoría y edad máxima (para juegos)
+GET http://localhost:3000/api/search?categoriaId=2&edadMax=13&tipo=juego
+
+
+
