@@ -9,10 +9,10 @@ POST http://localhost:3000/api/resenia
 Content-Type: application/json
 
 {
-  "usuario": 1,
+  "usuario": 2,
   "venta": 5,
   "detalle": "Este juego me hizo llorar... de risa. Mi personaje murió 47 veces en el tutorial. 10/10 recomiendo para practicar la paciencia zen.",
-  "puntaje": 3,
+  "puntaje": 8,
   "fecha": "2025-08-14T15:30:00.000Z"
 }
 

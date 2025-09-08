@@ -8,7 +8,8 @@
   "test": "echo \"Error: no test specified\" && exit 1",
   "build": "tsc -p tsconfig.json",
   "start": "node dist/app.js",
-  "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"node dist/app.js\""
+  "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"node dist/app.js\"",
+  "seed": "pnpm run build && node dist/src/seed.js"
   },
   "keywords": [],
   "author": "",

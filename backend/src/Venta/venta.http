@@ -6,12 +6,12 @@ POST http://localhost:3000/api/venta
 Content-Type: application/json
 
 {
-  "usuario": 1,
-  "juego": 3,
+  "usuario": 2,
+  "juego": 1,
   "complemento": null,
   "servicio": null,
   "fecha": "2025-08-14T12:00:00.000Z",
-  "codActivacion": "ABC123XYZd"
+  "codActivacion": "ABo123XYZd"
 }
 
 ### Obtener una venta por id

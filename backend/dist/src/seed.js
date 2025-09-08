@@ -1,179 +1,272 @@
-import 'dotenv/config';
+import 'reflect-metadata';
+import './shared/orm.js';
 import { orm } from './shared/orm.js';
-import { Compania } from './Compania/compania.entity.js';
 import { Categoria } from './Categoria/categoria.entity.js';
+import { Compania } from './Compania/compania.entity.js';
 import { Juego } from './Producto/Juego/juego.entity.js';
 import { Servicio } from './Producto/Servicio/servicio.entity.js';
 import { Complemento } from './Producto/Complemento/complemento.entity.js';
-async function seed() {
+import { Usuario } from './Usuario/usuario.entity.js';
+import { Venta } from './Venta/venta.entity.js';
+import { Resenia } from './Resenia/resenia.entity.js';
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
+async function resetSchema() {
+    const gen = orm.getSchemaGenerator();
+    await gen.dropSchema();
+    await gen.createSchema();
+}
+function makeCode(prefix) {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let out = '';
+    for (let i = 0; i < 16; i++)
+        out += chars[Math.floor(Math.random() * chars.length)];
+    return `${prefix}-${out}`;
+}
+async function main() {
+    console.log('Seeding: reset schema...');
+    await resetSchema();
     const em = orm.em.fork();
-    console.log('Seeding database (masivo)...');
-    // 1) Compañías
-    const companiasData = [
-        { key: 'ea', nombre: 'Electronic Arts', detalle: 'EA' },
-        { key: 'epic', nombre: 'Epic Games', detalle: 'Epic' },
-        { key: 'activision', nombre: 'Activision', detalle: 'Activision' },
-        { key: 'ubisoft', nombre: 'Ubisoft', detalle: 'Ubisoft' },
-        { key: 'nintendo', nombre: 'Nintendo', detalle: 'Nintendo' },
-        { key: 'sony', nombre: 'Sony Interactive Entertainment', detalle: 'PlayStation Studios' },
-        { key: 'bethesda', nombre: 'Bethesda Softworks', detalle: 'Bethesda' },
-        { key: 'square', nombre: 'Square Enix', detalle: 'Square Enix' },
-        { key: 'rockstar', nombre: 'Rockstar Games', detalle: 'Rockstar' },
-        { key: 'take2', nombre: '2K / Take-Two', detalle: '2K Games' },
-        { key: 'blizzard', nombre: 'Blizzard Entertainment', detalle: 'Blizzard' },
-        { key: 'sega', nombre: 'SEGA', detalle: 'SEGA' },
-        { key: 'cdpr', nombre: 'CD PROJEKT RED', detalle: 'CDPR' },
-        { key: 'bandai', nombre: 'Bandai Namco', detalle: 'Bandai Namco' },
-        { key: 'bungie', nombre: 'Bungie', detalle: 'Bungie' },
-        { key: 'xbox', nombre: 'Xbox Game Studios', detalle: 'Microsoft' },
+    // Categorías 
+    const catsData = [
+        { nombre: 'Deportes', detalle: 'Juegos de deportes' },
+        { nombre: 'Acción', detalle: 'Juegos de acción' },
+        { nombre: 'Suscripción', detalle: 'Servicios de gaming' },
+        { nombre: 'RPG', detalle: 'Rol y progresión' },
+        { nombre: 'Aventura', detalle: 'Exploración y narrativa' },
+        { nombre: 'Shooter', detalle: 'Disparos en primera/tercera persona' },
+        { nombre: 'Carreras', detalle: 'Conducción y velocidad' },
+        { nombre: 'Estrategia', detalle: 'Tácticas y gestión' },
+        { nombre: 'Indie', detalle: 'Producciones independientes' },
+        { nombre: 'Simulación', detalle: 'Simulación y vida' },
+        { nombre: 'Puzzle', detalle: 'Rompecabezas y lógica' },
+        { nombre: 'Plataformas', detalle: 'Saltar y correr' },
+        { nombre: 'Mundo Abierto', detalle: 'Exploración libre' },
+        { nombre: 'Terror', detalle: 'Horror y suspenso' },
+        { nombre: 'Multijugador', detalle: 'Enfocado en multijugador' },
+        { nombre: 'Battle Royale', detalle: 'Último en pie' },
     ];
-    const companiasMap = {};
-    for (const c of companiasData) {
-        companiasMap[c.key] = em.create(Compania, { nombre: c.nombre, detalle: c.detalle });
-    }
-    // 2) Categorías
-    const categoriasData = [
-        { key: 'deportes', nombre: 'Deportes', detalle: 'Juegos de deportes' },
-        { key: 'accion', nombre: 'Acción', detalle: 'Juegos de acción' },
-        { key: 'rpg', nombre: 'RPG', detalle: 'Rol y progresión' },
-        { key: 'aventura', nombre: 'Aventura', detalle: 'Exploración y narrativa' },
-        { key: 'shooter', nombre: 'Shooter', detalle: 'Disparos en primera/tercera persona' },
-        { key: 'carreras', nombre: 'Carreras', detalle: 'Conducción y velocidad' },
-        { key: 'estrategia', nombre: 'Estrategia', detalle: 'Tácticas y gestión' },
-        { key: 'indie', nombre: 'Indie', detalle: 'Producciones independientes' },
-        { key: 'simulacion', nombre: 'Simulación', detalle: 'Simulación y vida' },
-        { key: 'puzzle', nombre: 'Puzzle', detalle: 'Rompecabezas y lógica' },
-        { key: 'plataformas', nombre: 'Plataformas', detalle: 'Saltar y correr' },
-        { key: 'mundoabierto', nombre: 'Mundo Abierto', detalle: 'Exploración libre' },
-        { key: 'horror', nombre: 'Terror', detalle: 'Horror y suspenso' },
-        { key: 'multiplayer', nombre: 'Multijugador', detalle: 'Enfocado en multijugador' },
-        { key: 'battleroyale', nombre: 'Battle Royale', detalle: 'Último en pie' },
-        { key: 'suscripcion', nombre: 'Suscripción', detalle: 'Servicios de gaming' },
+    const categorias = catsData.map((cd) => {
+        const c = new Categoria();
+        c.nombre = cd.nombre;
+        c.detalle = cd.detalle;
+        return c;
+    });
+    await em.persistAndFlush(categorias);
+    // Compañías (>=20)
+    const companyNames = [
+        'EA', 'Ubisoft', 'Nintendo', 'Sony', 'Microsoft', 'Rockstar', 'Take-Two', 'Bethesda', 'Square Enix', 'Bandai Namco',
+        'Sega', 'Capcom', 'CD Projekt', 'Activision', 'Blizzard', 'Epic Games', 'Bungie', 'FromSoftware', 'Konami', '2K'
     ];
-    const categoriasMap = {};
-    for (const cat of categoriasData) {
-        categoriasMap[cat.key] = em.create(Categoria, { nombre: cat.nombre, detalle: cat.detalle });
-    }
-    await em.persistAndFlush([
-        ...Object.values(companiasMap),
-        ...Object.values(categoriasMap),
-    ]);
-    // Helper to add categories
-    const addCats = (collection, keys) => {
-        const list = Array.from(keys);
-        const cats = list.map((k) => categoriasMap[k]).filter(Boolean);
-        if (cats.length)
-            collection.add(...cats);
-    };
-    // 3) Juegos (más de 20)
-    const juegosData = [
-        { key: 'fc24', nombre: 'EA Sports FC 24', detalle: 'Fútbol de última generación', monto: 59.99, comp: 'ea', fecha: '2024-09-01', edad: 3, cats: ['deportes'] },
-        { key: 'f1_24', nombre: 'F1 24', detalle: 'La máxima categoría del automovilismo', monto: 69.99, comp: 'ea', fecha: '2024-05-31', edad: 3, cats: ['deportes', 'carreras'] },
-        { key: 'sims4', nombre: 'The Sims 4', detalle: 'Crea y controla personas en un mundo virtual', monto: 39.99, comp: 'ea', fecha: '2014-09-02', edad: 12, cats: ['simulacion'] },
-        { key: 'bf2042', nombre: 'Battlefield 2042', detalle: 'Guerra moderna a gran escala', monto: 49.99, comp: 'ea', fecha: '2021-11-19', edad: 16, cats: ['accion', 'shooter', 'multiplayer'] },
-        { key: 'apex', nombre: 'Apex Legends', detalle: 'Battle Royale gratuito con héroes', monto: 0, comp: 'ea', fecha: '2019-02-04', edad: 16, cats: ['shooter', 'battleroyale', 'multiplayer'] },
-        { key: 'mw3', nombre: 'Call of Duty: Modern Warfare III', detalle: 'Shooter de acción', monto: 69.99, comp: 'activision', fecha: '2023-11-01', edad: 18, cats: ['accion', 'shooter', 'multiplayer'] },
-        { key: 'diablo4', nombre: 'Diablo IV', detalle: 'Oscuro RPG de acción', monto: 69.99, comp: 'blizzard', fecha: '2023-06-06', edad: 18, cats: ['accion', 'rpg'] },
-        { key: 'ow2', nombre: 'Overwatch 2', detalle: 'Héroes y trabajo en equipo', monto: 0, comp: 'blizzard', fecha: '2022-10-04', edad: 13, cats: ['shooter', 'multiplayer'] },
-        { key: 'gta5', nombre: 'Grand Theft Auto V', detalle: 'Crimen y mundo abierto', monto: 29.99, comp: 'rockstar', fecha: '2013-09-17', edad: 18, cats: ['accion', 'mundoabierto'] },
-        { key: 'rdr2', nombre: 'Red Dead Redemption 2', detalle: 'Aventura en el lejano oeste', monto: 49.99, comp: 'rockstar', fecha: '2018-10-26', edad: 18, cats: ['aventura', 'mundoabierto'] },
-        { key: 'cp2077', nombre: 'Cyberpunk 2077', detalle: 'RPG futurista de mundo abierto', monto: 59.99, comp: 'cdpr', fecha: '2020-12-10', edad: 18, cats: ['rpg', 'mundoabierto', 'accion'] },
-        { key: 'tw3', nombre: 'The Witcher 3: Wild Hunt', detalle: 'Caza de monstruos y decisiones', monto: 39.99, comp: 'cdpr', fecha: '2015-05-19', edad: 18, cats: ['rpg', 'aventura'] },
-        { key: 'acv', nombre: 'Assassin’s Creed Valhalla', detalle: 'Saga vikinga de mundo abierto', monto: 49.99, comp: 'ubisoft', fecha: '2020-11-10', edad: 18, cats: ['accion', 'aventura', 'mundoabierto'] },
-        { key: 'r6', nombre: 'Rainbow Six Siege', detalle: 'Tácticas y destrucción', monto: 19.99, comp: 'ubisoft', fecha: '2015-12-01', edad: 16, cats: ['shooter', 'estrategia', 'multiplayer'] },
-        { key: 'zelda_totk', nombre: 'The Legend of Zelda: Tears of the Kingdom', detalle: 'Aventura épica en Hyrule', monto: 69.99, comp: 'nintendo', fecha: '2023-05-12', edad: 10, cats: ['aventura', 'mundoabierto'] },
-        { key: 'mario_kart8', nombre: 'Mario Kart 8 Deluxe', detalle: 'Carreras al estilo Mario', monto: 59.99, comp: 'nintendo', fecha: '2017-04-28', edad: 3, cats: ['carreras', 'multiplayer'] },
-        { key: 'gt7', nombre: 'Gran Turismo 7', detalle: 'Simulación de conducción realista', monto: 69.99, comp: 'sony', fecha: '2022-03-04', edad: 3, cats: ['carreras', 'simulacion'] },
-        { key: 'gowr', nombre: 'God of War Ragnarök', detalle: 'Acción y mitología nórdica', monto: 69.99, comp: 'sony', fecha: '2022-11-09', edad: 18, cats: ['accion', 'aventura'] },
-        { key: 'hfw', nombre: 'Horizon Forbidden West', detalle: 'Aventura en un mundo postapocalíptico', monto: 59.99, comp: 'sony', fecha: '2022-02-18', edad: 16, cats: ['aventura', 'mundoabierto'] },
-        { key: 'fortnite', nombre: 'Fortnite', detalle: 'Construye y sobrevive', monto: 0, comp: 'epic', fecha: '2017-07-21', edad: 12, cats: ['shooter', 'battleroyale', 'multiplayer'] },
-        { key: 'elden', nombre: 'Elden Ring', detalle: 'Aventura desafiante en un mundo abierto', monto: 59.99, comp: 'bandai', fecha: '2022-02-25', edad: 16, cats: ['rpg', 'mundoabierto'] },
-        { key: 'destiny2', nombre: 'Destiny 2', detalle: 'Shooter de saqueo cooperativo', monto: 0, comp: 'bungie', fecha: '2017-09-06', edad: 16, cats: ['shooter', 'multiplayer', 'accion'] },
-        { key: 'yakuza', nombre: 'Yakuza: Like a Dragon', detalle: 'RPG urbano con humor', monto: 39.99, comp: 'sega', fecha: '2020-11-10', edad: 18, cats: ['rpg', 'accion'] },
-        { key: 'ffxvi', nombre: 'Final Fantasy XVI', detalle: 'Nueva entrega de la saga de fantasía', monto: 69.99, comp: 'square', fecha: '2023-06-22', edad: 16, cats: ['rpg', 'accion'] },
-        { key: 'nba2k24', nombre: 'NBA 2K24', detalle: 'Baloncesto realista', monto: 59.99, comp: 'take2', fecha: '2023-09-08', edad: 3, cats: ['deportes'] },
+    const companias = companyNames.map((n) => {
+        const co = new Compania();
+        co.nombre = n;
+        co.detalle = `Compañía ${n}`;
+        return co;
+    });
+    await em.persistAndFlush(companias);
+    // Usuarios (asegurar #1 gamer@gmail.com / 123456) y muchos usuarios con nombres reales
+    const usuarios = [];
+    const u1 = new Usuario();
+    u1.nombreUsuario = 'gamer';
+    u1.mail = 'gamer@gmail.com';
+    u1.contrasenia = '123456';
+    u1.nombre = 'Gamer Uno';
+    u1.fechaNacimiento = new Date('1995-01-15');
+    u1.fechaCreacion = new Date();
+    usuarios.push(u1);
+    const firstNames = [
+        'Sofía', 'Mateo', 'Valentina', 'Benjamín', 'Emma', 'Thiago', 'Isabella', 'Santiago', 'Martina', 'Lucas',
+        'Camila', 'Joaquín', 'Catalina', 'Lautaro', 'Mía', 'Julián', 'Victoria', 'Tomás', 'Agustina', 'Bruno',
+        'Lucía', 'Franco', 'Paula', 'Nicolás', 'Abril', 'Diego', 'Luna', 'Facundo', 'Florencia', 'Gael',
+        'Antonella', 'Ramiro', 'Carolina', 'Ignacio', 'Bianca', 'Emilia', 'Juan', 'Pilar', 'Gonzalo', 'Zoe'
     ];
-    const juegosMap = {};
-    for (const j of juegosData) {
-        const juego = em.create(Juego, {
-            nombre: j.nombre,
-            detalle: j.detalle,
-            monto: j.monto,
-            compania: companiasMap[j.comp],
-            fechaLanzamiento: new Date(j.fecha),
-            edadPermitida: j.edad,
-        });
-        addCats(juego.categorias, j.cats);
-        juegosMap[j.key] = juego;
+    const lastNames = [
+        'González', 'Rodríguez', 'Fernández', 'Gómez', 'López', 'Martínez', 'Pérez', 'Sánchez', 'Ramírez', 'Torres',
+        'Flores', 'Rivera', 'Romero', 'Suárez', 'Molina', 'Silva', 'Castro', 'Morales', 'Herrera', 'Vega',
+        'Rojas', 'Navarro', 'Campos', 'Vázquez', 'Ibarra', 'Núñez', 'Cruz', 'Ortega', 'Peña', 'Méndez'
+    ];
+    const normalize = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    let userCount = 0;
+    const totalExtraUsers = 120;
+    for (let i = 0; i < totalExtraUsers; i++) {
+        const fn = sample(firstNames);
+        const ln = sample(lastNames);
+        const nombre = `${fn} ${ln}`;
+        const base = normalize(`${fn}${ln}`);
+        const suffix = i.toString().padStart(2, '0');
+        const username = `${base}${suffix}`.slice(0, 20);
+        const u = new Usuario();
+        u.nombreUsuario = username;
+        u.mail = `${base}.${suffix}@example.com`;
+        u.contrasenia = '123456';
+        u.nombre = nombre;
+        u.fechaNacimiento = new Date(rand(1975, 2008), rand(0, 11), rand(1, 28));
+        u.fechaCreacion = new Date();
+        usuarios.push(u);
+        userCount++;
     }
-    // 4) Servicios (10+)
-    const serviciosData = [
-        { nombre: 'Xbox Game Pass Ultimate - 1 Mes', detalle: 'Catálogo en consola y PC', monto: 14.99, comp: 'xbox', cats: ['suscripcion'] },
-        { nombre: 'PlayStation Plus Extra - 1 Mes', detalle: 'Catálogo PS4/PS5', monto: 13.99, comp: 'sony', cats: ['suscripcion'] },
-        { nombre: 'Nintendo Switch Online - 12 Meses', detalle: 'Juego online y catálogo clásico', monto: 19.99, comp: 'nintendo', cats: ['suscripcion'] },
-        { nombre: 'EA Play - 1 Mes', detalle: 'Juegos de EA y pruebas anticipadas', monto: 4.99, comp: 'ea', cats: ['suscripcion'] },
-        { nombre: 'Ubisoft+ - 1 Mes', detalle: 'Acceso a lanzamientos de Ubisoft', monto: 14.99, comp: 'ubisoft', cats: ['suscripcion'] },
-        { nombre: 'Fortnite Crew - 1 Mes', detalle: 'Pase mensual con V-Bucks y skins', monto: 11.99, comp: 'epic', cats: ['suscripcion'] },
-        { nombre: 'GTA+ - 1 Mes', detalle: 'Beneficios en GTA Online', monto: 5.99, comp: 'rockstar', cats: ['suscripcion'] },
-        { nombre: 'World of Warcraft - 60 días', detalle: 'Tiempo de juego para WoW', monto: 29.99, comp: 'blizzard', cats: ['suscripcion'] },
-        { nombre: 'The Elder Scrolls Online Plus - 1 Mes', detalle: 'Beneficios premium en TESO', monto: 14.99, comp: 'bethesda', cats: ['suscripcion'] },
-        { nombre: 'Destiny 2 Lightfall (pase de temporada)', detalle: 'Temporada y contenido', monto: 9.99, comp: 'bungie', cats: ['suscripcion'] },
+    await em.persistAndFlush(usuarios);
+    console.log(`Usuarios: ${usuarios.length}`);
+    // Juegos (>=30)
+    const gameTitles = [
+        'Elden Ring', 'Cyberpunk 2077', 'The Witcher 3', 'GTA V', 'RDR2', 'Zelda TotK', 'Mario Kart 8', 'God of War',
+        'Horizon FW', 'Spider-Man 2', 'FIFA 24', 'F1 24', 'Battlefield 2042', 'Apex Legends', 'Overwatch 2', 'Diablo IV',
+        'Fortnite', 'Destiny 2', 'AC Valhalla', 'Rainbow Six Siege', 'Gran Turismo 7', 'Starfield', 'Halo Infinite',
+        'Forza Horizon 5', 'Yakuza LAD', 'Final Fantasy XVI', 'Monster Hunter Rise', 'Sekiro', 'Resident Evil 4', 'Street Fighter 6',
+        'Baldur’s Gate 3', 'Ghost of Tsushima', 'Bloodborne', 'Death Stranding', 'No Man’s Sky', 'Skyrim'
+    ];
+    const juegos = [];
+    for (let i = 0; i < 35; i++) {
+        const j = new Juego();
+        j.nombre = gameTitles[i] || `Juego ${i + 1}`;
+        j.detalle = `Detalle de ${j.nombre}`;
+        j.monto = rand(0, 70);
+        j.compania = sample(companias);
+        j.fechaLanzamiento = new Date(rand(2014, 2025), rand(0, 11), rand(1, 28));
+        j.edadPermitida = sample([7, 12, 14, 16, 18]);
+        // categorías aleatorias (1-3)
+        const cats = [...categorias].sort(() => 0.5 - Math.random()).slice(0, rand(1, 3));
+        cats.forEach(c => j.categorias.add(c));
+        juegos.push(j);
+    }
+    await em.persistAndFlush(juegos);
+    console.log(`Juegos: ${juegos.length}`);
+    // Servicios (>=16)
+    const serviceNames = [
+        'Xbox Game Pass', 'PlayStation Plus', 'Nintendo Switch Online', 'EA Play', 'Ubisoft+',
+        'GTA+', 'Fortnite Crew', 'Blizzard Arcade', 'ESO Plus', 'Destiny 2 Season',
+        'WoW Time', 'Netflix Games', 'GeForce NOW', 'PS Now Legacy', 'Apple Arcade', 'Prime Gaming'
     ];
     const servicios = [];
-    for (const s of serviciosData) {
-        const serv = em.create(Servicio, {
-            nombre: s.nombre,
-            detalle: s.detalle,
-            monto: s.monto,
-            compania: companiasMap[s.comp],
-        });
-        addCats(serv.categorias, s.cats);
-        servicios.push(serv);
+    for (let i = 0; i < 16; i++) {
+        const s = new Servicio();
+        s.nombre = serviceNames[i] || `Servicio ${i + 1}`;
+        s.detalle = `Detalle de ${s.nombre}`;
+        s.monto = rand(2, 20);
+        s.compania = sample(companias);
+        const cats = [...categorias].sort(() => 0.5 - Math.random()).slice(0, rand(1, 2));
+        cats.forEach(c => s.categorias.add(c));
+        servicios.push(s);
     }
-    // 5) Complementos (monedas/DLC ligados a juegos)
-    const complData = [
-        { nombre: 'V-Bucks 2800', detalle: 'Moneda para Fortnite', monto: 19.99, comp: 'epic', juego: 'fortnite', cats: ['battleroyale', 'multiplayer'] },
-        { nombre: 'V-Bucks 5000', detalle: 'Moneda para Fortnite', monto: 31.99, comp: 'epic', juego: 'fortnite', cats: ['battleroyale', 'multiplayer'] },
-        { nombre: 'COD Points 2400', detalle: 'Moneda para Call of Duty', monto: 19.99, comp: 'activision', juego: 'mw3', cats: ['shooter', 'accion'] },
-        { nombre: 'COD Points 5000', detalle: 'Moneda para Call of Duty', monto: 39.99, comp: 'activision', juego: 'mw3', cats: ['shooter', 'accion'] },
-        { nombre: 'FIFA Points 4600', detalle: 'Puntos para FC 24', monto: 39.99, comp: 'ea', juego: 'fc24', cats: ['deportes'] },
-        { nombre: 'FIFA Points 12000', detalle: 'Puntos para FC 24', monto: 99.99, comp: 'ea', juego: 'fc24', cats: ['deportes'] },
-        { nombre: 'Apex Coins 2150', detalle: 'Moneda para Apex Legends', monto: 19.99, comp: 'ea', juego: 'apex', cats: ['battleroyale', 'multiplayer'] },
-        { nombre: 'Overwatch Coins 1000', detalle: 'Moneda para Overwatch 2', monto: 9.99, comp: 'blizzard', juego: 'ow2', cats: ['shooter', 'multiplayer'] },
-        { nombre: 'Diablo IV Platinum 1000', detalle: 'Moneda para Diablo IV', monto: 9.99, comp: 'blizzard', juego: 'diablo4', cats: ['rpg', 'accion'] },
-        { nombre: 'Shark Cash Card (Whale) - GTA Online', detalle: 'Dinero para GTA Online', monto: 49.99, comp: 'rockstar', juego: 'gta5', cats: ['mundoabierto'] },
-        { nombre: 'RDO Gold Bars 25', detalle: 'Oro para Red Dead Online', monto: 9.99, comp: 'rockstar', juego: 'rdr2', cats: ['mundoabierto'] },
-        { nombre: 'Forza Horizon 5 Car Pass', detalle: 'Coches adicionales', monto: 29.99, comp: 'xbox', juego: 'gta5', cats: ['carreras'] },
-        { nombre: 'Rainbow Six Credits 2670', detalle: 'Moneda para R6 Siege', monto: 19.99, comp: 'ubisoft', juego: 'r6', cats: ['estrategia', 'shooter'] },
-        { nombre: 'Elden Ring Shadow of the Erdtree', detalle: 'Expansión', monto: 39.99, comp: 'bandai', juego: 'elden', cats: ['rpg'] },
-        { nombre: 'Cyberpunk 2077: Phantom Liberty', detalle: 'Expansión', monto: 29.99, comp: 'cdpr', juego: 'cp2077', cats: ['rpg', 'mundoabierto'] },
+    await em.persistAndFlush(servicios);
+    console.log(`Servicios: ${servicios.length}`);
+    // Complementos (>=30)
+    const compNames = [
+        'V-Bucks', 'COD Points', 'FIFA Points', 'Apex Coins', 'Overwatch Coins', 'Diablo Platinum', 'Shark Cards',
+        'RDO Gold', 'Forza Car Pass', 'Rainbow Six Credits', 'DLC Historia I', 'DLC Historia II', 'Temporada 1',
+        'Temporada 2', 'Paquete Skins', 'Armas Épicas', 'Mapa Extra', 'Pase de Batalla', 'Pack Música', 'Pack Vehículos',
+        'Traje Especial', 'Emoji Pack', 'Filtro Retro', 'HUD Temático', 'Animación Especial', 'DLC Boss Rush', 'DLC Arena',
+        'Pack Texturas', 'Pack Voces', 'Pack Celebración', 'DLC Multijugador'
     ];
     const complementos = [];
-    for (const c of complData) {
-        const juegoRef = juegosMap[c.juego];
-        if (!juegoRef)
-            continue;
-        const comp = em.create(Complemento, {
-            nombre: c.nombre,
-            detalle: c.detalle,
-            monto: c.monto,
-            compania: companiasMap[c.comp],
-            juego: juegoRef,
-        });
-        addCats(comp.categorias, c.cats);
-        complementos.push(comp);
+    for (let i = 0; i < 30; i++) {
+        const c = new Complemento();
+        c.nombre = compNames[i] || `Complemento ${i + 1}`;
+        c.detalle = `Detalle de ${c.nombre}`;
+        c.monto = rand(1, 30);
+        c.compania = sample(companias);
+        c.juego = sample(juegos);
+        const cats = [...categorias].sort(() => 0.5 - Math.random()).slice(0, rand(1, 2));
+        cats.forEach(cat => c.categorias.add(cat));
+        complementos.push(c);
     }
-    await em.persistAndFlush([
-        ...Object.values(juegosMap),
-        ...servicios,
-        ...complementos,
-    ]);
-    console.log('Seed masivo completo.');
-    await orm.close(true);
+    await em.persistAndFlush(complementos);
+    console.log(`Complementos: ${complementos.length}`);
+    // Ventas + Reseñas
+    const ventas = [];
+    const resenias = [];
+    const allUsers = usuarios;
+    // Crear ventas (unas 200)
+    for (let i = 0; i < 200; i++) {
+        const v = new Venta();
+        v.usuario = sample(allUsers);
+        v.fecha = new Date(rand(2022, 2025), rand(0, 11), rand(1, 28));
+        v.codActivacion = makeCode('ACT');
+        const tipo = sample(['juego', 'servicio', 'complemento']);
+        if (tipo === 'juego')
+            v.juego = sample(juegos);
+        if (tipo === 'servicio')
+            v.servicio = sample(servicios);
+        if (tipo === 'complemento')
+            v.complemento = sample(complementos);
+        ventas.push(v);
+    }
+    await em.persistAndFlush(ventas);
+    console.log(`Ventas: ${ventas.length}`);
+    // Reseñas: crear para ~60% de ventas, con variedad realista
+    const reviewTexts = {
+        5: [
+            'Increíble experiencia, superó mis expectativas.',
+            'Excelente calidad y muy divertido, 100% recomendado.',
+            'Historia atrapante y rendimiento impecable.',
+            'Arte y música de primer nivel, una joya.',
+            'Multijugador muy sólido, partidas fluidas.'
+        ],
+        4: [
+            'Muy bueno en general, pequeños detalles por pulir.',
+            'Gran propuesta, lo disfruté mucho.',
+            'Buen contenido y balance aceptable.',
+            'Visualmente destaca, jugabilidad sólida.',
+            'Me encantó, pero podría tener mejor matchmaking.'
+        ],
+        3: [
+            'Entretenido por ratos, repetitivo a la larga.',
+            'Cumple, pero nada sobresaliente.',
+            'Algunas caídas de FPS y bugs menores.',
+            'Sistema de progresión correcto, sin brillar.',
+            'Podría mejorar el contenido endgame.'
+        ],
+        2: [
+            'Varias fallas técnicas y balance flojo.',
+            'Pay-to-win en algunos modos, desmotiva.',
+            'La historia no engancha y los controles se sienten raros.',
+            'Demasiado grind, progreso lento.',
+            'Modo online inestable en horas pico.'
+        ],
+        1: [
+            'Mala optimización, crasheos frecuentes.',
+            'No cumple lo prometido, decepcionante.',
+            'Contenidos pobres y microtransacciones agresivas.',
+            'Controles imprecisos, mala experiencia.',
+            'Soporte técnico inexistente, mala compra.'
+        ],
+    };
+    const weightedScore = () => {
+        // 5:35%, 4:25%, 3:25%, 2:10%, 1:5%
+        const r = Math.random();
+        if (r < 0.35)
+            return 5;
+        if (r < 0.60)
+            return 4;
+        if (r < 0.85)
+            return 3;
+        if (r < 0.95)
+            return 2;
+        return 1;
+    };
+    const reviewsToCreate = Math.floor(ventas.length * 0.6);
+    const picked = [...ventas].sort(() => 0.5 - Math.random()).slice(0, reviewsToCreate);
+    for (const v of picked) {
+        const r = new Resenia();
+        r.usuario = v.usuario;
+        r.venta = v;
+        r.puntaje = weightedScore();
+        const pool = reviewTexts[r.puntaje] || reviewTexts[3];
+        r.detalle = sample(pool);
+        r.fecha = new Date(v.fecha.getTime() + rand(1, 60) * 86400000);
+        resenias.push(r);
+    }
+    await em.persistAndFlush(resenias);
+    console.log(`Reseñas: ${resenias.length}`);
+    console.log('Seed completo.');
 }
-seed().catch(async (e) => {
+main()
+    .catch((e) => {
     console.error(e);
+    process.exitCode = 1;
+})
+    .finally(async () => {
     await orm.close(true);
-    process.exit(1);
 });
 //# sourceMappingURL=seed.js.map
