@@ -14,6 +14,7 @@ export let Usuario = class Usuario extends BaseEntity {
     constructor() {
         super(...arguments);
         this.ventas = new Collection(this);
+        this.resenias = new Collection(this);
     }
     // Hook para hashear contraseña antes de crear
     async hashPasswordOnCreate() {
@@ -63,6 +64,10 @@ __decorate([
     OneToMany(() => 'Venta', (venta) => venta.usuario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Usuario.prototype, "ventas", void 0);
+__decorate([
+    OneToMany(() => 'Resenia', (resenia) => resenia.usuario, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Usuario.prototype, "resenias", void 0);
 __decorate([
     BeforeCreate(),
     __metadata("design:type", Function),

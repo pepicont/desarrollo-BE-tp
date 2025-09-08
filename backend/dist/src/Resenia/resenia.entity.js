@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, Property, OneToOne } from '@mikro-orm/core';
+import { Entity, Property, ManyToOne, OneToOne } from '@mikro-orm/core';
 import { BaseEntity } from '../shared/baseEntity.entity.js';
 import { Usuario } from "../Usuario/usuario.entity.js";
 import { Venta } from "../Venta/venta.entity.js";
 export let Resenia = class Resenia extends BaseEntity {
 };
 __decorate([
-    OneToOne(() => Usuario),
+    ManyToOne(() => Usuario, { nullable: false }),
     __metadata("design:type", Object)
 ], Resenia.prototype, "usuario", void 0);
 __decorate([

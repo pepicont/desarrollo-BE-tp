@@ -33,6 +33,9 @@ export class Usuario extends BaseEntity {
   @OneToMany(() => 'Venta', (venta: any) => venta.usuario,{cascade:[Cascade.ALL]})
   ventas = new Collection<any>(this);
 
+  @OneToMany(() => 'Resenia', (resenia: any) => resenia.usuario,{cascade:[Cascade.ALL]})
+  resenias = new Collection<any>(this);
+
   // Hook para hashear contraseña antes de crear
   @BeforeCreate()
   async hashPasswordOnCreate() {

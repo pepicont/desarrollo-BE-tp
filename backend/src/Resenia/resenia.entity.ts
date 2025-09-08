@@ -5,8 +5,9 @@ import { Venta } from "../Venta/venta.entity.js";
 
 @Entity()
 export class Resenia extends BaseEntity {
-  @OneToOne(() => Usuario)
+  @ManyToOne(() => Usuario , { nullable: false })
   usuario!: Rel<Usuario>;
+
 
   @OneToOne(() => Venta)
   venta!: Rel<Venta>;
@@ -18,5 +19,5 @@ export class Resenia extends BaseEntity {
   puntaje!: number;
 
   @Property({ nullable: false })
-  fecha!: Date;
+  fecha!:Date;
 }
