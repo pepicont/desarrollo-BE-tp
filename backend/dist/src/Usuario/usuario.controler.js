@@ -71,14 +71,14 @@ async function remove(req, res) {
 }
 async function getProfile(req, res) {
     try {
-        // El middleware de autenticación debe haber agregado el user al request
         const userId = req.user?.id;
         if (!userId) {
             return res.status(401).json({ message: 'Usuario no autenticado' });
         }
+        const em = orm.em.fork();
         const usuario = await em.findOne(Usuario, { id: userId });
         if (!usuario) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
+            return res.status(404).json({ message: 'Usuario no encontrado' }); //Todas estas validaciones las hace porque si el
         }
         // Enviar datos del perfil sin la contraseña
         const perfil = {
@@ -92,8 +92,9 @@ async function getProfile(req, res) {
         res.status(200).json(perfil);
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error al obtener perfil:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
     }
 }
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove };
+export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, getProfile };
 //# sourceMappingURL=usuario.controler.js.map

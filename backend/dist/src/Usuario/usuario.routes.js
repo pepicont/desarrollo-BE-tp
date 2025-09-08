@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { sanitizeUsuarioInput, findAll, findOne, add, update, remove } from "./usuario.controler.js";
+import { sanitizeUsuarioInput, findAll, findOne, add, update, remove, getProfile } from "./usuario.controler.js";
+import { authenticateToken } from "../Auth/auth.middleware.js";
 export const usuarioRouter = Router();
+usuarioRouter.get('/profile', authenticateToken, getProfile);
 usuarioRouter.get('/', findAll);
 usuarioRouter.post('/', sanitizeUsuarioInput, add);
 usuarioRouter.get('/:id', findOne);

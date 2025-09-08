@@ -79,35 +79,37 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-  async function getProfile(req: AuthenticatedRequest, res: Response) {
-  try {
-    // El middleware de autenticación debe haber agregado el user al request
-    const userId = req.user?.id;
-    
-    if (!userId) {
-      return res.status(401).json({ message: 'Usuario no autenticado' });
+async function getProfile(req: AuthenticatedRequest, res: Response) {
+    try {
+      const userId = req.user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ message: 'Usuario no autenticado' });
+      }
+
+      const em = orm.em.fork();
+      const usuario = await em.findOne(Usuario, { id: userId });
+      
+      if (!usuario) {
+        return res.status(404).json({ message: 'Usuario no encontrado' }); //Todas estas validaciones las hace porque si el
+      }
+
+      // Enviar datos del perfil sin la contraseña
+      const perfil = {
+        id: usuario.id,
+        nombreUsuario: usuario.nombreUsuario,
+        nombre: usuario.nombre,
+        mail: usuario.mail,
+        fechaNacimiento: usuario.fechaNacimiento,
+        fechaCreacion: usuario.fechaCreacion
+      };
+
+      res.status(200).json(perfil);
+    } catch (error: any) {
+      console.error('Error al obtener perfil:', error);
+      res.status(500).json({ message: 'Error interno del servidor' });
     }
-
-    const usuario = await em.findOne(Usuario, { id: userId });
-    
-    if (!usuario) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
-    }
-
-    // Enviar datos del perfil sin la contraseña
-    const perfil = {
-      id: usuario.id,
-      nombreUsuario: usuario.nombreUsuario,
-      nombre: usuario.nombre,
-      mail: usuario.mail,
-      fechaNacimiento: usuario.fechaNacimiento,
-      fechaCreacion: usuario.fechaCreacion
-    };
-
-    res.status(200).json(perfil);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
   }
-}
 
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove };
+
+export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, getProfile };

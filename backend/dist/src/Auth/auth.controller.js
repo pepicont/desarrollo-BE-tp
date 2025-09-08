@@ -189,36 +189,6 @@ class AuthController {
             });
         }
     }
-    // Endpoint para obtener el perfil completo del usuario autenticado
-    //🛡️ "¿Tienes credencial válida?" ✅ "Sí, pasa" (esto es lo que hizo el middleware)
-    //"¿Tu cuenta existe realmente?" "¿No fue cerrada?" "¿Los datos son correctos?" (esto es lo que hace el principio de getProfile)
-    async getProfile(req, res) {
-        try {
-            const userId = req.user?.id;
-            if (!userId) {
-                return res.status(401).json({ message: 'Usuario no autenticado' });
-            }
-            const em = orm.em.fork();
-            const usuario = await em.findOne(Usuario, { id: userId });
-            if (!usuario) {
-                return res.status(404).json({ message: 'Usuario no encontrado' }); //Todas estas validaciones las hace porque si el
-            }
-            // Enviar datos del perfil sin la contraseña
-            const perfil = {
-                id: usuario.id,
-                nombreUsuario: usuario.nombreUsuario,
-                nombre: usuario.nombre,
-                mail: usuario.mail,
-                fechaNacimiento: usuario.fechaNacimiento,
-                fechaCreacion: usuario.fechaCreacion
-            };
-            res.status(200).json(perfil);
-        }
-        catch (error) {
-            console.error('Error al obtener perfil:', error);
-            res.status(500).json({ message: 'Error interno del servidor' });
-        }
-    }
 }
 export { AuthController };
 //# sourceMappingURL=auth.controller.js.map
