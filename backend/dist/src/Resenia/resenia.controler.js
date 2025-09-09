@@ -83,5 +83,31 @@ async function getMyResenias(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias };
+// Obtener reseñas por producto (juego/servicio/complemento)
+async function getByProduct(req, res) {
+    try {
+        const tipo = String(req.params.tipo);
+        const id = Number.parseInt(req.params.id);
+        if (!['juego', 'servicio', 'complemento'].includes(tipo) || Number.isNaN(id)) {
+            res.status(400).json({ message: 'Parámetros inválidos' });
+            return;
+        }
+        let where;
+        if (tipo === 'juego')
+            where = { venta: { juego: id } };
+        if (tipo === 'servicio')
+            where = { venta: { servicio: id } };
+        if (tipo === 'complemento')
+            where = { venta: { complemento: id } };
+        const resenias = await em.find(Resenia, where, {
+            populate: ['usuario'],
+            orderBy: { fecha: 'desc' },
+        });
+        res.status(200).json({ message: 'found product reviews', data: resenias });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct };
 //# sourceMappingURL=resenia.controler.js.map

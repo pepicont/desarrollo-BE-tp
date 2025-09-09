@@ -7,6 +7,7 @@ import {
   update,
   remove,
   getMyResenias,
+  getByProduct,
 } from './resenia.controler.js';
 import { authenticateToken } from '../Auth/auth.middleware.js';
 
@@ -16,6 +17,8 @@ export const reseniaRouter = Router();
 reseniaRouter.get('/my-resenias', authenticateToken as any, getMyResenias as any);
 
 reseniaRouter.get('/', findAll);
+// Reseñas por producto
+reseniaRouter.get('/by-product/:tipo/:id', getByProduct as any);
 reseniaRouter.get('/:id', findOne);
 reseniaRouter.post('/', sanitizeReseniaInput, add);
 reseniaRouter.put('/:id', sanitizeReseniaInput, update);
