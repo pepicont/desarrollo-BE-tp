@@ -196,7 +196,7 @@ async function main() {
     v.usuario = sample(allUsers) as any
     v.fecha = new Date(rand(2022, 2025), rand(0,11), rand(1,28))
     v.codActivacion = makeCode('ACT')
-    const tipo = sample(['juego','servicio','complemento'] as const)
+  const tipo = sample(['juego','servicio','complemento'])
     if (tipo === 'juego') v.juego = sample(juegos) as any
     if (tipo === 'servicio') v.servicio = sample(servicios) as any
     if (tipo === 'complemento') v.complemento = sample(complementos) as any
