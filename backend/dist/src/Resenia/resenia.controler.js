@@ -103,7 +103,15 @@ async function getByProduct(req, res) {
             populate: ['usuario'],
             orderBy: { fecha: 'desc' },
         });
-        res.status(200).json({ message: 'found product reviews', data: resenias });
+        // Mapear solo id y nombreUsuario del usuario
+        const data = resenias.map(resenia => ({
+            ...resenia,
+            usuario: {
+                id: resenia.usuario.id,
+                nombreUsuario: resenia.usuario.nombreUsuario
+            }
+        }));
+        res.status(200).json({ message: 'found product reviews', data });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
