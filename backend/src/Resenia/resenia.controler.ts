@@ -45,9 +45,22 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
-async function add(req: Request, res: Response) {
+async function add(req: AuthenticatedRequest, res: Response) {
   try {
-    const resenia = em.create(Resenia, req.body.sanitizedInput);
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Agregar el usuario autenticado a los datos
+    const reseniaData = {
+      ...req.body.sanitizedInput,
+      usuario: userId
+    };
+
+    const resenia = em.create(Resenia, reseniaData);
     await em.flush();
     res.status(201).json({ message: "review created", data: resenia });
   } catch (error: any) {
@@ -67,10 +80,29 @@ async function update(req: Request, res: Response) {
   }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: AuthenticatedRequest, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const resenia = em.getReference(Resenia, id);
+    const userId = req.user?.id;
+    
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Verificar que la reseña pertenece al usuario autenticado
+    const resenia = await em.findOne(Resenia, { id }, { populate: ['usuario'] });
+    
+    if (!resenia) {
+      res.status(404).json({ message: 'Reseña no encontrada' });
+      return;
+    }
+
+    if (resenia.usuario.id !== userId) {
+      res.status(403).json({ message: 'No tienes permisos para eliminar esta reseña' });
+      return;
+    }
+
     await em.removeAndFlush(resenia);
     res.status(200).json({ message: "review removed" });
   } catch (error: any) {
@@ -95,6 +127,40 @@ async function getMyResenias(req: AuthenticatedRequest, res: Response): Promise<
     );
 
     res.status(200).json({ message: "found user reviews", data: resenias });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+// Verificar si el usuario tiene una reseña para una compra específica
+async function checkUserReviewForPurchase(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const userId = req.user?.id;
+    const ventaId = Number.parseInt(req.params.ventaId);
+    
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    if (Number.isNaN(ventaId)) {
+      res.status(400).json({ message: 'ID de venta inválido' });
+      return;
+    }
+
+    const resenia = await em.findOne(
+      Resenia,
+      { 
+        usuario: userId,
+        venta: ventaId 
+      }
+    );
+
+    res.status(200).json({ 
+      message: 'Review check completed',
+      hasReview: !!resenia,
+      reseniaId: resenia?.id || null
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -140,4 +206,4 @@ async function getByProduct(req: Request, res: Response): Promise<void> {
   }
 }
 
-export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct };
+export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase };
