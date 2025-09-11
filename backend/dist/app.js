@@ -10,6 +10,7 @@ import { complementoRouter } from './src/Producto/Complemento/complemento.routes
 import { ventaRouter } from './src/Venta/venta.routes.js';
 import { reseniaRouter } from './src/Resenia/resenia.routes.js';
 import { searchRouter } from './src/Search/search.routes.js';
+import { checkoutRouter } from './src/Checkout/checkout.routes.js';
 import 'reflect-metadata';
 import { orm, syncSchema } from './src/shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
@@ -44,6 +45,7 @@ app.use('/api/complemento', complementoRouter);
 app.use('/api/venta', ventaRouter);
 app.use('/api/resenia', reseniaRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/checkout', checkoutRouter);
 app.use((_, res) => {
     res.status(404).send({ message: 'Resource not found' });
     return;
