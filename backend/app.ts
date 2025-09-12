@@ -11,6 +11,7 @@ import { ventaRouter } from './src/Venta/venta.routes.js'
 import { reseniaRouter } from './src/Resenia/resenia.routes.js'
 import { searchRouter } from './src/Search/search.routes.js'
 import { checkoutRouter } from './src/Checkout/checkout.routes.js'
+import { mpWebhook, mpSuccessCallback } from './src/Checkout/checkout.controller.js'
 import 'reflect-metadata'
 import { orm, syncSchema } from './src/shared/orm.js'
 import { RequestContext } from '@mikro-orm/core'
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 })
 
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 //luego de los middlewares base
 app.use((req, res, next) => {
@@ -51,6 +53,10 @@ app.use('/api/venta', ventaRouter)
 app.use('/api/resenia', reseniaRouter)
 app.use('/api/search', searchRouter)
 app.use('/api/checkout', checkoutRouter)
+
+
+app.post('/mp/webhook', mpWebhook as any)
+app.get('/mp/success', mpSuccessCallback as any)
 
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' })
