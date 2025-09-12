@@ -48,7 +48,6 @@ app.use('/api/venta', ventaRouter);
 app.use('/api/resenia', reseniaRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/checkout', checkoutRouter);
-// Compat: permitir webhook en ruta raíz '/mp/webhook' si alguna preferencia quedó configurada con esa URL
 app.post('/mp/webhook', mpWebhook);
 app.get('/mp/success', mpSuccessCallback);
 app.use((_, res) => {
