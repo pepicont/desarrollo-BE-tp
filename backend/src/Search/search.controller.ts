@@ -3,6 +3,7 @@ import { orm } from '../shared/orm.js';
 import { Juego } from '../Producto/Juego/juego.entity.js';
 import { Servicio } from '../Producto/Servicio/servicio.entity.js';
 import { Complemento } from '../Producto/Complemento/complemento.entity.js';
+import { FotoProducto } from '../Producto/FotoProducto/fotoProducto.entity.js';
 
 type TipoProducto = 'juego' | 'servicio' | 'complemento' | 'todos';
 
@@ -41,7 +42,7 @@ export async function search(req: Request, res: Response) {
 			};
 			queries.push(
 				em.find(Juego, whereJuego, {
-					populate: ['compania', 'categorias'],
+					populate: ['compania', 'categorias', 'fotos'],
 					limit,
 					offset,
 					orderBy: { id: 'asc' },
@@ -56,7 +57,7 @@ export async function search(req: Request, res: Response) {
 			};
 			queries.push(
 				em.find(Servicio, whereServicio, {
-					populate: ['compania', 'categorias'],
+					populate: ['compania', 'categorias', 'fotos'],
 					limit,
 					offset,
 					orderBy: { id: 'asc' },
@@ -71,7 +72,7 @@ export async function search(req: Request, res: Response) {
 			};
 			queries.push(
 				em.find(Complemento, whereComplemento, {
-					populate: ['compania', 'categorias', 'juego'],
+					populate: ['compania', 'categorias', 'juego', 'fotos'],
 					limit,
 					offset,
 					orderBy: { id: 'asc' },
@@ -94,6 +95,7 @@ export async function search(req: Request, res: Response) {
 			fechaLanzamiento?: Date;
 			edadPermitida?: number;
 			juegoRelacionado?: { id: number; nombre: string } | null;
+			imageUrl?: string | null;
 		};
 
 		const items: Item[] = [];
@@ -101,6 +103,8 @@ export async function search(req: Request, res: Response) {
 		for (const list of results) {
 			for (const r of list) {
 				if (r instanceof Juego) {
+					const fotos = (r as any).fotos?.toArray?.() as FotoProducto[] | undefined;
+					const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
 					items.push({
 						id: r.id!,
 						tipo: 'juego',
@@ -111,8 +115,11 @@ export async function search(req: Request, res: Response) {
 						categorias: (r.categorias as any)?.toArray?.().map((c: any) => ({ id: c.id, nombre: c.nombre })) ?? [],
 						fechaLanzamiento: r.fechaLanzamiento,
 						edadPermitida: r.edadPermitida,
+						imageUrl: principal?.url ?? null,
 					});
 				} else if (r instanceof Servicio) {
+					const fotos = (r as any).fotos?.toArray?.() as FotoProducto[] | undefined;
+					const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
 					items.push({
 						id: r.id!,
 						tipo: 'servicio',
@@ -121,8 +128,11 @@ export async function search(req: Request, res: Response) {
 						monto: r.monto,
 						compania: r.compania ? { id: (r.compania as any).id, nombre: (r.compania as any).nombre } : null,
 						categorias: (r.categorias as any)?.toArray?.().map((c: any) => ({ id: c.id, nombre: c.nombre })) ?? [],
+						imageUrl: principal?.url ?? null,
 					});
 				} else if (r instanceof Complemento) {
+					const fotos = (r as any).fotos?.toArray?.() as FotoProducto[] | undefined;
+					const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
 					items.push({
 						id: r.id!,
 						tipo: 'complemento',
@@ -132,6 +142,7 @@ export async function search(req: Request, res: Response) {
 						compania: r.compania ? { id: (r.compania as any).id, nombre: (r.compania as any).nombre } : null,
 						categorias: (r.categorias as any)?.toArray?.().map((c: any) => ({ id: c.id, nombre: c.nombre })) ?? [],
 						juegoRelacionado: r.juego ? { id: (r.juego as any).id, nombre: (r.juego as any).nombre } : null,
+						imageUrl: principal?.url ?? null,
 					});
 				}
 			}

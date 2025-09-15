@@ -30,7 +30,7 @@ export async function search(req, res) {
                 ...(categoriaId ? { categorias: { id: categoriaId } } : {}),
             };
             queries.push(em.find(Juego, whereJuego, {
-                populate: ['compania', 'categorias'],
+                populate: ['compania', 'categorias', 'fotos'],
                 limit,
                 offset,
                 orderBy: { id: 'asc' },
@@ -42,7 +42,7 @@ export async function search(req, res) {
                 ...(categoriaId ? { categorias: { id: categoriaId } } : {}),
             };
             queries.push(em.find(Servicio, whereServicio, {
-                populate: ['compania', 'categorias'],
+                populate: ['compania', 'categorias', 'fotos'],
                 limit,
                 offset,
                 orderBy: { id: 'asc' },
@@ -54,7 +54,7 @@ export async function search(req, res) {
                 ...(categoriaId ? { categorias: { id: categoriaId } } : {}),
             };
             queries.push(em.find(Complemento, whereComplemento, {
-                populate: ['compania', 'categorias', 'juego'],
+                populate: ['compania', 'categorias', 'juego', 'fotos'],
                 limit,
                 offset,
                 orderBy: { id: 'asc' },
@@ -65,6 +65,8 @@ export async function search(req, res) {
         for (const list of results) {
             for (const r of list) {
                 if (r instanceof Juego) {
+                    const fotos = r.fotos?.toArray?.();
+                    const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
                     items.push({
                         id: r.id,
                         tipo: 'juego',
@@ -75,9 +77,12 @@ export async function search(req, res) {
                         categorias: r.categorias?.toArray?.().map((c) => ({ id: c.id, nombre: c.nombre })) ?? [],
                         fechaLanzamiento: r.fechaLanzamiento,
                         edadPermitida: r.edadPermitida,
+                        imageUrl: principal?.url ?? null,
                     });
                 }
                 else if (r instanceof Servicio) {
+                    const fotos = r.fotos?.toArray?.();
+                    const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
                     items.push({
                         id: r.id,
                         tipo: 'servicio',
@@ -86,9 +91,12 @@ export async function search(req, res) {
                         monto: r.monto,
                         compania: r.compania ? { id: r.compania.id, nombre: r.compania.nombre } : null,
                         categorias: r.categorias?.toArray?.().map((c) => ({ id: c.id, nombre: c.nombre })) ?? [],
+                        imageUrl: principal?.url ?? null,
                     });
                 }
                 else if (r instanceof Complemento) {
+                    const fotos = r.fotos?.toArray?.();
+                    const principal = fotos?.find(f => f.esPrincipal) ?? fotos?.[0];
                     items.push({
                         id: r.id,
                         tipo: 'complemento',
@@ -98,6 +106,7 @@ export async function search(req, res) {
                         compania: r.compania ? { id: r.compania.id, nombre: r.compania.nombre } : null,
                         categorias: r.categorias?.toArray?.().map((c) => ({ id: c.id, nombre: c.nombre })) ?? [],
                         juegoRelacionado: r.juego ? { id: r.juego.id, nombre: r.juego.nombre } : null,
+                        imageUrl: principal?.url ?? null,
                     });
                 }
             }
