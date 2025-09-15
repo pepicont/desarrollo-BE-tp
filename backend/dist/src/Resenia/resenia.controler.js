@@ -100,7 +100,7 @@ async function getMyResenias(req, res) {
             res.status(401).json({ message: 'Usuario no autenticado' });
             return;
         }
-        const resenias = await em.find(Resenia, { usuario: userId }, { populate: ['venta.juego', 'venta.servicio', 'venta.complemento'] });
+        const resenias = await em.find(Resenia, { usuario: userId }, { populate: ['venta.juego.fotos', 'venta.servicio.fotos', 'venta.complemento.fotos'] });
         res.status(200).json({ message: "found user reviews", data: resenias });
     }
     catch (error) {

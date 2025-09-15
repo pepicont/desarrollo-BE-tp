@@ -78,7 +78,7 @@ async function getMyVentas(req, res) {
             res.status(401).json({ message: 'Usuario no autenticado' });
             return;
         }
-        const ventas = await em.find(Venta, { usuario: userId }, { populate: ['complemento', 'juego', 'servicio'] });
+        const ventas = await em.find(Venta, { usuario: userId }, { populate: ['complemento.fotos', 'juego.fotos', 'servicio.fotos'] });
         res.status(200).json({ message: "found user purchases", data: ventas });
     }
     catch (error) {

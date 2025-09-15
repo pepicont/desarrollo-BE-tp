@@ -85,7 +85,11 @@ async function getMyVentas(req: AuthenticatedRequest, res: Response): Promise<vo
 			return;
 		}
 
-		const ventas = await em.find(Venta, { usuario: userId }, { populate: ['complemento', 'juego', 'servicio'] });
+			const ventas = await em.find(
+				Venta,
+				{ usuario: userId },
+				{ populate: ['complemento.fotos', 'juego.fotos', 'servicio.fotos'] }
+			);
 		res.status(200).json({ message: "found user purchases", data: ventas });
 	} catch (error: any) {
 		res.status(500).json({ message: error.message });	

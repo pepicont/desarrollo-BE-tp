@@ -123,7 +123,7 @@ async function getMyResenias(req: AuthenticatedRequest, res: Response): Promise<
     const resenias = await em.find(
       Resenia,
       { usuario: userId },
-      { populate: ['venta.juego', 'venta.servicio', 'venta.complemento'] }
+      { populate: ['venta.juego.fotos', 'venta.servicio.fotos', 'venta.complemento.fotos'] }
     );
 
     res.status(200).json({ message: "found user reviews", data: resenias });
