@@ -19,7 +19,7 @@ function sanitizeServicioInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const servicios = await em.find(Servicio, {}, { populate: ["categorias", "compania"] });
+        const servicios = await em.find(Servicio, {}, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found all services", data: servicios });
     }
     catch (error) {
@@ -29,7 +29,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const servicios = await em.findOneOrFail(Servicio, { id }, { populate: ["categorias", "compania"] });
+        const servicios = await em.findOneOrFail(Servicio, { id }, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found service", data: servicios });
     }
     catch (error) {

@@ -34,7 +34,7 @@ async function findAll(req: Request, res: Response) {
     const complementos = await em.find(
       Complemento,
       {},
-      { populate: ["categorias", "compania", "juego"] }
+      { populate: ["categorias", "compania", "juego", "fotos"] }
     );
     res.status(200).json({ message: "found all complementos", data: complementos });
   } catch (error: any) {
@@ -48,7 +48,7 @@ async function findOne(req: Request, res: Response) {
     const complementos = await em.findOneOrFail(
       Complemento,
       { id },
-      { populate: ["categorias", "compania", "juego"] }
+      { populate: ["categorias", "compania", "juego", "fotos"] }
     );
     res.status(200).json({ message: "found complemento", data: complementos });
   } catch (error: any) {

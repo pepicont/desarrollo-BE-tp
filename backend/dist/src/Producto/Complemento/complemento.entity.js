@@ -9,11 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { BaseProducto } from '../../shared/baseProducto.entity.js';
 import { Cascade, Collection, Entity, ManyToMany, ManyToOne, OneToMany } from '@mikro-orm/core';
+import { FotoProducto } from '../FotoProducto/fotoProducto.entity.js';
 let Complemento = class Complemento extends BaseProducto {
     constructor() {
         super(...arguments);
         this.categorias = new Collection(this);
         this.ventas = new Collection(this);
+        this.fotos = new Collection(this);
     }
 };
 __decorate([
@@ -31,6 +33,10 @@ __decorate([
     OneToMany(() => 'Venta', (venta) => venta.complemento, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)
 ], Complemento.prototype, "ventas", void 0);
+__decorate([
+    OneToMany(() => FotoProducto, (foto) => foto.complemento, { cascade: [Cascade.ALL] }),
+    __metadata("design:type", Object)
+], Complemento.prototype, "fotos", void 0);
 Complemento = __decorate([
     Entity()
 ], Complemento);

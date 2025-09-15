@@ -7,34 +7,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { BaseProducto } from '../../shared/baseProducto.entity.js';
-import { Cascade, Collection, Entity, ManyToMany, OneToMany } from '@mikro-orm/core';
-import { FotoProducto } from '../FotoProducto/fotoProducto.entity.js';
-let Servicio = class Servicio extends BaseProducto {
+import { Entity, Property, ManyToOne } from '@mikro-orm/core';
+import { BaseEntity } from '../../shared/baseEntity.entity.js';
+let FotoProducto = class FotoProducto extends BaseEntity {
     constructor() {
         super(...arguments);
-        this.categorias = new Collection(this);
-        this.ventas = new Collection(this);
-        this.fotos = new Collection(this);
+        this.esPrincipal = false;
     }
 };
 __decorate([
-    ManyToMany(() => 'Categoria', (categoria) => categoria.servicios, {
-        cascade: [Cascade.ALL],
-        owner: true,
-    }),
-    __metadata("design:type", Object)
-], Servicio.prototype, "categorias", void 0);
+    Property({ nullable: false, length: 2048 }),
+    __metadata("design:type", String)
+], FotoProducto.prototype, "url", void 0);
 __decorate([
-    OneToMany(() => 'Venta', (venta) => venta.servicio, { cascade: [Cascade.ALL] }),
-    __metadata("design:type", Object)
-], Servicio.prototype, "ventas", void 0);
+    Property({ nullable: false, default: false }),
+    __metadata("design:type", Boolean)
+], FotoProducto.prototype, "esPrincipal", void 0);
 __decorate([
-    OneToMany(() => FotoProducto, (foto) => foto.servicio, { cascade: [Cascade.ALL] }),
+    ManyToOne(() => 'Juego', { nullable: true }),
     __metadata("design:type", Object)
-], Servicio.prototype, "fotos", void 0);
-Servicio = __decorate([
+], FotoProducto.prototype, "juego", void 0);
+__decorate([
+    ManyToOne(() => 'Complemento', { nullable: true }),
+    __metadata("design:type", Object)
+], FotoProducto.prototype, "complemento", void 0);
+__decorate([
+    ManyToOne(() => 'Servicio', { nullable: true }),
+    __metadata("design:type", Object)
+], FotoProducto.prototype, "servicio", void 0);
+FotoProducto = __decorate([
     Entity()
-], Servicio);
-export { Servicio };
-//# sourceMappingURL=servicio.entity.js.map
+], FotoProducto);
+export { FotoProducto };
+//# sourceMappingURL=fotoProducto.entity.js.map

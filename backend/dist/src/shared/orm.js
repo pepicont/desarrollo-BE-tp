@@ -8,6 +8,7 @@ import { Complemento } from '../Producto/Complemento/complemento.entity.js';
 import { Usuario } from '../Usuario/usuario.entity.js';
 import { Venta } from '../Venta/venta.entity.js';
 import { Resenia } from '../Resenia/resenia.entity.js';
+import { FotoProducto } from '../Producto/FotoProducto/fotoProducto.entity.js';
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = Number(process.env.DB_PORT || 3307);
 const DB_USER = process.env.DB_USER || 'dsw';
@@ -17,10 +18,10 @@ export const orm = await MikroORM.init({
     //entities: ['dist/**/*.entity.js'],
     //entitiesTs: ['src/**/*.entity.ts'],
     entities: [
-        Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia
+        Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia, FotoProducto
     ],
     entitiesTs: [
-        Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia
+        Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia, FotoProducto
     ],
     dbName: DB_NAME,
     driver: MySqlDriver,

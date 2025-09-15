@@ -21,7 +21,7 @@ function sanitizeJuegoInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const juegos = await em.find(Juego, {}, { populate: ["categorias", "compania"] });
+        const juegos = await em.find(Juego, {}, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found all games", data: juegos });
     }
     catch (error) {
@@ -31,7 +31,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania"] });
+        const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found game", data: juego });
     }
     catch (error) {

@@ -20,7 +20,7 @@ function sanitizeComplementoInput(req, res, next) {
 }
 async function findAll(req, res) {
     try {
-        const complementos = await em.find(Complemento, {}, { populate: ["categorias", "compania", "juego"] });
+        const complementos = await em.find(Complemento, {}, { populate: ["categorias", "compania", "juego", "fotos"] });
         res.status(200).json({ message: "found all complementos", data: complementos });
     }
     catch (error) {
@@ -30,7 +30,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const complementos = await em.findOneOrFail(Complemento, { id }, { populate: ["categorias", "compania", "juego"] });
+        const complementos = await em.findOneOrFail(Complemento, { id }, { populate: ["categorias", "compania", "juego", "fotos"] });
         res.status(200).json({ message: "found complemento", data: complementos });
     }
     catch (error) {

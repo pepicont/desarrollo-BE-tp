@@ -33,7 +33,7 @@ async function findAll(req: Request, res: Response) {
     const servicios = await em.find(
       Servicio,
       {},
-      { populate: ["categorias", "compania"] }
+      { populate: ["categorias", "compania", "fotos"] }
     );
     res.status(200).json({ message: "found all services", data: servicios });
   } catch (error: any) {
@@ -47,7 +47,7 @@ async function findOne(req: Request, res: Response) {
     const servicios = await em.findOneOrFail(
       Servicio,
       { id },
-      { populate: ["categorias", "compania"] }
+      { populate: ["categorias", "compania", "fotos"] }
     );
     res.status(200).json({ message: "found service", data: servicios });
   } catch (error: any) {
