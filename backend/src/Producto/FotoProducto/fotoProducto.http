@@ -1,0 +1,53 @@
+### Listar fotos de un juego
+GET http://localhost:3000/api/foto-producto/juego/2
+
+### Agregar foto a un juego
+POST http://localhost:3000/api/foto-producto/juego/2
+Content-Type: application/json
+
+{
+  "url": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Cyberpunk_2077_box_art.jpg/250px-Cyberpunk_2077_box_art.jpg",
+  "esPrincipal": false
+}
+
+### Marcar foto como principal de un juego
+PUT http://localhost:3000/api/foto-producto/juego/1/1/principal
+
+### Eliminar foto de un juego
+DELETE http://localhost:3000/api/foto-producto/juego/1/1
+
+### Listar fotos de un servicio
+GET http://localhost:3000/api/foto-producto/servicio/1
+
+### Agregar foto a un servicio
+POST http://localhost:3000/api/foto-producto/servicio/1
+Content-Type: application/json
+
+{
+  "url": "https://placehold.co/1200x800/png?text=Game%20Pass%20Alt",
+  "esPrincipal": false
+}
+
+### Marcar foto como principal de un servicio
+PUT http://localhost:3000/api/foto-producto/servicio/1/1/principal
+
+### Eliminar foto de un servicio
+DELETE http://localhost:3000/api/foto-producto/servicio/1/1
+
+### Listar fotos de un complemento
+GET http://localhost:3000/api/foto-producto/complemento/1
+
+### Agregar foto a un complemento
+POST http://localhost:3000/api/foto-producto/complemento/1
+Content-Type: application/json
+
+{
+  "url": "https://placehold.co/1200x800/png?text=V-Bucks%20Alt",
+  "esPrincipal": false
+}
+
+### Marcar foto como principal de un complemento
+PUT http://localhost:3000/api/foto-producto/complemento/1/1/principal
+
+### Eliminar foto de un complemento
+DELETE http://localhost:3000/api/foto-producto/complemento/1/1

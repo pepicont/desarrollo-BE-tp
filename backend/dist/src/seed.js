@@ -9,8 +9,95 @@ import { Complemento } from './Producto/Complemento/complemento.entity.js';
 import { Usuario } from './Usuario/usuario.entity.js';
 import { Venta } from './Venta/venta.entity.js';
 import { Resenia } from './Resenia/resenia.entity.js';
+import { FotoProducto } from './Producto/FotoProducto/fotoProducto.entity.js';
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
+// ==============================
+// Imágenes (URLs estáticas)
+// ==============================
+// NOTA de licencias: usamos Pexels (libre uso) para imágenes temáticas y Wikimedia para logos de servicios.
+// Helper Pexels 16:9 siempre consistente
+const PEX = (id) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1600&h=900&fit=crop`;
+// Juegos: imágenes temáticas (no carátulas oficiales) por título
+const imagesByJuego = {
+    'Elden Ring': [PEX(6595971)],
+    'Cyberpunk 2077': [PEX(373543)],
+    'The Witcher 3': [PEX(6595970)],
+    'GTA V': [PEX(21014)],
+    'RDR2': [PEX(1192671)],
+    'Zelda TotK': [PEX(276514)],
+    'Mario Kart 8': [PEX(2445537)],
+    'God of War': [PEX(414171)],
+    'Horizon FW': [PEX(572897)],
+    'Spider-Man 2': [PEX(373481)],
+    'FIFA 24': [PEX(399187)],
+    'F1 24': [PEX(1402787)],
+    'Battlefield 2042': [PEX(205523)],
+    'Apex Legends': [PEX(461198)],
+    'Overwatch 2': [PEX(257904)],
+    'Diablo IV': [PEX(6595971)],
+    'Fortnite': [PEX(12380741)],
+    'Destiny 2': [PEX(461198)],
+    'AC Valhalla': [PEX(414171)],
+    'Rainbow Six Siege': [PEX(205523)],
+    'Gran Turismo 7': [PEX(12380741)],
+    'Starfield': [PEX(1169754)],
+    'Halo Infinite': [PEX(461198)],
+    'Forza Horizon 5': [PEX(12380741)],
+    'Yakuza LAD': [PEX(373481)],
+    'Final Fantasy XVI': [PEX(6595971)],
+    'Monster Hunter Rise': [PEX(6595970)],
+    'Sekiro': [PEX(6595970)],
+    'Resident Evil 4': [PEX(207353)],
+    'Street Fighter 6': [PEX(2903499)],
+    'Baldur’s Gate 3': [PEX(6595971)],
+    'Ghost of Tsushima': [PEX(572897)],
+    'Bloodborne': [PEX(6595971)],
+    'Death Stranding': [PEX(1169754)],
+    'No Man’s Sky': [PEX(1169754)],
+    'Skyrim': [PEX(6595970)],
+};
+// Servicios: logos desde Wikimedia (PNG thumbnails de SVG para <img> directas)
+const imagesByServicio = {
+    'Xbox Game Pass': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Xbox_Game_Pass_new_logo_-_colored_version.svg/1280px-Xbox_Game_Pass_new_logo_-_colored_version.svg.png'
+    ],
+    'PlayStation Plus': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/PlayStation_Plus_second_logo_and_wordmark.svg/1024px-PlayStation_Plus_second_logo_and_wordmark.svg.png'
+    ],
+    'Nintendo Switch Online': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Nintendo_Switch_Online_logo.svg/1024px-Nintendo_Switch_Online_logo.svg.png'
+    ],
+    'EA Play': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/EA_Play_logo.svg/1280px-EA_Play_logo.svg.png'
+    ],
+    'Ubisoft+': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Ubisoft%2B.svg/1024px-Ubisoft%2B.svg.png'
+    ],
+    'GeForce NOW': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/GeForce_Now_logo.svg/1024px-GeForce_Now_logo.svg.png'
+    ],
+    'Prime Gaming': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Prime_gaming_logo.svg/1024px-Prime_gaming_logo.svg.png'
+    ],
+    'Apple Arcade': [
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Apple-arcade-logo.svg/1024px-Apple-arcade-logo.svg.png'
+    ],
+};
+// Complementos: imágenes genéricas (monedas/tokens/pases) en Pexels
+const imagesByComplemento = {
+    'V-Bucks': [PEX(6595970), PEX(6595971)],
+    'COD Points': [PEX(6595971), PEX(6595970)],
+    'FIFA Points': [PEX(399187)],
+    'Apex Coins': [PEX(6595971)],
+    'Overwatch Coins': [PEX(6595970)],
+    'Diablo Platinum': [PEX(6595971)],
+    'Shark Cards': [PEX(28114090)],
+    'Forza Car Pass': [PEX(12380741)],
+    'Rainbow Six Credits': [PEX(32977036)],
+    'Pase de Batalla': [PEX(32977036)],
+    'Paquete Skins': [PEX(12380741)],
+};
 async function resetSchema() {
     const gen = orm.getSchemaGenerator();
     await gen.dropSchema();
@@ -132,6 +219,21 @@ async function main() {
     }
     await em.persistAndFlush(juegos);
     console.log(`Juegos: ${juegos.length}`);
+    // Fotos para Juegos (1–3, principal la primera); fallback temático si no hay mapeo
+    const fotosJuegos = [];
+    for (const j of juegos) {
+        const urls = [...(imagesByJuego[j.nombre] ?? [])];
+        if (urls.length === 0)
+            urls.push(PEX(12380741)); // gamepad genérico
+        for (let i = 0; i < urls.length && i < 3; i++) {
+            const f = new FotoProducto();
+            f.url = urls[i];
+            f.esPrincipal = i === 0;
+            f.juego = j;
+            fotosJuegos.push(f);
+        }
+    }
+    await em.persistAndFlush(fotosJuegos);
     // Servicios (>=16)
     const serviceNames = [
         'Xbox Game Pass', 'PlayStation Plus', 'Nintendo Switch Online', 'EA Play', 'Ubisoft+',
@@ -151,6 +253,22 @@ async function main() {
     }
     await em.persistAndFlush(servicios);
     console.log(`Servicios: ${servicios.length}`);
+    // Fotos para Servicios (1–2 según mapeo); mantenemos los logos curados
+    const fotosServicios = [];
+    for (const s of servicios) {
+        const urls = [...(imagesByServicio[s.nombre] ?? [])];
+        // fallback neutral mínimo si un servicio no está en el mapeo (evitar placeholders con texto)
+        if (urls.length === 0)
+            urls.push('https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Icon_-_image.svg/64px-Icon_-_image.svg.png');
+        for (let i = 0; i < urls.length && i < 2; i++) {
+            const f = new FotoProducto();
+            f.url = urls[i];
+            f.esPrincipal = i === 0;
+            f.servicio = s;
+            fotosServicios.push(f);
+        }
+    }
+    await em.persistAndFlush(fotosServicios);
     // Complementos (>=30)
     const compNames = [
         'V-Bucks', 'COD Points', 'FIFA Points', 'Apex Coins', 'Overwatch Coins', 'Diablo Platinum', 'Shark Cards',
@@ -173,6 +291,21 @@ async function main() {
     }
     await em.persistAndFlush(complementos);
     console.log(`Complementos: ${complementos.length}`);
+    // Fotos para Complementos (1–2 desde mapeo Pexels; fallback temático si falta)
+    const fotosComplementos = [];
+    for (const c of complementos) {
+        const urls = [...(imagesByComplemento[c.nombre] ?? [])];
+        if (urls.length === 0)
+            urls.push(PEX(6595970)); // moneda/tema in-game
+        for (let i = 0; i < urls.length && i < 2; i++) {
+            const f = new FotoProducto();
+            f.url = urls[i];
+            f.esPrincipal = i === 0;
+            f.complemento = c;
+            fotosComplementos.push(f);
+        }
+    }
+    await em.persistAndFlush(fotosComplementos);
     // Ventas + Reseñas
     const ventas = [];
     const resenias = [];
