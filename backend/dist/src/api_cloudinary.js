@@ -30,7 +30,7 @@ categorias.forEach((categoria) => {
     }
 });
 /*Instrucciones para subir imágenes a Cloudinary:
-2. dentro de src poner la carpetas fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento con las imágenes a subir.
+2. dentro de backend poner la carpetas fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento con las imágenes a subir.
 
 (REGLAS PARA NOMBRAR LAS IMÁGENES: nombres todo en minuscula, reemplazar " ", ":" por _
 ,ignorar "-","'" y reemplazar letra con acento por letra sin)
