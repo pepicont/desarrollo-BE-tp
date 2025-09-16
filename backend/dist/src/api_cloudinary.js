@@ -29,4 +29,17 @@ categorias.forEach((categoria) => {
         });
     }
 });
+/*Instrucciones para subir imágenes a Cloudinary:
+2. dentro de src poner la carpetas fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento con las imágenes a subir.
+
+(REGLAS PARA NOMBRAR LAS IMÁGENES: nombres todo en minuscula, reemplazar " ", ":" por _
+,ignorar "-","'" y reemplazar letra con acento por letra sin)
+
+3. navegar en consola hasta la carpeta backend (cd desarrollo-BE-tp/backend)
+4. ejecutar el script con tsc src/api_cloudinary.ts (para compilarlo a js)
+5. cambiar el archivo generado .js a .cjs (renombrar src/api_cloudinary.js a src/api_cloudinary.cjs)
+6. reemplazar las credenciales de cloudinary.config con las de nuestra cuenta (en el .cjs).
+7. ejecutar el script con node src/api_cloudinary.cjs
+8 luego de corrido el script, borrar carpeta fotos-productos y el archivo src/api_cloudinary.cjs
+9 actualizar el seed para que las contemple*/ 
 //# sourceMappingURL=api_cloudinary.js.map
