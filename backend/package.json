@@ -27,6 +27,7 @@
     "@mikro-orm/core": "6.4.16",
     "@mikro-orm/mysql": "6.4.16",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
