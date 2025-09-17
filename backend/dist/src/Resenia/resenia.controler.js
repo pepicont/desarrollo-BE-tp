@@ -1,5 +1,6 @@
 import { orm } from "../shared/orm.js";
 import { Resenia } from "./resenia.entity.js";
+import { moderateText } from "../shared/moderation.js";
 const em = orm.em;
 function sanitizeReseniaInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -42,6 +43,18 @@ async function add(req, res) {
             res.status(401).json({ message: 'Usuario no autenticado' });
             return;
         }
+        // Moderación de contenido (detalle)
+        const detalle = req.body?.sanitizedInput?.detalle;
+        if (typeof detalle === 'string' && detalle.trim().length > 0) {
+            const mod = await moderateText(detalle);
+            if (!mod.allowed) {
+                res.status(400).json({
+                    message: 'La reseña contiene contenido no permitido',
+                    reasons: mod.reasons ?? [],
+                });
+                return;
+            }
+        }
         // Agregar el usuario autenticado a los datos
         const reseniaData = {
             ...req.body.sanitizedInput,
@@ -59,6 +72,18 @@ async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const reseniaToUpdate = await em.findOneOrFail(Resenia, { id });
+        // Moderación de contenido (detalle)
+        const detalle = req.body?.sanitizedInput?.detalle;
+        if (typeof detalle === 'string' && detalle.trim().length > 0) {
+            const mod = await moderateText(detalle);
+            if (!mod.allowed) {
+                res.status(400).json({
+                    message: 'La reseña contiene contenido no permitido',
+                    reasons: mod.reasons ?? [],
+                });
+                return;
+            }
+        }
         em.assign(reseniaToUpdate, req.body.sanitizedInput);
         await em.flush();
         res.status(200).json({ message: "review updated", data: reseniaToUpdate });

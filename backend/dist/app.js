@@ -16,6 +16,7 @@ import { fotoProductoRouter } from './src/Producto/FotoProducto/fotoProducto.rou
 import 'reflect-metadata';
 import { orm, syncSchema } from './src/shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
+import { MODERATION_ENABLED } from './src/shared/moderation.js';
 const app = express();
 // CORS
 app.use((req, res, next) => {
@@ -60,5 +61,6 @@ await syncSchema(); //nunca en producción. cambia los datos del schema según n
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(` Server running on http://localhost:${PORT}/`);
+    console.log(` [moderation] enabled=${MODERATION_ENABLED} model=${process.env.OPENAI_MODERATION_MODEL || 'omni-moderation-latest'}`);
 });
 //# sourceMappingURL=app.js.map
