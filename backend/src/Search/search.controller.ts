@@ -43,8 +43,6 @@ export async function search(req: Request, res: Response) {
 			queries.push(
 				em.find(Juego, whereJuego, {
 					populate: ['compania', 'categorias', 'fotos'],
-					limit,
-					offset,
 					orderBy: { id: 'asc' },
 				})
 			);
@@ -58,8 +56,6 @@ export async function search(req: Request, res: Response) {
 			queries.push(
 				em.find(Servicio, whereServicio, {
 					populate: ['compania', 'categorias', 'fotos'],
-					limit,
-					offset,
 					orderBy: { id: 'asc' },
 				})
 			);
@@ -73,8 +69,6 @@ export async function search(req: Request, res: Response) {
 			queries.push(
 				em.find(Complemento, whereComplemento, {
 					populate: ['compania', 'categorias', 'juego', 'fotos'],
-					limit,
-					offset,
 					orderBy: { id: 'asc' },
 				})
 			);
@@ -148,12 +142,16 @@ export async function search(req: Request, res: Response) {
 			}
 		}
 
+		// Aplicar paginación al resultado combinado
+		const totalCount = items.length;
+		const paginatedItems = items.slice(offset, offset + limit);
+
 		res.status(200).json({
 			message: 'search ok',
 			page,
 			limit,
-			count: items.length,
-			data: items,
+			count: totalCount,
+			data: paginatedItems,
 		});
 	} catch (error: any) {
 		console.error('Search error:', error);
