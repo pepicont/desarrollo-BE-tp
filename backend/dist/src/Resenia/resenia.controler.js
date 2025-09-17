@@ -43,7 +43,6 @@ async function add(req, res) {
             res.status(401).json({ message: 'Usuario no autenticado' });
             return;
         }
-        // Moderación de contenido (detalle)
         const detalle = req.body?.sanitizedInput?.detalle;
         if (typeof detalle === 'string' && detalle.trim().length > 0) {
             const mod = await moderateText(detalle);
@@ -72,7 +71,6 @@ async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const reseniaToUpdate = await em.findOneOrFail(Resenia, { id });
-        // Moderación de contenido (detalle)
         const detalle = req.body?.sanitizedInput?.detalle;
         if (typeof detalle === 'string' && detalle.trim().length > 0) {
             const mod = await moderateText(detalle);

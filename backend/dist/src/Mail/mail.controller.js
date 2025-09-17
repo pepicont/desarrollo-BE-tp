@@ -18,7 +18,7 @@ export async function sendMail(req, res) {
         await transporter.sendMail({
             from: process.env.GMAIL_USER,
             to: process.env.MAILTO,
-            subject: 'mail prueba',
+            subject: 'Consulta',
             text: `Remitente: ${mail}\nAsunto original: ${asunto}\n\n${detalle}`,
             headers: {
                 'Importance': 'high',

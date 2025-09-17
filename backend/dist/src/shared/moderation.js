@@ -31,7 +31,6 @@ export async function moderateText(text) {
         return { allowed: !flagged, reasons };
     }
     catch (err) {
-        // En caso de error con la API, permitir (modo tolerante) sin informar nada al usuario
         console.warn('[moderation] error al llamar a OpenAI, permitiendo contenido por fallback (modo tolerante):', err);
         return { allowed: true, reasons: [] };
     }
