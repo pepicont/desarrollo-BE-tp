@@ -70,8 +70,8 @@ export async function forgotPassword(req: Request, res: Response) {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: email,
-      subject: 'Contraseña de recuperación de cuenta - Portalvideojuegos',
-      html: `<h2>Hola ${usuario.nombre}</h2><p>Tu nueva contraseña es: <b>${nuevaPass}</b>. Te recomendamos cambiarla luego de ingresar.<br><br>Si no fuiste vos quien solicitó esta recuperación de contraseña, por favor comunicate con uno de nuestros administradores.</p>`,
+  subject: 'Contraseña de recuperación de cuenta - Portal Videojuegos',
+  html: `<h2>Hola ${usuario.nombre}</h2><p>Tu nueva contraseña es: <b>${nuevaPass}</b>. Te recomendamos cambiarla luego de ingresar.<br><br>Si no fuiste vos quien solicitó esta recuperación de contraseña, por favor comunicate con uno de nuestros administradores.</p><br><p style='color:#888;font-size:13px'>— Portal Videojuegos</p>`,
       headers: {
         'Importance': 'high',
         'X-Priority': '1'
@@ -97,8 +97,8 @@ export async function welcome(req: Request, res: Response) {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: email,
-      subject: '¡Bienvenido a Portalvideojuegos!',
-      html: `<h2>¡Hola ${nombre}!</h2><p>Te damos la bienvenida a Portalvideojuegos. Ya puedes disfrutar de todos nuestros servicios y beneficios.</p><p>¡Gracias por registrarte!</p>`,
+  subject: '¡Bienvenido a Portal Videojuegos!',
+  html: `<h2>¡Hola ${nombre}!</h2><p>Te damos la bienvenida a Portal Videojuegos. Ya puedes disfrutar de todos nuestros servicios y beneficios.</p><p>¡Gracias por registrarte!</p><br><p style='color:#888;font-size:13px'>— Portal Videojuegos</p>`,
       headers: {
         'Importance': 'high',
         'X-Priority': '1'
@@ -124,8 +124,8 @@ export async function notifyCredentialsChange(req: Request, res: Response) {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: email,
-      subject: 'Cambio de credenciales de acceso - Portal videojuegos',
-      html: `<h2>Hola ${oldUsername}.</h2><p>Se han cambiado tus credenciales de acceso. Si no fuiste vos, por favor contactate con uno de nuestros administradores.</p>`,
+  subject: 'Cambio de credenciales de acceso - Portal Videojuegos',
+  html: `<h2>Hola ${oldUsername}.</h2><p>Se han cambiado tus credenciales de acceso. Si no fuiste vos, por favor contactate con uno de nuestros administradores.</p><br><p style='color:#888;font-size:13px'>— Portal Videojuegos</p>`,
       headers: {
         'Importance': 'high',
         'X-Priority': '1'
@@ -151,8 +151,8 @@ export async function paymentConfirmation(req: Request, res: Response) {
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: email,
-      subject: 'Confirmación de compra - Portalvideojuegos',
-      html: `<h2>¡Hola ${nombre}!</h2><p>Tu compra fue confirmada.</p><p><b>Producto:</b> ${producto}<br/><b>Código de activación:</b> ${codigo}</p><p>¡Gracias por tu compra!</p>`,
+  subject: 'Confirmación de compra - Portal Videojuegos',
+  html: `<h2>¡Hola ${nombre}!</h2><p>Tu compra fue confirmada.</p><p><b>Producto:</b> ${producto}<br/><b>Código de activación:</b> ${codigo}</p><p>¡Gracias por tu compra!</p><br><p style='color:#888;font-size:13px'>— Portal Videojuegos</p>`,
       headers: {
         'Importance': 'high',
         'X-Priority': '1'
