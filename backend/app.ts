@@ -11,6 +11,7 @@ import { ventaRouter } from './src/Venta/venta.routes.js'
 import { reseniaRouter } from './src/Resenia/resenia.routes.js'
 import { searchRouter } from './src/Search/search.routes.js'
 import { checkoutRouter } from './src/Checkout/checkout.routes.js'
+import { mailRouter } from './src/Mail/mail.routes.js'
 import { mpWebhook, mpSuccessCallback } from './src/Checkout/checkout.controller.js'
 import { fotoProductoRouter } from './src/Producto/FotoProducto/fotoProducto.routes.js'
 import 'reflect-metadata'
@@ -19,6 +20,7 @@ import { RequestContext } from '@mikro-orm/core'
 import { MODERATION_ENABLED } from './src/shared/moderation.js'
 
 const app = express()
+
 
 // CORS
 app.use((req, res, next) => {
@@ -56,9 +58,11 @@ app.use('/api/resenia', reseniaRouter)
 app.use('/api/search', searchRouter)
 app.use('/api/checkout', checkoutRouter)
 app.use('/api/foto-producto', fotoProductoRouter)
+app.use('/api/mail', mailRouter)
 
 
-app.post('/mp/webhook', mpWebhook as any)
+
+app.post('/mp/webhook', mpWebhook as any) //probar si borrando estas 2 sigue funcionando. no deben ir acá
 app.get('/mp/success', mpSuccessCallback as any)
 
 app.use((_, res) => {

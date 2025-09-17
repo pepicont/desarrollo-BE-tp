@@ -1,14 +1,12 @@
-
-
-
+import 'dotenv/config'
 import { v2 as cloudinary, UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 import * as fs from 'fs';
 import * as path from 'path';
 
 cloudinary.config({ //info disponible en cloudinary->image->api key
-  cloud_name: 'aca_iria_el_cloudname_de_nuestro_cloudinary', //no subido por cuestiones de seguridad
-  api_key: 'aca_iria_el_api_key_de_nuestro_cloudinary',
-  api_secret: 'aca_iria_el_api_secret_de_nuestro_cloudinary',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 

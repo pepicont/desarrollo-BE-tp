@@ -20,6 +20,7 @@
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.15.21",
+    "@types/nodemailer": "^7.0.1",
     "tsc-watch": "^7.0.0",
     "typescript": "^5.5.0"
   },
@@ -32,6 +33,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mercadopago": "^2.9.0",
+    "nodemailer": "^7.0.6",
     "openai": "^4.104.0",
     "reflect-metadata": "0.2.2"
   }
