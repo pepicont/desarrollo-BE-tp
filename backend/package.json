@@ -34,6 +34,7 @@
     "jsonwebtoken": "^9.0.2",
     "mercadopago": "^2.9.0",
     "nodemailer": "^7.0.6",
+    "openai": "^4.104.0",
     "reflect-metadata": "0.2.2"
   }
 }
