@@ -245,7 +245,7 @@ async function getAllResenasAdmin(req: AuthenticatedRequest, res: Response): Pro
     }
 
     // Verificar que el usuario es administrador
-    if (userTipo !== 'Administrador') {
+    if (userTipo !== 'admin') {
       res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
       return;
     }
@@ -278,7 +278,7 @@ async function removeAsAdmin(req: AuthenticatedRequest, res: Response): Promise<
     }
 
     // Verificar que el usuario es administrador
-    if (userTipo !== 'Administrador') {
+    if (userTipo !== 'admin') {
       res.status(403).json({ message: 'No tienes permisos para eliminar reseñas' });
       return;
     }
