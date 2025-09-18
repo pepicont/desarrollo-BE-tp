@@ -68,14 +68,34 @@ async function update(req: Request, res: Response) {
   }
 }
 
-async function remove(req: Request, res: Response) {
+async function remove(req: AuthenticatedRequest, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const usuario = em.getReference(Usuario, id);
+    
+    // Cargar el usuario con sus relaciones para que el cascade funcione
+    const usuario = await em.findOne(Usuario, { id }, { 
+      populate: ['ventas', 'resenias'] 
+    });
+    
+    if (!usuario) {
+      res.status(404).json({ message: "Usuario no encontrado" });
+      return;
+    }
+
+    // Eliminar el usuario y todas sus relaciones en cascada
     await em.removeAndFlush(usuario);
-    res.status(200).json({ message: "user removed" });
+    res.status(200).json({ message: "Usuario y datos asociados eliminados exitosamente" });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al eliminar usuario:', error);
+    
+    // Manejar error de foreign key constraint
+    if (error.message && error.message.includes('foreign key constraint fails')) {
+      res.status(400).json({ 
+        message: "No se puede eliminar el usuario porque tiene datos asociados que no se pueden eliminar automáticamente" 
+      });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 }
 
