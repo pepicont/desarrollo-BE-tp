@@ -7,29 +7,49 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-// Recorrer fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento
-const baseDir = './fotos-productos';
-const categorias = fs.readdirSync(baseDir);
-categorias.forEach((categoria) => {
-    const categoriaPath = path.join(baseDir, categoria);
-    if (fs.statSync(categoriaPath).isDirectory()) {
-        const files = fs.readdirSync(categoriaPath);
-        files.forEach((file) => {
-            const nombreProducto = file.split('.')[0];
-            const filePath = path.join(categoriaPath, file);
-            cloudinary.uploader.upload(filePath, {
-                public_id: nombreProducto,
-                folder: `${categoria}`,
-            })
-                .then((result) => {
-                console.log(`Subido ${categoria}/${file}:`, result.secure_url);
-            })
-                .catch((err) => {
-                console.error(`Error subiendo ${categoria}/${file}:`, err);
-            });
-        });
-    }
+const baseDir = './fotos-productos/usuario';
+const files = fs.readdirSync(baseDir);
+files.forEach((file) => {
+    const nombreAvatar = file.split('.')[0];
+    const filePath = path.join(baseDir, file);
+    cloudinary.uploader.upload(filePath, {
+        public_id: nombreAvatar,
+        folder: `usuario`,
+    })
+        .then((result) => {
+        console.log(`Subido usuario/${file}:`, result.secure_url);
+    })
+        .catch((err) => {
+        console.error(`Error subiendo usuario /${file}:`, err);
+    });
 });
+// Recorrer fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento
+/*const baseDir = './fotos-productos';
+const categorias = fs.readdirSync(baseDir);
+
+categorias.forEach((categoria) => {
+  const categoriaPath = path.join(baseDir, categoria);
+  if (fs.statSync(categoriaPath).isDirectory()) {
+    const files = fs.readdirSync(categoriaPath);
+    files.forEach((file) => {
+      const nombreProducto = file.split('.')[0];
+      const filePath = path.join(categoriaPath, file);
+      cloudinary.uploader.upload(
+        filePath,
+        {
+          public_id: nombreProducto,
+          folder: `${categoria}`,
+        }
+      )
+      .then((result: UploadApiResponse) => {
+        console.log(`Subido ${categoria}/${file}:`, result.secure_url);
+      })
+      .catch((err: UploadApiErrorResponse) => {
+        console.error(`Error subiendo ${categoria}/${file}:`, err);
+      });
+    });
+  }
+});*/
 /*Instrucciones para subir imágenes a Cloudinary:
 2. dentro de backend poner la carpetas fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento con las imágenes a subir.
 

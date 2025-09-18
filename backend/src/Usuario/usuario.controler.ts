@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/orm.js";
 import { Usuario } from "./usuario.entity.js";
 import { AuthenticatedRequest } from "../Auth/auth.types.js";
+import { url } from "inspector";
 
 const em = orm.em;
 
@@ -123,7 +124,8 @@ async function getProfile(req: AuthenticatedRequest, res: Response) {
         nombre: usuario.nombre,
         mail: usuario.mail,
         fechaNacimiento: usuario.fechaNacimiento,
-        fechaCreacion: usuario.fechaCreacion
+        fechaCreacion: usuario.fechaCreacion,
+          urlFoto: usuario.urlFoto // Agregado para incluir la URL de la foto
       };
 
       res.status(200).json(perfil);

@@ -9,9 +9,28 @@ cloudinary.config({ //info disponible en cloudinary->image->api key
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const baseDir = './fotos-productos/usuario';
+const files = fs.readdirSync(baseDir);
+    files.forEach((file) => {
+      const nombreAvatar = file.split('.')[0];
+      const filePath = path.join(baseDir, file);
+      cloudinary.uploader.upload(
+        filePath,
+        {
+          public_id: nombreAvatar,
+          folder: `usuario`,
+        }
+      )
+      .then((result: UploadApiResponse) => {
+        console.log(`Subido usuario/${file}:`, result.secure_url);
+      })
+      .catch((err: UploadApiErrorResponse) => {
+        console.error(`Error subiendo usuario /${file}:`, err);
+      });
+    });
 
 // Recorrer fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento
-const baseDir = './fotos-productos';
+/*const baseDir = './fotos-productos';
 const categorias = fs.readdirSync(baseDir);
 
 categorias.forEach((categoria) => {
@@ -36,7 +55,7 @@ categorias.forEach((categoria) => {
       });
     });
   }
-});
+});*/
 /*Instrucciones para subir imágenes a Cloudinary:
 2. dentro de backend poner la carpetas fotos-productos/juego, fotos-productos/servicio, fotos-productos/complemento con las imágenes a subir.
 

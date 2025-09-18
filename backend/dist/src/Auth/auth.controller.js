@@ -40,7 +40,9 @@ class AuthController {
             const payload = {
                 id: usuario.id,
                 mail: usuario.mail,
-                nombre: usuario.nombre
+                nombre: usuario.nombre,
+                tipoUsuario: usuario.tipoUsuario,
+                urlFoto: usuario.urlFoto
             };
             const secret = process.env.JWT_SECRET;
             if (!secret) {
@@ -53,7 +55,9 @@ class AuthController {
                 user: {
                     id: usuario.id,
                     mail: usuario.mail,
-                    nombre: usuario.nombre
+                    nombre: usuario.nombre,
+                    tipoUsuario: usuario.tipoUsuario,
+                    urlFoto: usuario.urlFoto
                 }
             };
             res.status(200).json(response);
@@ -136,7 +140,9 @@ class AuthController {
                 nombre: nombre,
                 nombreUsuario: nombreUsuario,
                 fechaNacimiento: birthDate,
-                fechaCreacion: new Date()
+                fechaCreacion: new Date(),
+                tipoUsuario: 'cliente',
+                urlFoto: 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ghost.jpg'
             });
             await em.persistAndFlush(nuevoUsuario);
             // Verificar que el ID existe después de persistir
@@ -149,7 +155,9 @@ class AuthController {
             const payload = {
                 id: nuevoUsuario.id,
                 mail: nuevoUsuario.mail,
-                nombre: nuevoUsuario.nombre
+                nombre: nuevoUsuario.nombre,
+                tipoUsuario: nuevoUsuario.tipoUsuario,
+                urlFoto: nuevoUsuario.urlFoto
             };
             const secret = process.env.JWT_SECRET;
             if (!secret) {
@@ -162,7 +170,9 @@ class AuthController {
                 user: {
                     id: nuevoUsuario.id,
                     mail: nuevoUsuario.mail,
-                    nombre: nuevoUsuario.nombre
+                    nombre: nuevoUsuario.nombre,
+                    tipoUsuario: nuevoUsuario.tipoUsuario,
+                    urlFoto: nuevoUsuario.urlFoto
                 }
             };
             res.status(201).json(response);

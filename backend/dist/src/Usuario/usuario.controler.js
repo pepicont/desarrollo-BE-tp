@@ -8,7 +8,9 @@ function sanitizeUsuarioInput(req, res, next) {
         nombre: req.body.nombre,
         fechaNacimiento: req.body.fechaNacimiento,
         fechaCreacion: req.body.fechaCreacion,
-        mail: req.body.mail
+        mail: req.body.mail,
+        tipoUsuario: req.body.tipoUsuario,
+        urlFoto: req.body.urlFoto,
     };
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
@@ -61,12 +63,29 @@ async function update(req, res) {
 async function remove(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const usuario = em.getReference(Usuario, id);
+        // Cargar el usuario con sus relaciones para que el cascade funcione
+        const usuario = await em.findOne(Usuario, { id }, {
+            populate: ['ventas', 'resenias']
+        });
+        if (!usuario) {
+            res.status(404).json({ message: "Usuario no encontrado" });
+            return;
+        }
+        // Eliminar el usuario y todas sus relaciones en cascada
         await em.removeAndFlush(usuario);
-        res.status(200).json({ message: "user removed" });
+        res.status(200).json({ message: "Usuario y datos asociados eliminados exitosamente" });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error al eliminar usuario:', error);
+        // Manejar error de foreign key constraint
+        if (error.message && error.message.includes('foreign key constraint fails')) {
+            res.status(400).json({
+                message: "No se puede eliminar el usuario porque tiene datos asociados que no se pueden eliminar automáticamente"
+            });
+        }
+        else {
+            res.status(500).json({ message: error.message });
+        }
     }
 }
 async function getProfile(req, res) {
@@ -87,7 +106,8 @@ async function getProfile(req, res) {
             nombre: usuario.nombre,
             mail: usuario.mail,
             fechaNacimiento: usuario.fechaNacimiento,
-            fechaCreacion: usuario.fechaCreacion
+            fechaCreacion: usuario.fechaCreacion,
+            urlFoto: usuario.urlFoto // Agregado para incluir la URL de la foto
         };
         res.status(200).json(perfil);
     }

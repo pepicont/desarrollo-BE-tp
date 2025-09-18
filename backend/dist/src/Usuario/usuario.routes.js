@@ -8,5 +8,5 @@ usuarioRouter.post('/', sanitizeUsuarioInput, add);
 usuarioRouter.get('/:id', findOne);
 usuarioRouter.put('/:id', sanitizeUsuarioInput, update);
 usuarioRouter.patch('/:id', sanitizeUsuarioInput, update);
-usuarioRouter.delete('/:id', remove);
+usuarioRouter.delete('/:id', authenticateToken, remove);
 //# sourceMappingURL=usuario.routes.js.map

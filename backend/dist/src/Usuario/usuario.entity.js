@@ -47,6 +47,10 @@ __decorate([
 __decorate([
     Property({ nullable: false }),
     __metadata("design:type", String)
+], Usuario.prototype, "tipoUsuario", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", String)
 ], Usuario.prototype, "nombre", void 0);
 __decorate([
     Property({ nullable: false }),
@@ -60,6 +64,10 @@ __decorate([
     Property({ nullable: false, unique: true }),
     __metadata("design:type", String)
 ], Usuario.prototype, "mail", void 0);
+__decorate([
+    Property({ nullable: false }),
+    __metadata("design:type", String)
+], Usuario.prototype, "urlFoto", void 0);
 __decorate([
     OneToMany(() => 'Venta', (venta) => venta.usuario, { cascade: [Cascade.ALL] }),
     __metadata("design:type", Object)

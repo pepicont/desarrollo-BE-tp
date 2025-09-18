@@ -187,6 +187,8 @@ async function main() {
     u1.nombre = 'Gamer Uno';
     u1.fechaNacimiento = new Date('1995-01-15');
     u1.fechaCreacion = new Date();
+    u1.tipoUsuario = 'cliente';
+    u1.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ghost.jpg';
     usuarios.push(u1);
     const firstNames = [
         'Sofía', 'Mateo', 'Valentina', 'Benjamín', 'Emma', 'Thiago', 'Isabella', 'Santiago', 'Martina', 'Lucas',
@@ -216,10 +218,23 @@ async function main() {
         u.nombre = nombre;
         u.fechaNacimiento = new Date(rand(1975, 2008), rand(0, 11), rand(1, 28));
         u.fechaCreacion = new Date();
+        u.tipoUsuario = 'cliente';
+        u.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ghost.jpg';
         usuarios.push(u);
         userCount++;
     }
     await em.persistAndFlush(usuarios);
+    // Usuario admin
+    const admin = new Usuario();
+    admin.nombreUsuario = 'admin';
+    admin.mail = 'portalvideojuegos@yahoo.com';
+    admin.contrasenia = '123456';
+    admin.nombre = 'Admin';
+    admin.fechaNacimiento = new Date('1990-01-01');
+    admin.fechaCreacion = new Date();
+    admin.tipoUsuario = 'admin';
+    admin.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ghost.jpg';
+    await em.persistAndFlush([admin]);
     console.log(`Usuarios: ${usuarios.length}`);
     // Juegos (>=30)
     const gameTitles = [
