@@ -223,7 +223,8 @@ async function getByProduct(req: Request, res: Response): Promise<void> {
       ...resenia,
       usuario: {
         id: resenia.usuario.id,
-        nombreUsuario: resenia.usuario.nombreUsuario
+        nombreUsuario: resenia.usuario.nombreUsuario,
+        urlFoto: resenia.usuario.urlFoto
       }
     }));
 
