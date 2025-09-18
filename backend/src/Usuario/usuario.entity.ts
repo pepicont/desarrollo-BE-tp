@@ -19,6 +19,9 @@ export class Usuario extends BaseEntity {
   contrasenia!: string;
 
   @Property({ nullable: false })
+  tipoUsuario!: string;
+
+  @Property({ nullable: false })
   nombre!: string;
 
   @Property({ nullable: false })
@@ -29,6 +32,9 @@ export class Usuario extends BaseEntity {
 
   @Property({ nullable: false, unique: true })
   mail!: string;
+
+  @Property({ nullable: false })
+  urlFoto!: string;
 
   @OneToMany(() => 'Venta', (venta: any) => venta.usuario,{cascade:[Cascade.ALL]})
   ventas = new Collection<any>(this);

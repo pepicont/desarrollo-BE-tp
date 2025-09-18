@@ -16,7 +16,9 @@ function sanitizeUsuarioInput(
     nombre: req.body.nombre,
     fechaNacimiento: req.body.fechaNacimiento,
     fechaCreacion: req.body.fechaCreacion,
-    mail: req.body.mail
+    mail: req.body.mail,
+    tipoUsuario: req.body.tipoUsuario,
+    urlFoto: req.body.urlFoto,
   };
 
   Object.keys(req.body.sanitizedInput).forEach((key) => {

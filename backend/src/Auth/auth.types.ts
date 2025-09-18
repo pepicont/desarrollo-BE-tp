@@ -20,6 +20,7 @@ export interface LoginResponse {
         id: number; 
         mail: string;
         nombre: string;
+        tipoUsuario: string;
     };
 }
 
@@ -28,6 +29,7 @@ export interface AuthenticatedRequest extends Request {
         id: number;
         mail: string;
         nombre: string;
+        tipoUsuario: string;
     };
 }
 
@@ -36,6 +38,7 @@ export interface JwtPayload {
   id: number;
   mail: string;
   nombre: string;
+  tipoUsuario: string;
   iat?: number; // Timestamp de cuándo se creó el token
   exp?: number; // Timestamp de cuándo expira el token
 }

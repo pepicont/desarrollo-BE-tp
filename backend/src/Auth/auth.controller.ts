@@ -52,7 +52,8 @@ class AuthController {
       const payload = {
         id: usuario.id, 
         mail: usuario.mail,
-        nombre: usuario.nombre 
+        nombre: usuario.nombre,
+        tipoUsuario: usuario.tipoUsuario 
       };
 
       const secret = process.env.JWT_SECRET;
@@ -72,7 +73,8 @@ class AuthController {
         user: {
           id: usuario.id,
           mail: usuario.mail,
-          nombre: usuario.nombre
+          nombre: usuario.nombre,
+          tipoUsuario: usuario.tipoUsuario
         }
       };
 
@@ -169,7 +171,9 @@ class AuthController {
         nombre: nombre,
         nombreUsuario: nombreUsuario,
         fechaNacimiento: birthDate,
-        fechaCreacion: new Date()
+        fechaCreacion: new Date(),
+        tipoUsuario: 'cliente',
+        urlFoto: 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar_1.jpg'
       });
 
       await em.persistAndFlush(nuevoUsuario);
@@ -185,7 +189,8 @@ class AuthController {
       const payload = {
         id: nuevoUsuario.id,
         mail: nuevoUsuario.mail,
-        nombre: nuevoUsuario.nombre
+        nombre: nuevoUsuario.nombre,
+        tipoUsuario: nuevoUsuario.tipoUsuario
       };
 
       const secret = process.env.JWT_SECRET;
@@ -205,7 +210,8 @@ class AuthController {
         user: {
           id: nuevoUsuario.id,
           mail: nuevoUsuario.mail,
-          nombre: nuevoUsuario.nombre
+          nombre: nuevoUsuario.nombre,
+          tipoUsuario: nuevoUsuario.tipoUsuario
         }
       };
 
