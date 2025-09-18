@@ -8,7 +8,6 @@ export class Complemento extends BaseProducto {
   juego!: Rel<Juego>;
 
   @ManyToMany(() => 'Categoria', (categoria: any) => categoria.complementos, {
-  cascade: [Cascade.ALL],
   owner: true,
   })
   categorias = new Collection<any>(this);

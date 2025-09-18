@@ -6,7 +6,6 @@ import { FotoProducto } from '../FotoProducto/fotoProducto.entity.js';
 @Entity()
 export class Servicio extends BaseProducto {
   @ManyToMany(() => 'Categoria', (categoria: any) => categoria.servicios, {
-  cascade: [Cascade.ALL],
   owner: true,
   })
   categorias = new Collection<any>(this);

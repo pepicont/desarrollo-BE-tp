@@ -80,4 +80,69 @@ async function remove(req: Request, res: Response) {
   }
 }
 
-export { sanitizeCategoriaInput, findAll, findOne, add, update, remove };
+//NUEVA FUNCIÓN: Obtener todas las categorías para administradores
+async function getAllCategoriesAdmin(req: any, res: Response): Promise<void> {
+  try {
+    const userId = req.userId;
+    const userTipo = req.userTipo;
+
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Verificar que el usuario es administrador
+    if (userTipo !== 'admin') {
+      res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
+      return;
+    }
+
+    const categorias = await em.find(
+      Categoria,
+      {},
+      { orderBy: { nombre: 'ASC' } }
+    );
+
+    res.status(200).json({ message: "found all categories for admin", data: categorias });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+//NUEVA FUNCIÓN: Eliminar cualquier categoría como administrador
+async function removeCategoryAsAdmin(req: any, res: Response): Promise<void> {
+  try {
+    const userId = req.userId;
+    const userTipo = req.userTipo;
+    const categoriaId = Number.parseInt(req.params.id);
+
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Verificar que el usuario es administrador
+    if (userTipo !== 'admin') {
+      res.status(403).json({ message: 'No tienes permisos para eliminar categorías' });
+      return;
+    }
+
+    const categoria = em.getReference(Categoria, categoriaId);
+    await em.removeAndFlush(categoria);
+
+    res.status(200).json({ message: "category removed by admin" });
+  } catch (error: any) {
+    console.error('Error al eliminar categoría:', error);
+    
+    // Manejar errores de integridad referencial
+    if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
+      res.status(409).json({ 
+        message: 'No se puede eliminar la categoría porque tiene productos asociados' 
+      });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
+  }
+}
+
+export { sanitizeCategoriaInput, findAll, findOne, add, update, remove, getAllCategoriesAdmin, removeCategoryAsAdmin };
