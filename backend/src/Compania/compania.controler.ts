@@ -80,4 +80,69 @@ async function remove(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
-export { sanitizeCompaniaInput, findAll, findOne, add,  update, remove};
+//NUEVA FUNCIÓN: Obtener todas las compañías para administradores
+async function getAllCompaniesAdmin(req: any, res: Response): Promise<void> {
+  try {
+    const userId = req.userId;
+    const userTipo = req.userTipo;
+
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Verificar que el usuario es administrador
+    if (userTipo !== 'admin') {
+      res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
+      return;
+    }
+
+    const companias = await em.find(
+      Compania,
+      {},
+      { orderBy: { nombre: 'ASC' } }
+    );
+
+    res.status(200).json({ message: "found all companies for admin", data: companias });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+//NUEVA FUNCIÓN: Eliminar cualquier compañía como administrador
+async function removeCompanyAsAdmin(req: any, res: Response): Promise<void> {
+  try {
+    const userId = req.userId;
+    const userTipo = req.userTipo;
+    const companiaId = Number.parseInt(req.params.id);
+
+    if (!userId) {
+      res.status(401).json({ message: 'Usuario no autenticado' });
+      return;
+    }
+
+    // Verificar que el usuario es administrador
+    if (userTipo !== 'admin') {
+      res.status(403).json({ message: 'No tienes permisos para eliminar compañías' });
+      return;
+    }
+
+    const compania = em.getReference(Compania, companiaId);
+    await em.removeAndFlush(compania);
+
+    res.status(200).json({ message: "company removed by admin" });
+  } catch (error: any) {
+    console.error('Error al eliminar compañía:', error);
+    
+    // Manejar errores de integridad referencial
+    if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
+      res.status(409).json({ 
+        message: 'No se puede eliminar la compañía porque tiene productos asociados' 
+      });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
+  }
+}
+
+export { sanitizeCompaniaInput, findAll, findOne, add, update, remove, getAllCompaniesAdmin, removeCompanyAsAdmin };

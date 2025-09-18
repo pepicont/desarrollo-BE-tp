@@ -17,7 +17,6 @@ export class Juego extends BaseProducto {
   complementos = new Collection<any>(this);
 
   @ManyToMany(() => 'Categoria', (categoria: any) => categoria.juegos, {
-    cascade: [Cascade.ALL],
     owner: true,
   })
   categorias = new Collection<any>(this);
