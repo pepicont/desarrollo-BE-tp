@@ -198,6 +198,8 @@ async function getByProduct(req: Request, res: Response): Promise<void> {
   try {
     const tipo = String(req.params.tipo);
     const id = Number.parseInt(req.params.id);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
 
     if (!['juego', 'servicio', 'complemento'].includes(tipo) || Number.isNaN(id)) {
       res.status(400).json({ message: 'Parámetros inválidos' });
@@ -209,16 +211,24 @@ async function getByProduct(req: Request, res: Response): Promise<void> {
     if (tipo === 'servicio') where = { venta: { servicio: id } };
     if (tipo === 'complemento') where = { venta: { complemento: id } };
 
+    // Obtener total de reseñas para paginación
+    const total = await em.count(Resenia, where);
+
+    // Calcular offset
+    const offset = (page - 1) * limit;
+
     const resenias = await em.find(
       Resenia,
       where,
       {
         populate: ['usuario'],
         orderBy: { fecha: 'desc' },
+        limit,
+        offset,
       }
     );
 
-        // Mapear solo id y nombreUsuario del usuario
+    // Mapear solo id y nombreUsuario del usuario
     const data = resenias.map(resenia => ({
       ...resenia,
       usuario: {
@@ -228,7 +238,9 @@ async function getByProduct(req: Request, res: Response): Promise<void> {
       }
     }));
 
-    res.status(200).json({ message: 'found product reviews', data });
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({ message: 'found product reviews', data, page, totalPages, total });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

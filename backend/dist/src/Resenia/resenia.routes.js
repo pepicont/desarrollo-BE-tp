@@ -1,7 +1,11 @@
 import { Router } from 'express';
-import { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase, } from './resenia.controler.js';
+import { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase, getAllResenasAdmin, removeAsAdmin, } from './resenia.controler.js';
 import { authenticateToken } from '../Auth/auth.middleware.js';
 export const reseniaRouter = Router();
+// NUEVA RUTA: Obtener todas las reseñas para administradores
+reseniaRouter.get('/admin/all', authenticateToken, getAllResenasAdmin);
+// NUEVA RUTA: Eliminar reseña como administrador
+reseniaRouter.delete('/admin/:id', authenticateToken, removeAsAdmin);
 // NUEVA RUTA: Obtener reseñas del usuario autenticado
 reseniaRouter.get('/my-resenias', authenticateToken, getMyResenias);
 // NUEVA RUTA: Verificar si el usuario tiene una reseña para una compra específica

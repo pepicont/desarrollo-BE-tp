@@ -20,7 +20,6 @@ let Servicio = class Servicio extends BaseProducto {
 };
 __decorate([
     ManyToMany(() => 'Categoria', (categoria) => categoria.servicios, {
-        cascade: [Cascade.ALL],
         owner: true,
     }),
     __metadata("design:type", Object)
