@@ -73,11 +73,24 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const compania = em.getReference(Compania, id);
+    
+    // Cargar la compañía con todos sus productos asociados
+    const compania = await em.findOneOrFail(
+      Compania, 
+      { id },
+      { populate: ['juegos', 'complementos', 'servicios'] }
+    );
+
+    // Eliminar todos los productos asociados primero
+    await em.removeAndFlush([...compania.juegos, ...compania.complementos, ...compania.servicios]);
+    
+    // Ahora eliminar la compañía
     await em.removeAndFlush(compania);
-    res.status(200).send({ message: 'company class deleted' });
+    
+    res.status(200).send({ message: 'Compañía y todos sus productos eliminados correctamente' });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error('Error al eliminar compañía:', error);
+    res.status(500).json({ message: `Error al eliminar compañía: ${error.message}` });
   }
 }
 //NUEVA FUNCIÓN: Obtener todas las compañías para administradores
@@ -127,21 +140,24 @@ async function removeCompanyAsAdmin(req: any, res: Response): Promise<void> {
       return;
     }
 
-    const compania = em.getReference(Compania, companiaId);
+    // Cargar la compañía con todos sus productos asociados
+    const compania = await em.findOneOrFail(
+      Compania, 
+      { id: companiaId },
+      { populate: ['juegos', 'complementos', 'servicios'] }
+    );
+
+    // Eliminar todos los productos asociados primero
+    // Esto activará el cascade para eliminar fotos, ventas, etc.
+    await em.removeAndFlush([...compania.juegos, ...compania.complementos, ...compania.servicios]);
+    
+    // Ahora eliminar la compañía
     await em.removeAndFlush(compania);
 
-    res.status(200).json({ message: "company removed by admin" });
+    res.status(200).json({ message: "Compañía y todos sus productos eliminados correctamente" });
   } catch (error: any) {
     console.error('Error al eliminar compañía:', error);
-    
-    // Manejar errores de integridad referencial
-    if (error.code === 'ER_ROW_IS_REFERENCED_2' || error.errno === 1451) {
-      res.status(409).json({ 
-        message: 'No se puede eliminar la compañía porque tiene productos asociados' 
-      });
-    } else {
-      res.status(500).json({ message: error.message });
-    }
+    res.status(500).json({ message: `Error al eliminar compañía: ${error.message}` });
   }
 }
 
