@@ -161,4 +161,34 @@ export async function paymentConfirmation(req, res) {
         return res.status(500).json({ message: 'Error enviando mail de confirmación de compra', error: error.message });
     }
 }
+// Enviar mail de cuenta eliminada
+export async function deletedUser(req, res) {
+    const { mail, nombreUsuario, motivo } = req.body;
+    if (!mail || !nombreUsuario)
+        return res.status(400).json({ message: 'Faltan datos requeridos' });
+    const motivoFinal = motivo && motivo.trim() !== '' ? motivo : 'Infracción políticas de Portal Videojuegos';
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.GMAIL_USER,
+                pass: process.env.GMAIL_PASS,
+            },
+        });
+        await transporter.sendMail({
+            from: process.env.GMAIL_USER,
+            to: mail,
+            subject: `Malas noticias - Portal Videojuegos`,
+            html: `<h2>Malas noticias, <b>${nombreUsuario}</b></h2><p>Lamentamos informarte que uno de nuestros administradores ha eliminado tu cuenta por <b>${motivoFinal}</b>.<br>Si crees que se trata de un problema, contactate con nosotros.</p><br><p style='color:#888;font-size:13px'>— Portal Videojuegos</p>`,
+            headers: {
+                'Importance': 'high',
+                'X-Priority': '1'
+            }
+        });
+        return res.status(200).json({ message: 'Mail de cuenta eliminada enviado' });
+    }
+    catch (error) {
+        return res.status(500).json({ message: 'Error enviando mail de cuenta eliminada', error: error.message });
+    }
+}
 //# sourceMappingURL=mail.controller.js.map

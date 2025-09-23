@@ -36,7 +36,6 @@ __decorate([
 ], Juego.prototype, "complementos", void 0);
 __decorate([
     ManyToMany(() => 'Categoria', (categoria) => categoria.juegos, {
-        cascade: [Cascade.ALL],
         owner: true,
     }),
     __metadata("design:type", Object)

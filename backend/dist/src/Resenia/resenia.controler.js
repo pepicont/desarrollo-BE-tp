@@ -192,5 +192,57 @@ async function getByProduct(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase };
+//NUEVA FUNCIÓN: Obtener todas las reseñas para administradores
+async function getAllResenasAdmin(req, res) {
+    try {
+        const userId = req.user?.id;
+        const userTipo = req.user?.tipoUsuario;
+        if (!userId) {
+            res.status(401).json({ message: 'Usuario no autenticado' });
+            return;
+        }
+        // Verificar que el usuario es administrador
+        if (userTipo !== 'admin') {
+            res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
+            return;
+        }
+        const resenias = await em.find(Resenia, {}, {
+            populate: ['usuario', 'venta.juego', 'venta.servicio', 'venta.complemento'],
+            orderBy: { fecha: 'desc' }
+        });
+        res.status(200).json({ message: "found all reviews for admin", data: resenias });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+//NUEVA FUNCIÓN: Eliminar cualquier reseña como administrador
+async function removeAsAdmin(req, res) {
+    try {
+        const id = Number.parseInt(req.params.id);
+        const userId = req.user?.id;
+        const userTipo = req.user?.tipoUsuario;
+        if (!userId) {
+            res.status(401).json({ message: 'Usuario no autenticado' });
+            return;
+        }
+        // Verificar que el usuario es administrador
+        if (userTipo !== 'admin') {
+            res.status(403).json({ message: 'No tienes permisos para eliminar reseñas' });
+            return;
+        }
+        // Buscar la reseña
+        const resenia = await em.findOne(Resenia, { id });
+        if (!resenia) {
+            res.status(404).json({ message: 'Reseña no encontrada' });
+            return;
+        }
+        await em.removeAndFlush(resenia);
+        res.status(200).json({ message: "review removed by admin" });
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase, getAllResenasAdmin, removeAsAdmin };
 //# sourceMappingURL=resenia.controler.js.map

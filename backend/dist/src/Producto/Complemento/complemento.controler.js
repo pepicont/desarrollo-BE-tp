@@ -1,5 +1,6 @@
 import { orm } from "../../shared/orm.js";
 import { Complemento } from "./complemento.entity.js";
+import { Venta } from "../../Venta/venta.entity.js";
 const em = orm.em;
 function sanitizeComplementoInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -31,7 +32,10 @@ async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const complementos = await em.findOneOrFail(Complemento, { id }, { populate: ["categorias", "compania", "juego", "fotos"] });
-        res.status(200).json({ message: "found complemento", data: complementos });
+        const ventasCount = await em.count(Venta, { complemento: id });
+        const serialized = JSON.parse(JSON.stringify(complementos));
+        serialized.ventasCount = ventasCount;
+        res.status(200).json({ message: "found complemento", data: serialized });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
