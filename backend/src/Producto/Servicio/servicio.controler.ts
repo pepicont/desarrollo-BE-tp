@@ -3,6 +3,7 @@ import { Categoria } from "../../Categoria/categoria.entity.js"
 import {Compania} from  "../../Compania/compania.entity.js"
 import { orm } from "../../shared/orm.js";
 import {Servicio} from "./servicio.entity.js";
+import { Venta } from "../../Venta/venta.entity.js";
 
 const em = orm.em;
 
@@ -49,7 +50,10 @@ async function findOne(req: Request, res: Response) {
       { id },
       { populate: ["categorias", "compania", "fotos"] }
     );
-    res.status(200).json({ message: "found service", data: servicios });
+    const ventasCount = await em.count(Venta, { servicio: id });
+    const serialized: any = JSON.parse(JSON.stringify(servicios));
+    serialized.ventasCount = ventasCount;
+    res.status(200).json({ message: "found service", data: serialized });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

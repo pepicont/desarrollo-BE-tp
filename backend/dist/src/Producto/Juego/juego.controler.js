@@ -1,5 +1,6 @@
 import { orm } from "../../shared/orm.js";
 import { Juego } from "./juego.entity.js";
+import { Venta } from "../../Venta/venta.entity.js";
 const em = orm.em;
 function sanitizeJuegoInput(req, res, next) {
     req.body.sanitizedInput = {
@@ -32,7 +33,11 @@ async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania", "fotos"] });
-        res.status(200).json({ message: "found game", data: juego });
+        // Count number of sales for this game
+        const ventasCount = await em.count(Venta, { juego: id });
+        const serialized = JSON.parse(JSON.stringify(juego));
+        serialized.ventasCount = ventasCount;
+        res.status(200).json({ message: "found game", data: serialized });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

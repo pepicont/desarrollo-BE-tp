@@ -4,6 +4,7 @@ import { Juego } from '../Producto/Juego/juego.entity.js';
 import { Servicio } from '../Producto/Servicio/servicio.entity.js';
 import { Complemento } from '../Producto/Complemento/complemento.entity.js';
 import { FotoProducto } from '../Producto/FotoProducto/fotoProducto.entity.js';
+import { Venta } from '../Venta/venta.entity.js';
 
 type TipoProducto = 'juego' | 'servicio' | 'complemento' | 'todos';
 
@@ -156,6 +157,126 @@ export async function search(req: Request, res: Response) {
 	} catch (error: any) {
 		console.error('Search error:', error);
 		res.status(500).json({ message: error.message || 'internal error' });
+	}
+}
+
+type TopTipo = 'juego' | 'servicio' | 'complemento' | 'todos'
+
+export async function topSellers(req: Request, res: Response) {
+	try {
+		const em = orm.em.fork()
+
+		const tipo = ((req.query.tipo as string) || 'todos').toLowerCase() as TopTipo
+		const limit = Math.min(24, Math.max(1, Number(req.query.limit) || 8))
+
+		
+		const getPrincipalUrl = (fotos?: FotoProducto[] | any) => {
+			const arr: FotoProducto[] = (fotos?.toArray?.() ?? fotos ?? []) as FotoProducto[]
+			const principal = arr.find(f => (f as any).esPrincipal) ?? arr[0]
+			return principal ? (principal as any).url : null
+		}
+
+		
+		const conn = em.getConnection()
+		const results: Array<{ tipo: 'juego'|'servicio'|'complemento'; id: number; count: number }> = []
+
+		if (tipo === 'juego' || tipo === 'todos') {
+			const rows = await conn.execute<{ id: number; cnt: number }[]>(
+				`SELECT juego_id AS id, COUNT(*) AS cnt FROM venta WHERE juego_id IS NOT NULL GROUP BY juego_id ORDER BY cnt DESC LIMIT ?`,
+				[limit]
+			)
+			for (const r of rows) results.push({ tipo: 'juego', id: Number(r.id), count: Number(r.cnt) })
+		}
+		if (tipo === 'servicio' || tipo === 'todos') {
+			const rows = await conn.execute<{ id: number; cnt: number }[]>(
+				`SELECT servicio_id AS id, COUNT(*) AS cnt FROM venta WHERE servicio_id IS NOT NULL GROUP BY servicio_id ORDER BY cnt DESC LIMIT ?`,
+				[limit]
+			)
+			for (const r of rows) results.push({ tipo: 'servicio', id: Number(r.id), count: Number(r.cnt) })
+		}
+		if (tipo === 'complemento' || tipo === 'todos') {
+			const rows = await conn.execute<{ id: number; cnt: number }[]>(
+				`SELECT complemento_id AS id, COUNT(*) AS cnt FROM venta WHERE complemento_id IS NOT NULL GROUP BY complemento_id ORDER BY cnt DESC LIMIT ?`,
+				[limit]
+			)
+			for (const r of rows) results.push({ tipo: 'complemento', id: Number(r.id), count: Number(r.cnt) })
+		}
+
+		
+		const byType = {
+			juego: results.filter(r => r.tipo === 'juego'),
+			servicio: results.filter(r => r.tipo === 'servicio'),
+			complemento: results.filter(r => r.tipo === 'complemento'),
+		}
+
+		const items: any[] = []
+
+		if (byType.juego.length) {
+			const ids = byType.juego.map(r => r.id)
+			const list = await em.find(Juego, { id: { $in: ids } }, { populate: ['compania', 'fotos'] })
+			for (const r of byType.juego) {
+				const p = list.find(x => x.id === r.id)
+				if (!p) continue
+				items.push({
+					id: p.id!,
+					tipo: 'juego',
+					nombre: p.nombre,
+					detalle: p.detalle,
+					monto: p.monto,
+					compania: p.compania ? { id: (p.compania as any).id, nombre: (p.compania as any).nombre } : null,
+					imageUrl: getPrincipalUrl((p as any).fotos),
+					count: r.count,
+				})
+			}
+		}
+
+		if (byType.servicio.length) {
+			const ids = byType.servicio.map(r => r.id)
+			const list = await em.find(Servicio, { id: { $in: ids } }, { populate: ['compania', 'fotos'] })
+			for (const r of byType.servicio) {
+				const p = list.find(x => x.id === r.id)
+				if (!p) continue
+				items.push({
+					id: p.id!,
+					tipo: 'servicio',
+					nombre: p.nombre,
+					detalle: p.detalle,
+					monto: p.monto,
+					compania: p.compania ? { id: (p.compania as any).id, nombre: (p.compania as any).nombre } : null,
+					imageUrl: getPrincipalUrl((p as any).fotos),
+					count: r.count,
+				})
+			}
+		}
+
+		if (byType.complemento.length) {
+			const ids = byType.complemento.map(r => r.id)
+			const list = await em.find(Complemento, { id: { $in: ids } }, { populate: ['fotos', 'juego'] })
+			for (const r of byType.complemento) {
+				const p = list.find(x => x.id === r.id)
+				if (!p) continue
+				items.push({
+					id: p.id!,
+					tipo: 'complemento',
+					nombre: p.nombre,
+					detalle: p.detalle,
+					monto: p.monto,
+					compania: null,
+					imageUrl: getPrincipalUrl((p as any).fotos),
+					juegoRelacionado: p.juego ? { id: (p.juego as any).id, nombre: (p.juego as any).nombre } : null,
+					count: r.count,
+				})
+			}
+		}
+
+		
+		items.sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+		const data = items.slice(0, limit)
+
+		res.status(200).json({ message: 'top sellers', count: data.length, data })
+	} catch (error: any) {
+		console.error('topSellers error:', error)
+		res.status(500).json({ message: error.message || 'internal error' })
 	}
 }
 
