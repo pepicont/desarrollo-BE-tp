@@ -4,7 +4,7 @@ export const juegoRouter = Router();
 juegoRouter.get("/", findAll);
 juegoRouter.get("/:id", findOne);
 juegoRouter.post("/", upload.array("fotos"), sanitizeJuegoInput, add);
-juegoRouter.put("/:id", sanitizeJuegoInput, update);
+juegoRouter.put("/:id", upload.array("fotos"), sanitizeJuegoInput, update);
 juegoRouter.patch("/:id", sanitizeJuegoInput, update);
 juegoRouter.delete("/:id", remove);
 //# sourceMappingURL=juego.routes.js.map

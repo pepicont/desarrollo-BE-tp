@@ -57,7 +57,6 @@ async function findOne(req, res) {
 }
 async function add(req, res) {
     try {
-        console.log("Archivos recibidos:", req.files);
         let fotosFiles = [];
         if (req.files && Array.isArray(req.files)) {
             fotosFiles = req.files;
@@ -96,12 +95,57 @@ async function add(req, res) {
 async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const juegoToUpdate = await em.findOneOrFail(Juego, { id });
+        const juegoToUpdate = await em.findOneOrFail(Juego, { id }, { populate: ["fotos"] });
         em.assign(juegoToUpdate, req.body.sanitizedInput);
+        // Procesar nuevas fotos si se enviaron
+        let fotosFiles = [];
+        if (req.files && Array.isArray(req.files)) {
+            fotosFiles = req.files;
+        }
+        // Subir nuevas fotos y asociarlas
+        const fotoPrincipalNombre = req.body.fotoPrincipal;
+        for (const file of fotosFiles) {
+            const url = await new Promise((resolve, reject) => {
+                const stream = cloudinary.uploader.upload_stream({ folder: "juego" }, (error, result) => {
+                    if (error || !result)
+                        return reject(error);
+                    resolve(result.secure_url);
+                });
+                stream.end(file.buffer);
+            });
+            const esPrincipal = file.originalname === fotoPrincipalNombre;
+            const foto = em.create(FotoProducto, {
+                url,
+                esPrincipal,
+                juego: juegoToUpdate,
+            });
+            juegoToUpdate.fotos.add(foto);
+        }
+        // Actualizar foto principal si se envió
+        if (fotoPrincipalNombre) {
+            // Primero, quitar principal a todas
+            for (const foto of juegoToUpdate.fotos) {
+                foto.esPrincipal = false;
+            }
+            // Buscar la foto principal por id (preferido) o por url
+            let principalFoto = null;
+            for (const foto of juegoToUpdate.fotos) {
+                if ((foto.id && foto.id.toString() === fotoPrincipalNombre) ||
+                    (foto.url && foto.url === fotoPrincipalNombre)) {
+                    principalFoto = foto;
+                    break;
+                }
+            }
+            // Si no se encuentra, marcar la última agregada como principal
+            if (!principalFoto && juegoToUpdate.fotos.length > 0) {
+                principalFoto = juegoToUpdate.fotos[juegoToUpdate.fotos.length - 1];
+            }
+            if (principalFoto) {
+                principalFoto.esPrincipal = true;
+            }
+        }
         await em.flush();
-        res
-            .status(200)
-            .json({ message: "game updated", data: juegoToUpdate });
+        res.status(200).json({ message: "game updated", data: juegoToUpdate });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
