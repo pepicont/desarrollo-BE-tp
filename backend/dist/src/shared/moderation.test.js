@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+//ESTE TEST TESTEA: si el codigo maneja bien la respuesta de OpenAI, qué pasa si OpenAI dice "contenido malo", Qué pasa si no hay API key y Qué pasa si OpenAI da error
 // Mock completo de OpenAI
 const mockCreate = vi.fn();
 vi.mock('openai', () => ({
