@@ -15,6 +15,8 @@ const DB_PORT = Number(process.env.DB_PORT || 3307)
 const DB_USER = process.env.DB_USER || 'dsw'
 const DB_PASSWORD = process.env.DB_PASSWORD || 'dsw' 
 const DB_NAME = process.env.DB_NAME || 'portalvideojuegos'
+const NODE_ENV = process.env.NODE_ENV ?? 'development'
+const isProd = NODE_ENV === 'production'
 
 export const orm = await MikroORM.init({
   //entities: ['dist/**/*.entity.js'],
@@ -28,10 +30,10 @@ export const orm = await MikroORM.init({
   dbName: DB_NAME,
   driver: MySqlDriver,
   clientUrl: `mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
-  debug: true,
+  debug: !isProd,
   schemaGenerator: {
-    //never in production
-    disableForeignKeys: true,
+    // solo desactivamos las FKs cuando estamos fuera de producción
+    disableForeignKeys: !isProd,
     createForeignKeyConstraints: true,
     ignoreSchema: [],
   },
