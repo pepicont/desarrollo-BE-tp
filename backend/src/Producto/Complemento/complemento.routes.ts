@@ -7,12 +7,13 @@ import {
   update,
   remove,
 } from "./complemento.controler.js";
+import { authenticateToken } from '../../Auth/auth.middleware.js';
 
 export const complementoRouter = Router();
 
 complementoRouter.get("/", findAll);
 complementoRouter.get("/:id", findOne);
-complementoRouter.post("/", sanitizeComplementoInput, add);
-complementoRouter.put("/:id", sanitizeComplementoInput, update);
-complementoRouter.patch("/:id", sanitizeComplementoInput, update);
-complementoRouter.delete("/:id", remove);
+complementoRouter.post("/", authenticateToken as any,sanitizeComplementoInput, add);
+complementoRouter.put("/:id", authenticateToken as any,sanitizeComplementoInput, update);
+complementoRouter.patch("/:id", authenticateToken as any,sanitizeComplementoInput, update);
+complementoRouter.delete("/:id", authenticateToken as any,remove);
