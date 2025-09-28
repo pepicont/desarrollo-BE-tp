@@ -209,6 +209,32 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
+    // Eliminar fotos asociadas (FotoProducto y Cloudinary)
+    const fotos = await em.find(FotoProducto, { juego: id });
+    for (const foto of fotos) {
+      try {
+        const urlParts = foto.url.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        const [publicId] = fileName.split('.');
+        await cloudinary.uploader.destroy(`juego/${publicId}`);
+      } catch (e) {
+        console.error('Error eliminando de Cloudinary:', e);
+      }
+      await em.remove(foto);
+    }
+
+    // Eliminar ventas asociadas
+    const ventas = await em.find(Venta, { juego: id });
+    for (const venta of ventas) {
+      // Eliminar reseñas asociadas a la venta
+      const resenias = await em.find('Resenia', { venta: venta.id });
+      for (const resenia of resenias) {
+        await em.remove(resenia);
+      }
+      await em.remove(venta);
+    }
+
+    // Eliminar el juego
     const juego = em.getReference(Juego, id);
     await em.removeAndFlush(juego);
     res.status(200).json({ message: "game removed" });
