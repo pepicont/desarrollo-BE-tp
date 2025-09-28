@@ -97,6 +97,30 @@ async function update(req, res) {
         const id = Number.parseInt(req.params.id);
         const juegoToUpdate = await em.findOneOrFail(Juego, { id }, { populate: ["fotos"] });
         em.assign(juegoToUpdate, req.body.sanitizedInput);
+        // Eliminar fotos actuales si se envía fotosAEliminar (array de IDs)
+        let fotosAEliminar = req.body.fotosAEliminar;
+        if (typeof fotosAEliminar === "string" && fotosAEliminar.length > 0) {
+            fotosAEliminar = [fotosAEliminar];
+        }
+        if (Array.isArray(fotosAEliminar) && fotosAEliminar.length > 0) {
+            for (const fotoId of fotosAEliminar) {
+                const foto = await em.findOne(FotoProducto, { id: fotoId, juego: juegoToUpdate });
+                if (foto) {
+                    // Eliminar de Cloudinary
+                    try {
+                        const urlParts = foto.url.split('/');
+                        const fileName = urlParts[urlParts.length - 1];
+                        const [publicId] = fileName.split('.');
+                        await cloudinary.uploader.destroy(`juego/${publicId}`);
+                    }
+                    catch (e) {
+                        console.error('Error eliminando de Cloudinary:', e);
+                    }
+                    await em.remove(foto);
+                    juegoToUpdate.fotos.remove(foto);
+                }
+            }
+        }
         // Procesar nuevas fotos si se enviaron
         let fotosFiles = [];
         if (req.files && Array.isArray(req.files)) {
