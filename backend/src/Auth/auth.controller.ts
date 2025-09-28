@@ -4,6 +4,11 @@ import { orm } from '../shared/orm.js';
 import { Usuario } from '../Usuario/usuario.entity.js';
 import { LoginRequest, RegisterRequest, LoginResponse, AuthenticatedRequest } from './auth.types.js';
 
+export function isValidEmail(email: string): boolean {
+  const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return mailRegex.test(email);
+}
+
 class AuthController {
   
   async login(req: Request, res: Response) {
@@ -102,8 +107,7 @@ class AuthController {
       }
 
       // Validar formato de email
-      const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!mailRegex.test(mail)) {
+      if (!isValidEmail(mail)) {
         return res.status(400).json({ 
           message: 'Formato de email inválido' 
         });
