@@ -1,6 +1,10 @@
 import jwt from 'jsonwebtoken';
 import { orm } from '../shared/orm.js';
 import { Usuario } from '../Usuario/usuario.entity.js';
+export function isValidEmail(email) {
+    const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return mailRegex.test(email);
+}
 class AuthController {
     async login(req, res) {
         console.log('🔍 Login request recibido:', req.body);
@@ -79,8 +83,7 @@ class AuthController {
                 });
             }
             // Validar formato de email
-            const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!mailRegex.test(mail)) {
+            if (!isValidEmail(mail)) {
                 return res.status(400).json({
                     message: 'Formato de email inválido'
                 });
