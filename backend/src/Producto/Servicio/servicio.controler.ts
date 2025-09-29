@@ -1,3 +1,8 @@
+import { FotoProducto } from "../FotoProducto/fotoProducto.entity.js";
+import { cloudinary } from "../../shared/cloudinary.js";
+import multer from "multer";
+
+const upload = multer({ storage: multer.memoryStorage() });
 import { Request, Response, NextFunction } from "express";
 import { Categoria } from "../../Categoria/categoria.entity.js"
 import {Compania} from  "../../Compania/compania.entity.js"
@@ -5,7 +10,8 @@ import { orm } from "../../shared/orm.js";
 import {Servicio} from "./servicio.entity.js";
 import { Venta } from "../../Venta/venta.entity.js";
 
-const em = orm.em;
+const em = orm.em.fork();
+
 
 function sanitizeServicioInput(
   req: Request,
@@ -61,23 +67,133 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const servicios = em.create(Servicio, req.body.sanitizedInput);
+    let fotosFiles: Express.Multer.File[] = [];
+    if (req.files && Array.isArray(req.files)) {
+      fotosFiles = req.files as Express.Multer.File[];
+    }
+
+    // Crear el servicio
+    const servicio = em.create(Servicio, req.body.sanitizedInput);
+    await em.flush(); // para obtener el id
+
+    // Subir fotos y guardar en FotoProducto
+    const fotoPrincipalNombre = req.body.fotoPrincipal;
+    for (const file of fotosFiles) {
+      const url = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "servicio" },
+          (error, result) => {
+            if (error || !result) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(file.buffer);
+      });
+
+      const esPrincipal = file.originalname === fotoPrincipalNombre;
+      const foto = em.create(FotoProducto, {
+        url,
+        esPrincipal,
+        servicio: servicio,
+      });
+      // Asociar la foto al servicio
+      servicio.fotos.add(foto);
+    }
     await em.flush();
-    res.status(201).json({ message: "servicio created", data: servicios });
+
+    res.status(201).json({ message: "servicio created", data: servicio });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error("Error al crear servicio:", error);
+    res.status(500).json({ message: error.message, stack: error.stack });
   }
 }
 
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const servicioToUpdate = await em.findOneOrFail(Servicio, { id });
+    const servicioToUpdate = await em.findOneOrFail(Servicio, { id }, { populate: ["fotos"] });
     em.assign(servicioToUpdate, req.body.sanitizedInput);
+
+    // Eliminar fotos actuales si se envía fotosAEliminar (array de IDs)
+    let fotosAEliminar = req.body.fotosAEliminar;
+    if (typeof fotosAEliminar === "string" && fotosAEliminar.length > 0) {
+      fotosAEliminar = [fotosAEliminar];
+    }
+    if (Array.isArray(fotosAEliminar) && fotosAEliminar.length > 0) {
+      for (const fotoId of fotosAEliminar) {
+        const foto = await em.findOne(FotoProducto, { id: fotoId, servicio: servicioToUpdate });
+        if (foto) {
+          // Eliminar de Cloudinary
+          try {
+            const urlParts = foto.url.split('/');
+            const fileName = urlParts[urlParts.length - 1];
+            const [publicId] = fileName.split('.');
+            await cloudinary.uploader.destroy(`servicio/${publicId}`);
+          } catch (e) {
+            console.error('Error eliminando de Cloudinary:', e);
+          }
+          await em.remove(foto);
+          servicioToUpdate.fotos.remove(foto);
+        }
+      }
+    }
+    // Procesar nuevas fotos si se enviaron
+    let fotosFiles: Express.Multer.File[] = [];
+    if (req.files && Array.isArray(req.files)) {
+      fotosFiles = req.files as Express.Multer.File[];
+    }
+
+    // Subir nuevas fotos y asociarlas
+    const fotoPrincipalNombre = req.body.fotoPrincipal;
+    for (const file of fotosFiles) {
+      const url = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "servicio" },
+          (error, result) => {
+            if (error || !result) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(file.buffer);
+      });
+
+      const esPrincipal = file.originalname === fotoPrincipalNombre;
+      const foto = em.create(FotoProducto, {
+        url,
+        esPrincipal,
+        servicio: servicioToUpdate,
+      });
+      servicioToUpdate.fotos.add(foto);
+    }
+
+    // Actualizar foto principal si se envió
+    if (fotoPrincipalNombre) {
+      // Primero, quitar principal a todas
+      for (const foto of servicioToUpdate.fotos) {
+        foto.esPrincipal = false;
+      }
+      // Buscar la foto principal por id (preferido) o por url
+      let principalFoto = null;
+      for (const foto of servicioToUpdate.fotos) {
+        if (
+          (foto.id && foto.id.toString() === fotoPrincipalNombre) ||
+          (foto.url && foto.url === fotoPrincipalNombre)
+        ) {
+          principalFoto = foto;
+          break;
+        }
+      }
+      // Si no se encuentra, marcar la última agregada como principal
+      if (!principalFoto && servicioToUpdate.fotos.length > 0) {
+        principalFoto = servicioToUpdate.fotos[servicioToUpdate.fotos.length - 1];
+      }
+      if (principalFoto) {
+        principalFoto.esPrincipal = true;
+      }
+    }
+
     await em.flush();
-    res
-      .status(200)
-      .json({ message: "service updated", data: servicioToUpdate });
+    res.status(200).json({ message: "service updated", data: servicioToUpdate });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -86,11 +202,38 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const servicios = em.getReference(Servicio, id);
-    await em.removeAndFlush(servicios);
+    // Eliminar fotos asociadas (FotoProducto y Cloudinary)
+    const fotos = await em.find(FotoProducto, { servicio: id });
+    for (const foto of fotos) {
+      try {
+        const urlParts = foto.url.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        const [publicId] = fileName.split('.');
+        await cloudinary.uploader.destroy(`servicio/${publicId}`);
+      } catch (e) {
+        console.error('Error eliminando de Cloudinary:', e);
+      }
+      await em.remove(foto);
+    }
+
+    // Eliminar ventas asociadas
+    const ventas = await em.find(Venta, { servicio: id });
+    for (const venta of ventas) {
+      // Eliminar reseñas asociadas a la venta
+      const resenias = await em.find('Resenia', { venta: venta.id });
+      for (const resenia of resenias) {
+        await em.remove(resenia);
+      }
+      await em.remove(venta);
+    }
+
+    // Eliminar el servicio
+    const servicio = em.getReference(Servicio, id);
+    await em.removeAndFlush(servicio);
+    res.status(200).json({ message: "service removed" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
 
-export { sanitizeServicioInput, findAll, findOne, add, update, remove };
+export { sanitizeServicioInput, findAll, findOne, add, update, remove, upload };
