@@ -4,8 +4,12 @@ import { Compania } from "../../Compania/compania.entity.js";
 import { orm } from "../../shared/orm.js";
 import { Complemento } from "./complemento.entity.js";
 import { Venta } from "../../Venta/venta.entity.js";
+import { FotoProducto } from "../FotoProducto/fotoProducto.entity.js";
+import { cloudinary } from "../../shared/cloudinary.js";
+import multer from "multer";
 
-const em = orm.em;
+const upload = multer({ storage: multer.memoryStorage() });
+const em = orm.em.fork();
 
 function sanitizeComplementoInput(
   req: Request,
@@ -62,23 +66,132 @@ async function findOne(req: Request, res: Response) {
 
 async function add(req: Request, res: Response) {
   try {
-    const complementos = em.create(Complemento, req.body.sanitizedInput);
+    let fotosFiles: Express.Multer.File[] = [];
+    if (req.files && Array.isArray(req.files)) {
+      fotosFiles = req.files as Express.Multer.File[];
+    }
+
+    // Crear el complemento
+    const complemento = em.create(Complemento, req.body.sanitizedInput);
+    await em.flush(); // para obtener el id
+
+    // Subir fotos y guardar en FotoProducto
+    const fotoPrincipalNombre = req.body.fotoPrincipal;
+    for (const file of fotosFiles) {
+      const url = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "complemento" },
+          (error, result) => {
+            if (error || !result) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(file.buffer);
+      });
+
+      const esPrincipal = file.originalname === fotoPrincipalNombre;
+      const foto = em.create(FotoProducto, {
+        url,
+        esPrincipal,
+        complemento: complemento,
+      });
+      complemento.fotos.add(foto);
+    }
     await em.flush();
-    res.status(201).json({ message: "complemento created", data: complementos });
+
+    res.status(201).json({ message: "complemento created", data: complemento });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    console.error("Error al crear complemento:", error);
+    res.status(500).json({ message: error.message, stack: error.stack });
   }
 }
 
 async function update(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const complementoToUpdate = await em.findOneOrFail(Complemento, { id });
+    const complementoToUpdate = await em.findOneOrFail(Complemento, { id }, { populate: ["fotos"] });
     em.assign(complementoToUpdate, req.body.sanitizedInput);
+
+    // Eliminar fotos actuales si se envía fotosAEliminar (array de IDs)
+    let fotosAEliminar = req.body.fotosAEliminar;
+    if (typeof fotosAEliminar === "string" && fotosAEliminar.length > 0) {
+      fotosAEliminar = [fotosAEliminar];
+    }
+    if (Array.isArray(fotosAEliminar) && fotosAEliminar.length > 0) {
+      for (const fotoId of fotosAEliminar) {
+        const foto = await em.findOne(FotoProducto, { id: fotoId, complemento: complementoToUpdate });
+        if (foto) {
+          // Eliminar de Cloudinary
+          try {
+            const urlParts = foto.url.split('/');
+            const fileName = urlParts[urlParts.length - 1];
+            const [publicId] = fileName.split('.');
+            await cloudinary.uploader.destroy(`complemento/${publicId}`);
+          } catch (e) {
+            console.error('Error eliminando de Cloudinary:', e);
+          }
+          await em.remove(foto);
+          complementoToUpdate.fotos.remove(foto);
+        }
+      }
+    }
+    // Procesar nuevas fotos si se enviaron
+    let fotosFiles: Express.Multer.File[] = [];
+    if (req.files && Array.isArray(req.files)) {
+      fotosFiles = req.files as Express.Multer.File[];
+    }
+
+    // Subir nuevas fotos y asociarlas
+    const fotoPrincipalNombre = req.body.fotoPrincipal;
+    for (const file of fotosFiles) {
+      const url = await new Promise<string>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "complemento" },
+          (error, result) => {
+            if (error || !result) return reject(error);
+            resolve(result.secure_url);
+          }
+        );
+        stream.end(file.buffer);
+      });
+
+      const esPrincipal = file.originalname === fotoPrincipalNombre;
+      const foto = em.create(FotoProducto, {
+        url,
+        esPrincipal,
+        complemento: complementoToUpdate,
+      });
+      complementoToUpdate.fotos.add(foto);
+    }
+
+    // Actualizar foto principal si se envió
+    if (fotoPrincipalNombre) {
+      // Primero, quitar principal a todas
+      for (const foto of complementoToUpdate.fotos) {
+        foto.esPrincipal = false;
+      }
+      // Buscar la foto principal por id (preferido) o por url
+      let principalFoto = null;
+      for (const foto of complementoToUpdate.fotos) {
+        if (
+          (foto.id && foto.id.toString() === fotoPrincipalNombre) ||
+          (foto.url && foto.url === fotoPrincipalNombre)
+        ) {
+          principalFoto = foto;
+          break;
+        }
+      }
+      // Si no se encuentra, marcar la última agregada como principal
+      if (!principalFoto && complementoToUpdate.fotos.length > 0) {
+        principalFoto = complementoToUpdate.fotos[complementoToUpdate.fotos.length - 1];
+      }
+      if (principalFoto) {
+        principalFoto.esPrincipal = true;
+      }
+    }
+
     await em.flush();
-    res
-      .status(200)
-      .json({ message: "complemento updated", data: complementoToUpdate });
+    res.status(200).json({ message: "complemento updated", data: complementoToUpdate });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -87,11 +200,38 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const complementos = em.getReference(Complemento, id);
-    await em.removeAndFlush(complementos);
+    // Eliminar fotos asociadas (FotoProducto y Cloudinary)
+    const fotos = await em.find(FotoProducto, { complemento: id });
+    for (const foto of fotos) {
+      try {
+        const urlParts = foto.url.split('/');
+        const fileName = urlParts[urlParts.length - 1];
+        const [publicId] = fileName.split('.');
+        await cloudinary.uploader.destroy(`complemento/${publicId}`);
+      } catch (e) {
+        console.error('Error eliminando de Cloudinary:', e);
+      }
+      await em.remove(foto);
+    }
+
+    // Eliminar ventas asociadas
+    const ventas = await em.find(Venta, { complemento: id });
+    for (const venta of ventas) {
+      // Eliminar reseñas asociadas a la venta
+      const resenias = await em.find('Resenia', { venta: venta.id });
+      for (const resenia of resenias) {
+        await em.remove(resenia);
+      }
+      await em.remove(venta);
+    }
+
+    // Eliminar el complemento
+    const complemento = em.getReference(Complemento, id);
+    await em.removeAndFlush(complemento);
+    res.status(200).json({ message: "complemento removed" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
 
-export { sanitizeComplementoInput, findAll, findOne, add, update, remove };
+export { sanitizeComplementoInput, findAll, findOne, add, update, remove, upload };
