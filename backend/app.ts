@@ -18,6 +18,8 @@ import 'reflect-metadata'
 import { orm, syncSchema } from './src/shared/orm.js'
 import { RequestContext } from '@mikro-orm/core'
 import { MODERATION_ENABLED } from './src/shared/moderation.js'
+import { swaggerUi, swaggerSpec } from './swagger.js';
+
 
 const app = express()
 
@@ -36,6 +38,8 @@ app.use((req, res, next) => {
     next()
   }
 })
+// Documentación Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
