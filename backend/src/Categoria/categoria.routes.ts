@@ -1,17 +1,181 @@
 import { Router } from 'express';
-import {findAll, findOne, add, sanitizeCategoriaInput, update, remove, getAllCategoriesAdmin, removeCategoryAsAdmin} from './categoria.controler.js';
+import {findAll, findOne, add, sanitizeCategoriaInput, update, remove} from './categoria.controler.js';
 import { authenticateToken } from '../Auth/auth.middleware.js';
 
 export const categoriaRouter = Router();
 
-// RUTAS DE ADMIN (deben ir ANTES de las rutas genéricas)
-categoriaRouter.get('/admin/all', authenticateToken as any, getAllCategoriesAdmin as any);
-categoriaRouter.delete('/admin/:id', authenticateToken as any, removeCategoryAsAdmin as any);
-
 // RUTAS GENERALES
+/**
+ * @swagger
+ * /api/categoria:
+ *   get:
+ *     summary: Obtiene todas las categorías
+ *     tags:
+ *       - Categoría
+ *     responses:
+ *       200:
+ *         description: Lista de categorías
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "found all categories"
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Categoria'
+ *       500:
+ *         description: Error del servidor
+ */
 categoriaRouter.get('/', findAll);
-categoriaRouter.get('/:id', findOne); 
-categoriaRouter.post('/', sanitizeCategoriaInput, add); 
-categoriaRouter.put('/:id', sanitizeCategoriaInput, update); 
-categoriaRouter.patch('/:id', sanitizeCategoriaInput, update); 
-categoriaRouter.delete('/:id', remove);
+
+/**
+ * @swagger
+ * /api/categoria/{id}:
+ *   get:
+ *     summary: Obtiene una categoría por ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la categoría
+ *     responses:
+ *       200:
+ *         description: Categoría encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "found category"
+ *                 data:
+ *                   $ref: '#/components/schemas/Categoria'
+ *       500:
+ *         description: Categoría no encontrada / Error del servidor
+ */
+categoriaRouter.get('/:id', findOne);
+
+/**
+ * @swagger
+ * /api/categoria:
+ *   post:
+ *     summary: Crea una nueva categoría
+ *     tags:
+ *       - Categoría
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Deportes"
+ *               detalle:
+ *                 type: string
+ *                 example: "Juegos de deportes"
+ *             required:
+ *               - nombre
+ *               - detalle
+ *     responses:
+ *       201:
+ *         description: Categoría creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "category created"
+ *                 data:
+ *                   $ref: '#/components/schemas/Categoria'
+ *       500:
+ *         description: Error del servidor
+ */
+categoriaRouter.post('/', authenticateToken as any, sanitizeCategoriaInput, add);
+
+/**
+ * @swagger
+ * /api/categoria/{id}:
+ *   put:
+ *     summary: Actualiza una categoría por ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la categoría
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Deportes"
+ *               detalle:
+ *                 type: string
+ *                 example: "Juegos de deportes actualizados"
+ *     responses:
+ *       200:
+ *         description: Categoría actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "category updated"
+ *                 data:
+ *                   $ref: '#/components/schemas/Categoria'
+ *       500:
+ *         description: Categoría no encontrada / Error del servidor
+ */
+categoriaRouter.put('/:id', authenticateToken as any, sanitizeCategoriaInput, update);
+
+/**
+ * @swagger
+ * /api/categoria/{id}:
+ *   delete:
+ *     summary: Elimina una categoría por ID
+ *     tags:
+ *       - Categoría
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la categoría
+ *     responses:
+ *       200:
+ *         description: Categoría eliminada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "category deleted"
+ *       500:
+ *         description: Categoría no encontrada / Error del servidor
+ */
+categoriaRouter.delete('/:id', authenticateToken as any, remove);

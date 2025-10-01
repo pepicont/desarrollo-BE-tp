@@ -39,6 +39,15 @@ const options = {
                         }
                     }
                 },
+                Categoria: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer', example: 1 },
+                        nombre: { type: 'string', example: 'Deportes' },
+                        detalle: { type: 'string', example: 'Juegos de deportes' },
+                    },
+                    required: ['nombre', 'detalle']
+                },
                 Juego: {
                     type: 'object',
                     properties: {
