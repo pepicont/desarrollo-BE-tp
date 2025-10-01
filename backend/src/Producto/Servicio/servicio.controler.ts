@@ -18,11 +18,19 @@ function sanitizeServicioInput(
   res: Response,
   next: NextFunction
 ) {
+  // Normalizar categorias para aceptar tanto array como string
+  let categorias = req.body.categorias;
+  if (typeof categorias === "string") {
+    categorias = [categorias];
+  }
+  if (Array.isArray(categorias)) {
+    categorias = categorias.map(Number);
+  }
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     detalle: req.body.detalle,
     monto: req.body.monto, 
-    categorias: req.body.categorias,
+    categorias,
     compania: req.body.compania
   };
   //more checks here
