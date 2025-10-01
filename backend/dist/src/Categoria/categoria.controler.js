@@ -67,6 +67,10 @@ async function remove(req, res) {
             populate: ['juegos', 'complementos', 'servicios']
         });
         if (categoria) {
+            // Limpiar las relaciones antes de eliminar la categoría
+            categoria.juegos.removeAll();
+            categoria.complementos.removeAll();
+            categoria.servicios.removeAll();
             await em.removeAndFlush(categoria);
             res.status(200).send({ message: 'category deleted' });
         }
