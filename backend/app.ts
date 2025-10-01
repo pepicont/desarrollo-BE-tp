@@ -38,8 +38,10 @@ app.use((req, res, next) => {
     next()
   }
 })
-// Documentación Swagger
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Documentación Swagger. Solo Swagger en desarrollo por seguridad
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
