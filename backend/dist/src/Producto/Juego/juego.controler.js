@@ -5,7 +5,6 @@ import { FotoProducto } from "../FotoProducto/fotoProducto.entity.js";
 import { cloudinary } from "../../shared/cloudinary.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
-const em = orm.em.fork();
 function sanitizeJuegoInput(req, res, next) {
     // Normalizar categorias para aceptar tanto array como string
     let categorias = req.body.categorias;
@@ -33,6 +32,7 @@ function sanitizeJuegoInput(req, res, next) {
     next();
 }
 async function findAll(req, res) {
+    const em = orm.em.fork();
     try {
         const juegos = await em.find(Juego, {}, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found all games", data: juegos });
@@ -42,6 +42,7 @@ async function findAll(req, res) {
     }
 }
 async function findOne(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania", "fotos"] });
@@ -56,6 +57,7 @@ async function findOne(req, res) {
     }
 }
 async function add(req, res) {
+    const em = orm.em.fork();
     try {
         let fotosFiles = [];
         if (req.files && Array.isArray(req.files)) {
@@ -93,6 +95,7 @@ async function add(req, res) {
     }
 }
 async function update(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const juegoToUpdate = await em.findOneOrFail(Juego, { id }, { populate: ["fotos"] });
@@ -176,6 +179,7 @@ async function update(req, res) {
     }
 }
 async function remove(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         // Eliminar fotos asociadas (FotoProducto y Cloudinary)

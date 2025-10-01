@@ -7,7 +7,6 @@ import { cloudinary } from "../../shared/cloudinary.js";
 import multer from "multer";
 
 const upload = multer({ storage: multer.memoryStorage() });
-const em = orm.em.fork();
 
 function sanitizeJuegoInput(
   req: Request,
@@ -42,6 +41,7 @@ function sanitizeJuegoInput(
 }
 
 async function findAll(req: Request, res: Response) {
+  const em = orm.em.fork(); 
   try {
     const juegos = await em.find(
       Juego,
@@ -55,6 +55,7 @@ async function findAll(req: Request, res: Response) {
 }
 
 async function findOne(req: Request, res: Response) {
+  const em = orm.em.fork(); 
   try {
     const id = Number.parseInt(req.params.id);
     const juego = await em.findOneOrFail(
@@ -73,6 +74,7 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
+  const em = orm.em.fork(); 
   try {
     let fotosFiles: Express.Multer.File[] = [];
     if (req.files && Array.isArray(req.files)) {
@@ -116,6 +118,7 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
+  const em = orm.em.fork(); 
   try {
     const id = Number.parseInt(req.params.id);
     const juegoToUpdate = await em.findOneOrFail(Juego, { id }, { populate: ["fotos"] });
@@ -207,6 +210,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
+  const em = orm.em.fork(); 
   try {
     const id = Number.parseInt(req.params.id);
     // Eliminar fotos asociadas (FotoProducto y Cloudinary)
