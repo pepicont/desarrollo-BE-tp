@@ -7,6 +7,66 @@ const authController = new AuthController();
 
 // POST /api/auth/login - Iniciar sesión (ruta pública)
 /* http://localhost:3000/api/auth/login */
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Iniciar sesión
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mail:
+ *                 type: string
+ *                 example: stefano.repositorioutn@gmail.com
+ *               contrasenia:
+ *                 type: string
+ *                 example: "123456"
+ *             required:
+ *               - mail
+ *               - contrasenia
+ *     responses:
+ *       200:
+ *         description: Login exitoso, devuelve el token JWT y datos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 130
+ *                     mail:
+ *                       type: string
+ *                       example: "stefano.repositorioutn@gmail.com"
+ *                     nombre:
+ *                       type: string
+ *                       example: "yoooo"
+ *                     tipoUsuario:
+ *                       type: string
+ *                       example: "cliente"
+ *                     urlFoto:
+ *                       type: string
+ *                       format: uri
+ *                       example: "https://res.cloudinary.com/dbrfi383s/image/upload/usuario/yoda.jpg"
+ *       401:
+ *         description: Credenciales inválidas
+ *       400:
+ *         description: Faltan campos
+ *       500:
+ *         description: Error del servidor
+ */
 authRouter.post('/login', (authController.login as any).bind(authController));
 
 
