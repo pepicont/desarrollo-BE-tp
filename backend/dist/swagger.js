@@ -17,6 +17,39 @@ const options = {
                 },
             },
             schemas: {
+                Compania: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer', example: 1 },
+                        nombre: { type: 'string', example: 'Juegos SA' },
+                        detalle: { type: 'string', example: 'Juegos de deportes' }
+                    },
+                    required: ['nombre', 'detalle']
+                },
+                CompaniaCreateResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'company created' },
+                        data: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 26 },
+                                juegos: { type: 'array', items: {}, example: [] },
+                                complementos: { type: 'array', items: {}, example: [] },
+                                servicios: { type: 'array', items: {}, example: [] },
+                                nombre: { type: 'string', example: 'Juegos SA' },
+                                detalle: { type: 'string', example: 'Juegos de deportes' }
+                            }
+                        }
+                    }
+                },
+                CompaniaUpdateResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'company updated' },
+                        data: { $ref: '#/components/schemas/Compania' }
+                    }
+                },
                 CategoriaCreateResponse: {
                     type: 'object',
                     properties: {
