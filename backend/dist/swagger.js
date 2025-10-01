@@ -17,6 +17,23 @@ const options = {
                 },
             },
             schemas: {
+                CategoriaCreateResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'category created' },
+                        data: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 24 },
+                                juegos: { type: 'array', items: {}, example: [] },
+                                complementos: { type: 'array', items: {}, example: [] },
+                                servicios: { type: 'array', items: {}, example: [] },
+                                nombre: { type: 'string', example: 'Deportes' },
+                                detalle: { type: 'string', example: 'Juegos de deportesss' }
+                            }
+                        }
+                    }
+                },
                 JuegoCreateResponse: {
                     type: 'object',
                     properties: {

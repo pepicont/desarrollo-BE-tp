@@ -72,19 +72,9 @@ async function update(req: Request, res: Response) {
 async function remove(req: Request, res: Response) {
   try {
     const id = Number.parseInt(req.params.id);
-    const categoria = await em.findOne(Categoria, id, {
-      populate: ['juegos', 'complementos', 'servicios']
-    });
-    
-    if (categoria) {
-      // Limpiar las relaciones antes de eliminar la categoría
-      categoria.juegos.removeAll();
-      categoria.complementos.removeAll();
-      categoria.servicios.removeAll();
-      
+    const categoria = await em.getReference(Categoria, id);
       await em.removeAndFlush(categoria);
       res.status(200).send({ message: 'category deleted' });
-    } 
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

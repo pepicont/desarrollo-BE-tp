@@ -71,6 +71,8 @@ categoriaRouter.get('/:id', findOne);
  *     summary: Crea una nueva categoría
  *     tags:
  *       - Categoría
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -93,13 +95,9 @@ categoriaRouter.get('/:id', findOne);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "category created"
- *                 data:
- *                   $ref: '#/components/schemas/Categoria'
+ *               $ref: '#/components/schemas/CategoriaCreateResponse'
+ *       401: 
+ *         description: No autorizado
  *       500:
  *         description: Error del servidor
  */
@@ -112,6 +110,8 @@ categoriaRouter.post('/', authenticateToken as any, sanitizeCategoriaInput, add)
  *     summary: Actualiza una categoría por ID
  *     tags:
  *       - Categoría
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -145,6 +145,8 @@ categoriaRouter.post('/', authenticateToken as any, sanitizeCategoriaInput, add)
  *                   example: "category updated"
  *                 data:
  *                   $ref: '#/components/schemas/Categoria'
+ *       401:
+ *         description: No autorizado
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
@@ -157,6 +159,8 @@ categoriaRouter.put('/:id', authenticateToken as any, sanitizeCategoriaInput, up
  *     summary: Elimina una categoría por ID
  *     tags:
  *       - Categoría
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -175,6 +179,8 @@ categoriaRouter.put('/:id', authenticateToken as any, sanitizeCategoriaInput, up
  *                 message:
  *                   type: string
  *                   example: "category deleted"
+ *       401:
+ *         description: No autorizado
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
