@@ -13,7 +13,7 @@ async function findAll(req, res) {
 async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
-        const venta = await em.findOneOrFail(Venta, { id }, { populate: ['usuario', 'complemento', 'juego', 'servicio'] });
+        const venta = await em.findOneOrFail(Venta, { id }, { populate: ['complemento', 'juego', 'servicio'] });
         res.status(200).json({ message: 'found venta', data: venta });
     }
     catch (error) {
