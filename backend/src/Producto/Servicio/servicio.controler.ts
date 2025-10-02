@@ -10,7 +10,6 @@ import { orm } from "../../shared/orm.js";
 import {Servicio} from "./servicio.entity.js";
 import { Venta } from "../../Venta/venta.entity.js";
 
-const em = orm.em.fork();
 
 
 function sanitizeServicioInput(
@@ -44,6 +43,7 @@ function sanitizeServicioInput(
 }
 
 async function findAll(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const servicios = await em.find(
       Servicio,
@@ -57,6 +57,7 @@ async function findAll(req: Request, res: Response) {
 }
 
 async function findOne(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     const servicios = await em.findOneOrFail(
@@ -74,6 +75,7 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     let fotosFiles: Express.Multer.File[] = [];
     if (req.files && Array.isArray(req.files)) {
@@ -117,6 +119,7 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     const servicioToUpdate = await em.findOneOrFail(Servicio, { id }, { populate: ["fotos"] });
@@ -208,6 +211,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     // Eliminar fotos asociadas (FotoProducto y Cloudinary)

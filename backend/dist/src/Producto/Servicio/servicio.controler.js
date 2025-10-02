@@ -5,7 +5,6 @@ const upload = multer({ storage: multer.memoryStorage() });
 import { orm } from "../../shared/orm.js";
 import { Servicio } from "./servicio.entity.js";
 import { Venta } from "../../Venta/venta.entity.js";
-const em = orm.em.fork();
 function sanitizeServicioInput(req, res, next) {
     // Normalizar categorias para aceptar tanto array como string
     let categorias = req.body.categorias;
@@ -31,6 +30,7 @@ function sanitizeServicioInput(req, res, next) {
     next();
 }
 async function findAll(req, res) {
+    const em = orm.em.fork();
     try {
         const servicios = await em.find(Servicio, {}, { populate: ["categorias", "compania", "fotos"] });
         res.status(200).json({ message: "found all services", data: servicios });
@@ -40,6 +40,7 @@ async function findAll(req, res) {
     }
 }
 async function findOne(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const servicios = await em.findOneOrFail(Servicio, { id }, { populate: ["categorias", "compania", "fotos"] });
@@ -53,6 +54,7 @@ async function findOne(req, res) {
     }
 }
 async function add(req, res) {
+    const em = orm.em.fork();
     try {
         let fotosFiles = [];
         if (req.files && Array.isArray(req.files)) {
@@ -90,6 +92,7 @@ async function add(req, res) {
     }
 }
 async function update(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const servicioToUpdate = await em.findOneOrFail(Servicio, { id }, { populate: ["fotos"] });
@@ -173,6 +176,7 @@ async function update(req, res) {
     }
 }
 async function remove(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         // Eliminar fotos asociadas (FotoProducto y Cloudinary)
