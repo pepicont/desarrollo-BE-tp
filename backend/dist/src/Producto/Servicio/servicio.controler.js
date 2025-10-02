@@ -7,11 +7,19 @@ import { Servicio } from "./servicio.entity.js";
 import { Venta } from "../../Venta/venta.entity.js";
 const em = orm.em.fork();
 function sanitizeServicioInput(req, res, next) {
+    // Normalizar categorias para aceptar tanto array como string
+    let categorias = req.body.categorias;
+    if (typeof categorias === "string") {
+        categorias = [categorias];
+    }
+    if (Array.isArray(categorias)) {
+        categorias = categorias.map(Number);
+    }
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
         detalle: req.body.detalle,
         monto: req.body.monto,
-        categorias: req.body.categorias,
+        categorias,
         compania: req.body.compania
     };
     //more checks here

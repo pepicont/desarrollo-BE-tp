@@ -18,6 +18,70 @@ const options = {
         },
       },
       schemas: {
+        Servicio: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', example: 1 },
+            nombre: { type: 'string', example: 'Servicio Online' },
+            detalle: { type: 'string', example: 'Acceso a servidores premium' },
+            monto: { type: 'number', example: 19.99 },
+            compania: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } },
+            categorias: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } }, example: [] },
+            fotos: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, url: { type: 'string', format: 'uri' }, esPrincipal: { type: 'boolean' } } }, example: [] },},
+          required: ['nombre', 'detalle', 'monto', 'compania']
+        },
+        ServicioConVentasCount: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', example: 1 },
+            nombre: { type: 'string', example: 'Servicio Online' },
+            detalle: { type: 'string', example: 'Acceso a servidores premium' },
+            monto: { type: 'number', example: 19.99 },
+            compania: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } },
+            categorias: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } }, example: [] },
+            fotos: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, url: { type: 'string', format: 'uri' }, esPrincipal: { type: 'boolean' } } }, example: [] },
+            ventasCount: { type: 'integer', example: 42 }
+          },
+          required: ['nombre', 'detalle', 'monto', 'compania', 'ventasCount']
+        },
+        ServicioCreateResponse: {
+          type: 'object',
+          properties: {
+            message: { type: 'string', example: 'service created' },
+            data: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer', example: 10 },
+                nombre: { type: 'string', example: 'Servicio Online' },
+                detalle: { type: 'string', example: 'Acceso a servidores premium' },
+                monto: { type: 'number', example: 19.99 },
+                compania: { type: 'integer', example: 1 },
+                fotos: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, url: { type: 'string', format: 'uri' }, esPrincipal: { type: 'boolean' } } }, example: [] },
+                categorias: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } }, example: [] },
+                ventas: { type: 'array', items: {}, example: [] }
+              }
+            }
+          }
+        },
+        ServicioUpdateResponse: {
+          type: 'object',
+          properties: {
+            message: { type: 'string', example: 'service updated' },
+            data: {
+              type: 'object',
+              properties: {
+                id: { type: 'integer', example: 10 },
+                nombre: { type: 'string', example: 'Servicio Online' },
+                detalle: { type: 'string', example: 'Acceso a servidores premium actualizado' },
+                monto: { type: 'number', example: 29.99 },
+                compania: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } },
+                fotos: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, url: { type: 'string', format: 'uri' }, esPrincipal: { type: 'boolean' } } }, example: [] },
+                categorias: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, nombre: { type: 'string' }, detalle: { type: 'string' } } }, example: [] },
+                ventas: { type: 'array', items: {}, example: [] }
+              }
+            }
+          }
+        },
         Compania: {
           type: 'object',
           properties: {
