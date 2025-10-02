@@ -49,15 +49,6 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
-async function add(req: Request, res: Response) {
-  try {
-    const usuario = em.create(Usuario, req.body.sanitizedInput);
-    await em.flush();
-    res.status(201).json({ message: "user created", data: usuario });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
 
 async function update(req: Request, res: Response) {
   try {
@@ -136,4 +127,4 @@ async function getProfile(req: AuthenticatedRequest, res: Response) {
   }
 
 
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, getProfile };
+export { sanitizeUsuarioInput, findAll, findOne, update, remove, getProfile };

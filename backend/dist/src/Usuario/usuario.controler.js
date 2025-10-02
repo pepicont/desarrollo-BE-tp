@@ -38,16 +38,6 @@ async function findOne(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-async function add(req, res) {
-    try {
-        const usuario = em.create(Usuario, req.body.sanitizedInput);
-        await em.flush();
-        res.status(201).json({ message: "user created", data: usuario });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
@@ -116,5 +106,5 @@ async function getProfile(req, res) {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 }
-export { sanitizeUsuarioInput, findAll, findOne, add, update, remove, getProfile };
+export { sanitizeUsuarioInput, findAll, findOne, update, remove, getProfile };
 //# sourceMappingURL=usuario.controler.js.map
