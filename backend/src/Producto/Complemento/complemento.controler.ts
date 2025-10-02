@@ -9,18 +9,26 @@ import { cloudinary } from "../../shared/cloudinary.js";
 import multer from "multer";
 
 const upload = multer({ storage: multer.memoryStorage() });
-const em = orm.em.fork();
+
 
 function sanitizeComplementoInput(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
+  // Normalizar categorias para aceptar tanto array como string
+  let categorias = req.body.categorias;
+  if (typeof categorias === "string") {
+    categorias = categorias.split(',').map(Number);
+  }
+  if (Array.isArray(categorias)) {
+    categorias = categorias.map(Number);
+  }
   req.body.sanitizedInput = {
     nombre: req.body.nombre,
     detalle: req.body.detalle,
     monto: req.body.monto,
-    categorias: req.body.categorias,
+    categorias,
     compania: req.body.compania,
     juego: req.body.juego
   };
@@ -35,6 +43,7 @@ function sanitizeComplementoInput(
 }
 
 async function findAll(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const complementos = await em.find(
       Complemento,
@@ -48,6 +57,7 @@ async function findAll(req: Request, res: Response) {
 }
 
 async function findOne(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     const complementos = await em.findOneOrFail(
@@ -65,6 +75,7 @@ async function findOne(req: Request, res: Response) {
 }
 
 async function add(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     let fotosFiles: Express.Multer.File[] = [];
     if (req.files && Array.isArray(req.files)) {
@@ -107,6 +118,7 @@ async function add(req: Request, res: Response) {
 }
 
 async function update(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     const complementoToUpdate = await em.findOneOrFail(Complemento, { id }, { populate: ["fotos"] });
@@ -198,6 +210,7 @@ async function update(req: Request, res: Response) {
 }
 
 async function remove(req: Request, res: Response) {
+  const em = orm.em.fork();
   try {
     const id = Number.parseInt(req.params.id);
     // Eliminar fotos asociadas (FotoProducto y Cloudinary)

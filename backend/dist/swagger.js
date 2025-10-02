@@ -17,6 +17,187 @@ const options = {
                 },
             },
             schemas: {
+                ComplementoUpdateResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'complemento updated' },
+                        data: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 48 },
+                                nombre: { type: 'string', example: 'string' },
+                                detalle: { type: 'string', example: 'string' },
+                                monto: { type: 'number', example: 0 },
+                                compania: { type: 'integer', example: 1 },
+                                juego: { type: 'integer', example: 1 },
+                                categorias: { type: 'array', items: { type: 'integer' }, example: [1] },
+                                fotos: { type: 'array', items: {}, example: [] }
+                            }
+                        }
+                    }
+                },
+                ComplementoCreateResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'complemento created' },
+                        data: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 39 },
+                                categorias: { type: 'array', items: { type: 'integer' }, example: [1] },
+                                ventas: { type: 'array', items: {}, example: [] },
+                                fotos: { type: 'array', items: {}, example: [] },
+                                nombre: { type: 'string', example: 'string' },
+                                detalle: { type: 'string', example: 'string' },
+                                monto: { type: 'string', example: '12' },
+                                compania: { type: 'string', example: '1' },
+                                juego: { type: 'string', example: '1' }
+                            }
+                        }
+                    }
+                },
+                Complemento: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer', example: 1 },
+                        nombre: { type: 'string', example: 'V-Bucks' },
+                        detalle: { type: 'string', example: 'Detalle de V-Bucks' },
+                        monto: { type: 'number', example: 5 },
+                        compania: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 17 },
+                                nombre: { type: 'string', example: 'Bungie' },
+                                detalle: { type: 'string', example: 'Compañía Bungie' }
+                            }
+                        },
+                        juego: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 4 },
+                                nombre: { type: 'string', example: 'GTA V' },
+                                detalle: { type: 'string', example: 'Detalle de GTA V' },
+                                monto: { type: 'number', example: 15 },
+                                compania: { type: 'integer', example: 3 },
+                                fechaLanzamiento: { type: 'string', format: 'date-time', example: '2023-06-21T03:00:00.000Z' },
+                                edadPermitida: { type: 'integer', example: 13 }
+                            }
+                        },
+                        categorias: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'integer', example: 4 },
+                                    nombre: { type: 'string', example: 'RPG' },
+                                    detalle: { type: 'string', example: 'Rol y progresión' }
+                                }
+                            },
+                            example: [
+                                { id: 4, nombre: 'RPG', detalle: 'Rol y progresión' },
+                                { id: 16, nombre: 'Battle Royale', detalle: 'Último en pie' }
+                            ]
+                        },
+                        fotos: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'integer', example: 54 },
+                                    url: { type: 'string', format: 'uri', example: 'https://res.cloudinary.com/dbrfi383s/image/upload/complemento/vbucks.jpg' },
+                                    esPrincipal: { type: 'boolean', example: true },
+                                    juego: { type: 'integer', nullable: true, example: null },
+                                    complemento: { type: 'integer', example: 1 },
+                                    servicio: { type: 'integer', nullable: true, example: null }
+                                }
+                            },
+                            example: [
+                                { id: 54, url: 'https://res.cloudinary.com/dbrfi383s/image/upload/complemento/vbucks.jpg', esPrincipal: true, juego: null, complemento: 1, servicio: null }
+                            ]
+                        }
+                    },
+                    required: ['nombre', 'detalle', 'monto', 'compania', 'juego', 'categorias', 'fotos']
+                },
+                ComplementoFindAllResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'found all complementos' },
+                        data: {
+                            type: 'array',
+                            items: { $ref: '#/components/schemas/Complemento' }
+                        }
+                    }
+                },
+                ComplementoConVentasCount: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'integer', example: 1 },
+                        nombre: { type: 'string', example: 'V-Bucks' },
+                        detalle: { type: 'string', example: 'Detalle de V-Bucks' },
+                        monto: { type: 'number', example: 5 },
+                        compania: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 17 },
+                                nombre: { type: 'string', example: 'Bungie' },
+                                detalle: { type: 'string', example: 'Compañía Bungie' }
+                            }
+                        },
+                        juego: {
+                            type: 'object',
+                            properties: {
+                                id: { type: 'integer', example: 4 },
+                                nombre: { type: 'string', example: 'GTA V' },
+                                detalle: { type: 'string', example: 'Detalle de GTA V' },
+                                monto: { type: 'number', example: 15 },
+                                compania: { type: 'integer', example: 3 },
+                                fechaLanzamiento: { type: 'string', format: 'date-time', example: '2023-06-21T03:00:00.000Z' },
+                                edadPermitida: { type: 'integer', example: 13 }
+                            }
+                        },
+                        categorias: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'integer', example: 4 },
+                                    nombre: { type: 'string', example: 'RPG' },
+                                    detalle: { type: 'string', example: 'Rol y progresión' }
+                                }
+                            },
+                            example: [
+                                { id: 4, nombre: 'RPG', detalle: 'Rol y progresión' },
+                                { id: 16, nombre: 'Battle Royale', detalle: 'Último en pie' }
+                            ]
+                        },
+                        fotos: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    id: { type: 'integer', example: 54 },
+                                    url: { type: 'string', format: 'uri', example: 'https://res.cloudinary.com/dbrfi383s/image/upload/complemento/vbucks.jpg' },
+                                    esPrincipal: { type: 'boolean', example: true },
+                                    juego: { type: 'integer', nullable: true, example: null },
+                                    complemento: { type: 'integer', example: 1 },
+                                    servicio: { type: 'integer', nullable: true, example: null }
+                                }
+                            },
+                            example: [
+                                { id: 54, url: 'https://res.cloudinary.com/dbrfi383s/image/upload/complemento/vbucks.jpg', esPrincipal: true, juego: null, complemento: 1, servicio: null }
+                            ]
+                        },
+                        ventasCount: { type: 'integer', example: 1 }
+                    },
+                    required: ['nombre', 'detalle', 'monto', 'compania', 'juego', 'categorias', 'fotos', 'ventasCount']
+                },
+                ComplementoConVentasCountResponse: {
+                    type: 'object',
+                    properties: {
+                        message: { type: 'string', example: 'found complemento' },
+                        data: { $ref: '#/components/schemas/ComplementoConVentasCount' }
+                    }
+                },
                 Servicio: {
                     type: 'object',
                     properties: {

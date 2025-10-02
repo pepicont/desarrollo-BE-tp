@@ -5,13 +5,20 @@ import { FotoProducto } from "../FotoProducto/fotoProducto.entity.js";
 import { cloudinary } from "../../shared/cloudinary.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
-const em = orm.em.fork();
 function sanitizeComplementoInput(req, res, next) {
+    // Normalizar categorias para aceptar tanto array como string
+    let categorias = req.body.categorias;
+    if (typeof categorias === "string") {
+        categorias = categorias.split(',').map(Number);
+    }
+    if (Array.isArray(categorias)) {
+        categorias = categorias.map(Number);
+    }
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
         detalle: req.body.detalle,
         monto: req.body.monto,
-        categorias: req.body.categorias,
+        categorias,
         compania: req.body.compania,
         juego: req.body.juego
     };
@@ -24,6 +31,7 @@ function sanitizeComplementoInput(req, res, next) {
     next();
 }
 async function findAll(req, res) {
+    const em = orm.em.fork();
     try {
         const complementos = await em.find(Complemento, {}, { populate: ["categorias", "compania", "juego", "fotos"] });
         res.status(200).json({ message: "found all complementos", data: complementos });
@@ -33,6 +41,7 @@ async function findAll(req, res) {
     }
 }
 async function findOne(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const complementos = await em.findOneOrFail(Complemento, { id }, { populate: ["categorias", "compania", "juego", "fotos"] });
@@ -46,6 +55,7 @@ async function findOne(req, res) {
     }
 }
 async function add(req, res) {
+    const em = orm.em.fork();
     try {
         let fotosFiles = [];
         if (req.files && Array.isArray(req.files)) {
@@ -82,6 +92,7 @@ async function add(req, res) {
     }
 }
 async function update(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         const complementoToUpdate = await em.findOneOrFail(Complemento, { id }, { populate: ["fotos"] });
@@ -165,6 +176,7 @@ async function update(req, res) {
     }
 }
 async function remove(req, res) {
+    const em = orm.em.fork();
     try {
         const id = Number.parseInt(req.params.id);
         // Eliminar fotos asociadas (FotoProducto y Cloudinary)
