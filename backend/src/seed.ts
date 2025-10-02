@@ -270,7 +270,7 @@ async function main() {
     j.monto = rand(0, 70)
     j.compania = sample(companias)
     j.fechaLanzamiento = new Date(rand(2014, 2025), rand(0,11), rand(1,28))
-    j.edadPermitida = sample([7,12,14,16,18])
+    j.edadPermitida = sample([0, 10, 13, 17, 18])
     // categorías aleatorias (1-3)
     const cats = [...categorias].sort(() => 0.5 - Math.random()).slice(0, rand(1,3))
     cats.forEach(c => j.categorias.add(c as any))
