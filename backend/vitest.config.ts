@@ -5,8 +5,12 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     setupFiles: [],
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache']
+    include: [
+      'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+      'tests/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
+    ],
+    exclude: ['node_modules', 'dist', '.idea', '.git', '.cache'],
+    testTimeout: 10000  // 10 segundos para tests de integración
   },
   resolve: {
     alias: {

@@ -7,7 +7,8 @@
   "scripts": {
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run",
+    "test:run": "node scripts/test-run.mjs",
+  "clean:temp": "node -e \"const fs=require('fs'); try{fs.rmSync('temp',{recursive:true,force:true});}catch(e){if(e.code!=='ENOENT')throw e;}\"",
     "build": "tsc -p tsconfig.json",
     "start": "node dist/app.js",
     "dev": "tsc-watch --noClear -p tsconfig.json --onSuccess \"node dist/app.js\"",
@@ -18,15 +19,18 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.2",
   "devDependencies": {
+    "@mikro-orm/reflection": "^6.4.16",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^22.15.21",
     "@types/nodemailer": "^7.0.1",
+    "@types/supertest": "^6.0.3",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "@vitest/ui": "^3.2.4",
+    "supertest": "^7.1.4",
     "tsc-watch": "^7.0.0",
     "typescript": "^5.5.0",
     "vitest": "^3.2.4"
