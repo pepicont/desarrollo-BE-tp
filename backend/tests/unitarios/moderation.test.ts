@@ -32,7 +32,7 @@ describe('moderateText', () => {
     vi.resetModules()
     
     // Importar el módulo fresco
-    const moderationModule = await import('./moderation.js')
+    const moderationModule = await import('../../src/shared/moderation.js')
     moderateText = moderationModule.moderateText
   })
 

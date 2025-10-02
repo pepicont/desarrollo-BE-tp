@@ -1,6 +1,6 @@
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { Usuario } from './usuario.entity.js'
+import { Usuario } from '../../src/Usuario/usuario.entity.js'
 import * as bcrypt from 'bcrypt'
 
 describe('Usuario Entity - Hasheo de Contraseñas', () => {

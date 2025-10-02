@@ -1,16 +1,16 @@
 import { describe, it, expect, vi } from 'vitest'
 
 // Mock del ORM para evitar problemas de inicialización en tests unitarios
-vi.mock('../shared/orm.js', () => ({
+vi.mock('../../src/shared/orm.js', () => ({
   orm: { em: {} }
 }))
 
 // Mock de la entidad Usuario
-vi.mock('../Usuario/usuario.entity.js', () => ({
+vi.mock('../../src/Usuario/usuario.entity.js', () => ({
   Usuario: vi.fn()
 }))
 
-import { isValidEmail } from './auth.controller.js'
+import { isValidEmail } from '../../src/Auth/auth.controller.js'
 
 describe('isValidEmail - Validación de formato de email', () => {
   it('debe validar emails correctos', () => {
