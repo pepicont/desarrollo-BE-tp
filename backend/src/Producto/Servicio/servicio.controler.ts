@@ -20,7 +20,7 @@ function sanitizeServicioInput(
   // Normalizar categorias para aceptar tanto array como string
   let categorias = req.body.categorias;
   if (typeof categorias === "string") {
-    categorias = [categorias];
+    categorias = categorias.split(',').map(Number);
   }
   if (Array.isArray(categorias)) {
     categorias = categorias.map(Number);
