@@ -3,8 +3,17 @@ import { orm } from '../shared/orm.js';
 const em = orm.em;
 async function findAll(req, res) {
     try {
-        const ventas = await em.find(Venta, {}, { populate: ['usuario', 'complemento', 'juego', 'servicio'] });
-        res.status(200).json({ message: 'found all ventas', data: ventas });
+        const ventas = await em.find(Venta, {}, { populate: ['usuario', 'juego', 'complemento', 'servicio'] });
+        // Mapear para devolver solo los campos deseados del usuario
+        const ventasConUsuarioReducido = ventas.map(v => ({
+            ...v,
+            usuario: v.usuario ? {
+                nombre: v.usuario.nombre,
+                nombreUsuario: v.usuario.nombreUsuario,
+                mail: v.usuario.mail
+            } : null
+        }));
+        res.status(200).json({ message: 'found all ventas', data: ventasConUsuarioReducido });
     }
     catch (error) {
         res.status(500).json({ message: error.message });

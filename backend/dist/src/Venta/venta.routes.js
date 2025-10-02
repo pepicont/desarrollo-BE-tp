@@ -26,13 +26,48 @@ const ventaRouter = Router();
  *                   items:
  *                     type: object
  *                     properties:
- *                       id: { type: 'integer', example: 1 }
- *                       codActivacion: { type: 'string', example: 'ACT123456' }
- *                       fecha: { type: 'string', format: 'date-time', example: '2025-10-02T15:00:00.000Z' }
- *                       usuario: { type: 'integer', example: 1 }
- *                       juego: { type: 'integer', example: 1 }
- *                       servicio: { type: 'integer', example: 1 }
- *                       complemento: { type: 'integer', example: 1 }
+ *                       id:
+ *                         type: integer
+ *                         example: 203
+ *                       usuario:
+ *                         type: integer
+ *                         example: 130
+ *                       juego:
+ *                         type: object
+ *                         properties:
+ *                           id: { type: 'integer', example: 5 }
+ *                           nombre: { type: 'string', example: 'RDR2' }
+ *                           detalle: { type: 'string', example: 'Detalle de RDR2' }
+ *                           monto: { type: 'number', example: 4 }
+ *                           compania: { type: 'integer', example: 4 }
+ *                           fechaLanzamiento: { type: 'string', format: 'date-time', example: '2020-10-07T03:00:00.000Z' }
+ *                           edadPermitida: { type: 'integer', example: 7 }
+ *                           fotos:
+ *                             type: array
+ *                             items:
+ *                               type: object
+ *                               properties:
+ *                                 id: { type: 'integer', example: 5 }
+ *                                 url: { type: 'string', example: 'https://res.cloudinary.com/dbrfi383s/image/upload/juego/rdr2.jpg' }
+ *                                 esPrincipal: { type: 'boolean', example: true }
+ *                                 juego: { type: 'integer', example: 5 }
+ *                                 complemento: { type: ['integer', 'null'], example: null }
+ *                                 servicio: { type: ['integer', 'null'], example: null }
+*                           complemento:
+ *                             nullable: true
+ *                             type: object
+ *                             example: null
+ *                           servicio:
+ *                             nullable: true
+ *                             type: object
+ *                             example: null
+ *                           fecha:
+ *                             type: string
+ *                             format: date-time
+ *                             example: '2025-09-19T14:06:04.000Z'
+ *                           codActivacion:
+ *                             type: string
+ *                             example: 'ACT-5GEDPPCT2FSMMNA9'
  *       401:
  *         description: Usuario no autenticado
  *       500:
@@ -56,19 +91,48 @@ ventaRouter.get('/my-ventas', authenticateToken, getMyVentas);
  *             schema:
  *               type: object
  *               properties:
- *                 message: { type: 'string', example: 'found all ventas' }
+ *                 message:
+ *                   type: string
+ *                   example: found all ventas
  *                 data:
  *                   type: array
  *                   items:
  *                     type: object
  *                     properties:
- *                       id: { type: 'integer', example: 1 }
- *                       codActivacion: { type: 'string', example: 'ACT123456' }
- *                       fecha: { type: 'string', format: 'date-time', example: '2025-10-02T15:00:00.000Z' }
- *                       usuario: { type: 'integer', example: 1 }
- *                       juego: { type: 'integer', example: 1 }
- *                       servicio: { type: 'integer', example: 1 }
- *                       complemento: { type: 'integer', example: 1 }
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       usuario:
+ *                         type: object
+ *                         properties:
+ *                           nombre: { type: 'string', example: 'Martina Torres' }
+ *                           nombreUsuario: { type: 'string', example: 'martinatorres24' }
+ *                           mail: { type: 'string', example: 'martinatorres.24@example.com' }
+ *                       juego:
+ *                         type: object
+ *                         properties:
+ *                           id: { type: 'integer', example: 24 }
+ *                           nombre: { type: 'string', example: 'Forza Horizon 5' }
+ *                           detalle: { type: 'string', example: 'Detalle de Forza Horizon 5' }
+ *                           monto: { type: 'number', example: 34 }
+ *                           compania: { type: 'integer', example: 7 }
+ *                           fechaLanzamiento: { type: 'string', format: 'date-time', example: '2019-02-19T03:00:00.000Z' }
+ *                           edadPermitida: { type: 'integer', example: 18 }
+ *                       complemento:
+ *                         nullable: true
+ *                         type: object
+ *                         example: null
+ *                       servicio:
+ *                         nullable: true
+ *                         type: object
+ *                         example: null
+ *                       fecha:
+ *                         type: string
+ *                         format: date-time
+ *                         example: '2024-08-16T03:00:00.000Z'
+ *                       codActivacion:
+ *                         type: string
+ *                         example: 'ACT-NSJZN5HQZ9NW7W95'
  *       401:
  *         description: Usuario no autenticado
  *       500:
