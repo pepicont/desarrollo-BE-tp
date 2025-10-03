@@ -36,6 +36,24 @@ export const authenticateToken = (req, res, next) => {
         });
     }
 };
+// Middleware para validar solo admin
+export const authenticateAdmin = (req, res, next) => {
+    authenticateToken(req, res, () => {
+        if (req.user?.tipoUsuario === 'admin') {
+            return next();
+        }
+        return res.status(403).json({ message: 'Acceso solo para administradores', error: 'FORBIDDEN' });
+    });
+};
+// Middleware para validar solo cliente
+export const authenticateCliente = (req, res, next) => {
+    authenticateToken(req, res, () => {
+        if (req.user?.tipoUsuario === 'cliente') {
+            return next();
+        }
+        return res.status(403).json({ message: 'Acceso solo para clientes', error: 'FORBIDDEN' });
+    });
+};
 //IGNORAR
 // Middleware opcional que no falla si no hay token (útil para rutas semi-públicas)
 export const optionalAuth = (req, res, next) => {
