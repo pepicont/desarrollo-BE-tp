@@ -65,10 +65,6 @@ app.use('/api/checkout', checkoutRouter)
 app.use('/api/mail', mailRouter)
 
 
-
-app.post('/mp/webhook', mpWebhook as any) //probar si borrando estas 2 sigue funcionando. no deben ir acá
-app.get('/mp/success', mpSuccessCallback as any)
-
 app.use((_, res) => {
   res.status(404).send({ message: 'Resource not found' })
   return
