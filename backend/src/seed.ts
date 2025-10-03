@@ -39,6 +39,21 @@ const CLOUDINARY_BASE = 'https://res.cloudinary.com/dbrfi383s/image/upload';
 const cloudinaryUrl = (tipo: 'juego' | 'complemento' | 'servicio', nombre: string) =>
   `${CLOUDINARY_BASE}/${tipo}/${normalizeCloudinaryName(nombre)}.jpg`;
 
+// Avatares disponibles para usuarios
+const avatares = [
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/silksong.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar1.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar2.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar3.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar4.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar5.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar6.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar7.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar8.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar9.jpg',
+  'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar10.jpg',
+];
+
 // Juegos: imágenes Cloudinary por título
 const imagesByJuego: Record<string, string[]> = {
   'Elden Ring': [cloudinaryUrl('juego', 'Elden Ring')],
@@ -204,7 +219,7 @@ async function main() {
   u1.fechaNacimiento = new Date('1995-01-15')
   u1.fechaCreacion = new Date()
   u1.tipoUsuario = 'cliente'
-  u1.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/silksong.jpg'
+  u1.urlFoto = sample(avatares)
   usuarios.push(u1)
 
   const firstNames = [
@@ -236,7 +251,7 @@ async function main() {
   u.fechaNacimiento = new Date(rand(1975, 2008), rand(0,11), rand(1,28))
   u.fechaCreacion = new Date()
   u.tipoUsuario = 'cliente'
-  u.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/silksong.jpg'
+  u.urlFoto = sample(avatares)
   usuarios.push(u)
     userCount++
   }
