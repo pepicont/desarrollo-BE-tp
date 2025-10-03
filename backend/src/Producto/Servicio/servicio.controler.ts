@@ -89,25 +89,33 @@ async function add(req: Request, res: Response) {
     // Subir fotos y guardar en FotoProducto
     const fotoPrincipalNombre = req.body.fotoPrincipal;
     for (const file of fotosFiles) {
-      const url = await new Promise<string>((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "servicio" },
-          (error, result) => {
-            if (error || !result) return reject(error);
-            resolve(result.secure_url);
-          }
-        );
-        stream.end(file.buffer);
-      });
+      try {
+        const url = await new Promise<string>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "servicio" },
+            (error, result) => {
+              if (error || !result) {
+                console.error("❌ Error de Cloudinary:", error);
+                return reject(error || new Error("No se obtuvo resultado de Cloudinary"));
+              }
+              resolve(result.secure_url);
+            }
+          );
+          stream.end(file.buffer);
+        });
 
-      const esPrincipal = file.originalname === fotoPrincipalNombre;
-      const foto = em.create(FotoProducto, {
-        url,
-        esPrincipal,
-        servicio: servicio,
-      });
-      // Asociar la foto al servicio
-      servicio.fotos.add(foto);
+        const esPrincipal = file.originalname === fotoPrincipalNombre;
+        const foto = em.create(FotoProducto, {
+          url,
+          esPrincipal,
+          servicio: servicio,
+        });
+        // Asociar la foto al servicio
+        servicio.fotos.add(foto);
+      } catch (uploadError: any) {
+        console.error("❌ Error subiendo foto a Cloudinary:", uploadError);
+        throw new Error(`Error al subir imagen: ${uploadError.message || 'Error desconocido de Cloudinary. Verifica las credenciales.'}`);
+      }
     }
     await em.flush();
 
