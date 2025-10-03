@@ -27,25 +27,6 @@ function sanitizeReseniaInput(
   next();
 }
 
-async function findAll(req: Request, res: Response) {
-  try {
-    const resenias = await em.find(Resenia, {}, { populate: ['usuario', 'venta'] });
-    res.status(200).json({ message: "found all reviews", data: resenias });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const resenia = await em.findOneOrFail(Resenia, { id },{ populate: ['usuario', 'venta'] });
-    res.status(200).json({ message: "found review", data: resenia });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
 async function add(req: AuthenticatedRequest, res: Response) {
   try {
     const userId = req.user?.id;
@@ -311,4 +292,4 @@ async function removeAsAdmin(req: AuthenticatedRequest, res: Response): Promise<
   }
 }
 
-export { sanitizeReseniaInput, findAll, findOne, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase, getAllResenasAdmin, removeAsAdmin };
+export { sanitizeReseniaInput, add, update, remove, getMyResenias, getByProduct, checkUserReviewForPurchase, getAllResenasAdmin, removeAsAdmin };
