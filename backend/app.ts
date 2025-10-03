@@ -83,4 +83,18 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(` Server running on http://localhost:${PORT}/`)
   console.log(` [moderation] enabled=${MODERATION_ENABLED} model=${process.env.OPENAI_MODERATION_MODEL || 'omni-moderation-latest'}`)
+  
+  // Verificación de Cloudinary
+  console.log('\n=== CLOUDINARY CONFIGURATION ===')
+  console.log('CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? '✓ Configurado' : '✗ NO CONFIGURADO')
+  console.log('CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? '✓ Configurado' : '✗ NO CONFIGURADO')
+  console.log('CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? '✓ Configurado' : '✗ NO CONFIGURADO')
+  
+  if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    console.log('\n⚠️  ADVERTENCIA: Cloudinary NO está configurado correctamente.')
+    console.log('⚠️  La subida de imágenes NO funcionará.')
+    console.log('⚠️  Por favor configura las variables de entorno en tu servidor de producción.\n')
+  } else {
+    console.log('✓ Cloudinary configurado correctamente\n')
+  }
 })
