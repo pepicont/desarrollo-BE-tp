@@ -31,19 +31,32 @@ function normalizeCloudinaryName(nombre) {
 }
 const CLOUDINARY_BASE = 'https://res.cloudinary.com/dbrfi383s/image/upload';
 const cloudinaryUrl = (tipo, nombre) => `${CLOUDINARY_BASE}/${tipo}/${normalizeCloudinaryName(nombre)}.jpg`;
-// Avatares disponibles para usuarios
+// Avatares disponibles para usuarios 
 const avatares = [
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/astro.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar_cabra.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/calamardo.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/daft_punk.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/doom.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/dune.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ghost.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/hagrid.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/harry_potter.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/jake.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/jawa.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/linux.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/mart_mcfly.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/minion.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/r6.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/rabbit.png',
     'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/silksong.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar1.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar2.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar3.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar4.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar5.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar6.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar7.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar8.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar9.jpg',
-    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar10.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/soldier.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/stormtrooper.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/terrorist.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/tf2.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/tron.jpg',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/ww1.png',
+    'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/yoda.jpg',
 ];
 // Juegos: imágenes Cloudinary por título
 const imagesByJuego = {
