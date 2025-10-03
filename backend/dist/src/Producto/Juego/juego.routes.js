@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { findAll, findOne, add, sanitizeJuegoInput, update, remove, upload, } from "./juego.controler.js";
-import { authenticateToken } from '../../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../../Auth/auth.middleware.js';
 export const juegoRouter = Router();
 /**
  * @swagger
@@ -104,8 +104,10 @@ juegoRouter.get("/:id", findOne);
  *         description: Error del servidor / Juego no creado
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  */
-juegoRouter.post("/", authenticateToken, upload.array("fotos"), sanitizeJuegoInput, add);
+juegoRouter.post("/", authenticateAdmin, upload.array("fotos"), sanitizeJuegoInput, add);
 /**
  * @swagger
  * /api/juego/{id}:
@@ -168,10 +170,12 @@ juegoRouter.post("/", authenticateToken, upload.array("fotos"), sanitizeJuegoInp
  *               $ref: '#/components/schemas/JuegoUpdateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-juegoRouter.put("/:id", authenticateToken, upload.array("fotos"), sanitizeJuegoInput, update);
+juegoRouter.put("/:id", authenticateAdmin, upload.array("fotos"), sanitizeJuegoInput, update);
 /**
  * @swagger
  * /api/juego/{id}:
@@ -201,8 +205,10 @@ juegoRouter.put("/:id", authenticateToken, upload.array("fotos"), sanitizeJuegoI
  *                   example: "game removed"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-juegoRouter.delete("/:id", authenticateToken, remove);
+juegoRouter.delete("/:id", authenticateAdmin, remove);
 //# sourceMappingURL=juego.routes.js.map

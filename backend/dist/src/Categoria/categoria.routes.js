@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { findAll, findOne, add, sanitizeCategoriaInput, update, remove } from './categoria.controler.js';
-import { authenticateToken } from '../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../Auth/auth.middleware.js';
 export const categoriaRouter = Router();
 // RUTAS GENERALES
 /**
@@ -94,10 +94,12 @@ categoriaRouter.get('/:id', findOne);
  *               $ref: '#/components/schemas/CategoriaCreateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-categoriaRouter.post('/', authenticateToken, sanitizeCategoriaInput, add);
+categoriaRouter.post('/', authenticateAdmin, sanitizeCategoriaInput, add);
 /**
  * @swagger
  * /api/categoria/{id}:
@@ -142,10 +144,12 @@ categoriaRouter.post('/', authenticateToken, sanitizeCategoriaInput, add);
  *                   $ref: '#/components/schemas/Categoria'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
-categoriaRouter.put('/:id', authenticateToken, sanitizeCategoriaInput, update);
+categoriaRouter.put('/:id', authenticateAdmin, sanitizeCategoriaInput, update);
 /**
  * @swagger
  * /api/categoria/{id}:
@@ -175,8 +179,10 @@ categoriaRouter.put('/:id', authenticateToken, sanitizeCategoriaInput, update);
  *                   example: "category deleted"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
-categoriaRouter.delete('/:id', authenticateToken, remove);
+categoriaRouter.delete('/:id', authenticateAdmin, remove);
 //# sourceMappingURL=categoria.routes.js.map

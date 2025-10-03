@@ -4,7 +4,7 @@ import {
   findOne,
   getMyVentas
 } from './venta.controler.js';
-import { authenticateToken } from '../Auth/auth.middleware.js';
+import { authenticateAdmin, authenticateCliente } from '../Auth/auth.middleware.js';
 
 const ventaRouter = Router();
 
@@ -76,10 +76,12 @@ const ventaRouter = Router();
  *                             example: 'ACT-5GEDPPCT2FSMMNA9'
  *       401:
  *         description: Usuario no autenticado
+ *       403:
+ *         description: Prohibido, solo clientes pueden acceder a esta ruta
  *       500:
  *         description: Usuario no encontrado / Error del server
  */
-ventaRouter.get('/my-ventas', authenticateToken as any, getMyVentas as any);
+ventaRouter.get('/my-ventas', authenticateCliente as any, getMyVentas as any);
 
 /**
  * @swagger
@@ -142,10 +144,12 @@ ventaRouter.get('/my-ventas', authenticateToken as any, getMyVentas as any);
  *                         example: 'ACT-NSJZN5HQZ9NW7W95'
  *       401:
  *         description: Usuario no autenticado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del server
  */
-ventaRouter.get('/', authenticateToken as any,findAll);
+ventaRouter.get('/', authenticateAdmin as any,findAll);
 
 
 /**

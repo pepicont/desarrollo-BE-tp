@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { findAll, findOne, add, sanitizeComplementoInput, update, remove, upload, } from "./complemento.controler.js";
-import { authenticateToken } from '../../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../../Auth/auth.middleware.js';
 export const complementoRouter = Router();
 /**
  * @swagger
@@ -100,8 +100,10 @@ complementoRouter.get("/:id", findOne);
  *         description: Error del servidor / Complemento no creado
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  */
-complementoRouter.post("/", authenticateToken, upload.array("fotos"), sanitizeComplementoInput, add);
+complementoRouter.post("/", authenticateAdmin, upload.array("fotos"), sanitizeComplementoInput, add);
 /**
  * @swagger
  * /api/complemento/{id}:
@@ -160,10 +162,12 @@ complementoRouter.post("/", authenticateToken, upload.array("fotos"), sanitizeCo
  *               $ref: '#/components/schemas/ComplementoUpdateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-complementoRouter.put("/:id", authenticateToken, upload.array("fotos"), sanitizeComplementoInput, update);
+complementoRouter.put("/:id", authenticateAdmin, upload.array("fotos"), sanitizeComplementoInput, update);
 /**
  * @swagger
  * /api/complemento/{id}:
@@ -193,8 +197,10 @@ complementoRouter.put("/:id", authenticateToken, upload.array("fotos"), sanitize
  *                   example: "complemento eliminado"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-complementoRouter.delete("/:id", authenticateToken, remove);
+complementoRouter.delete("/:id", authenticateAdmin, remove);
 //# sourceMappingURL=complemento.routes.js.map

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {findAll, findOne, add, sanitizeCategoriaInput, update, remove} from './categoria.controler.js';
-import { authenticateToken } from '../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../Auth/auth.middleware.js';
 
 export const categoriaRouter = Router();
 
@@ -98,10 +98,12 @@ categoriaRouter.get('/:id', findOne);
  *               $ref: '#/components/schemas/CategoriaCreateResponse'
  *       401: 
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-categoriaRouter.post('/', authenticateToken as any, sanitizeCategoriaInput, add);
+categoriaRouter.post('/', authenticateAdmin as any, sanitizeCategoriaInput, add);
 
 /**
  * @swagger
@@ -147,10 +149,12 @@ categoriaRouter.post('/', authenticateToken as any, sanitizeCategoriaInput, add)
  *                   $ref: '#/components/schemas/Categoria'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
-categoriaRouter.put('/:id', authenticateToken as any, sanitizeCategoriaInput, update);
+categoriaRouter.put('/:id', authenticateAdmin as any, sanitizeCategoriaInput, update);
 
 /**
  * @swagger
@@ -181,7 +185,9 @@ categoriaRouter.put('/:id', authenticateToken as any, sanitizeCategoriaInput, up
  *                   example: "category deleted"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Categoría no encontrada / Error del servidor
  */
-categoriaRouter.delete('/:id', authenticateToken as any, remove);
+categoriaRouter.delete('/:id', authenticateAdmin as any, remove);

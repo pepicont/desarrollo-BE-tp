@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import {findAll, findOne, add, sanitizeCompaniaInput, update, remove} from './compania.controler.js';
-import { authenticateToken } from '../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../Auth/auth.middleware.js';
 
 export const companiaRouter = Router();
 
@@ -98,10 +98,12 @@ companiaRouter.get('/:id', findOne);
  *               $ref: '#/components/schemas/CompaniaCreateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-companiaRouter.post('/', authenticateToken as any, sanitizeCompaniaInput, add);
+companiaRouter.post('/', authenticateAdmin as any, sanitizeCompaniaInput, add);
 
 /**
  * @swagger
@@ -147,10 +149,12 @@ companiaRouter.post('/', authenticateToken as any, sanitizeCompaniaInput, add);
  *                   $ref: '#/components/schemas/Compania'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Compañía no encontrada / Error del servidor
  */
-companiaRouter.put('/:id', authenticateToken as any, sanitizeCompaniaInput, update); 
+companiaRouter.put('/:id', authenticateAdmin as any, sanitizeCompaniaInput, update); 
 
 /**
  * @swagger
@@ -181,7 +185,9 @@ companiaRouter.put('/:id', authenticateToken as any, sanitizeCompaniaInput, upda
  *                   example: "compañía deleted"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Compañía no encontrada / Error del servidor
  */
-companiaRouter.delete('/:id', authenticateToken as any, remove);
+companiaRouter.delete('/:id', authenticateAdmin as any, remove);
