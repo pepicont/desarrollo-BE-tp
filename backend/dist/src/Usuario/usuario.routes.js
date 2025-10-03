@@ -70,17 +70,13 @@ usuarioRouter.get('/profile', authenticateToken, getProfile);
 usuarioRouter.get('/', authenticateAdmin, findAll);
 /**
  * @swagger
- * /api/usuario/{id}:
+ * /api/usuario:
  *   put:
  *     summary: Actualizar usuario por ID
  *     tags:
  *       - Usuario
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
  *         schema:
  *           type: integer
  *         description: ID del usuario
