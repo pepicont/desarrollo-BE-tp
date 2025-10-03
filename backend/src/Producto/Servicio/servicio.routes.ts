@@ -8,7 +8,7 @@ import {
   remove,
   upload
 } from "./servicio.controler.js";
-import { authenticateToken } from '../../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../../Auth/auth.middleware.js';
 
 export const servicioRouter = Router();
 
@@ -109,8 +109,10 @@ servicioRouter.get("/:id", findOne);
  *         description: Error del servidor / Servicio no creado
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  */
-servicioRouter.post("/", authenticateToken as any, upload.array("fotos"), sanitizeServicioInput, add);
+servicioRouter.post("/", authenticateAdmin as any, upload.array("fotos"), sanitizeServicioInput, add);
 
 /**
  * @swagger
@@ -167,10 +169,12 @@ servicioRouter.post("/", authenticateToken as any, upload.array("fotos"), saniti
  *               $ref: '#/components/schemas/ServicioUpdateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-servicioRouter.put("/:id", authenticateToken as any, upload.array("fotos"), sanitizeServicioInput, update);
+servicioRouter.put("/:id", authenticateAdmin as any, upload.array("fotos"), sanitizeServicioInput, update);
 
 /**
  * @swagger
@@ -201,7 +205,9 @@ servicioRouter.put("/:id", authenticateToken as any, upload.array("fotos"), sani
  *                   example: "service removed"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-servicioRouter.delete("/:id", authenticateToken as any, remove);
+servicioRouter.delete("/:id", authenticateAdmin as any, remove);

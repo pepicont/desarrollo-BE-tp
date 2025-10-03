@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { orm } from "../shared/orm.js";
 import { Usuario } from "./usuario.entity.js";
 import { AuthenticatedRequest } from "../Auth/auth.types.js";
-import { url } from "inspector";
 
 const em = orm.em;
 
@@ -39,20 +38,9 @@ async function findAll(req: Request, res: Response) {
   }
 }
 
-async function findOne(req: Request, res: Response) {
+async function update(req: AuthenticatedRequest, res: Response) {
   try {
-    const id = Number.parseInt(req.params.id);
-    const usuario = await em.findOneOrFail(Usuario, { id });
-    res.status(200).json({ message: "found user", data: usuario });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
-
-async function update(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
+    const id = req.user?.id;
     const usuarioToUpdate = await em.findOneOrFail(Usuario, { id });
     em.assign(usuarioToUpdate, req.body.sanitizedInput);
     await em.flush();
@@ -127,4 +115,4 @@ async function getProfile(req: AuthenticatedRequest, res: Response) {
   }
 
 
-export { sanitizeUsuarioInput, findAll, findOne, update, remove, getProfile };
+export { sanitizeUsuarioInput, findAll, update, remove, getProfile };

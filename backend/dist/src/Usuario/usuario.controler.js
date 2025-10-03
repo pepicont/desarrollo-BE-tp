@@ -28,19 +28,9 @@ async function findAll(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-async function findOne(req, res) {
-    try {
-        const id = Number.parseInt(req.params.id);
-        const usuario = await em.findOneOrFail(Usuario, { id });
-        res.status(200).json({ message: "found user", data: usuario });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 async function update(req, res) {
     try {
-        const id = Number.parseInt(req.params.id);
+        const id = req.user?.id;
         const usuarioToUpdate = await em.findOneOrFail(Usuario, { id });
         em.assign(usuarioToUpdate, req.body.sanitizedInput);
         await em.flush();
@@ -106,5 +96,5 @@ async function getProfile(req, res) {
         res.status(500).json({ message: 'Error interno del servidor' });
     }
 }
-export { sanitizeUsuarioInput, findAll, findOne, update, remove, getProfile };
+export { sanitizeUsuarioInput, findAll, update, remove, getProfile };
 //# sourceMappingURL=usuario.controler.js.map

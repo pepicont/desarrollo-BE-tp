@@ -8,7 +8,7 @@ import {
   remove,
   upload,
 } from "./complemento.controler.js";
-import { authenticateToken } from '../../Auth/auth.middleware.js';
+import { authenticateAdmin } from '../../Auth/auth.middleware.js';
 
 export const complementoRouter = Router();
 
@@ -112,8 +112,10 @@ complementoRouter.get("/:id", findOne);
  *         description: Error del servidor / Complemento no creado
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  */
-complementoRouter.post("/", authenticateToken as any, upload.array("fotos"), sanitizeComplementoInput, add);
+complementoRouter.post("/", authenticateAdmin as any, upload.array("fotos"), sanitizeComplementoInput, add);
 
 /**
  * @swagger
@@ -173,10 +175,12 @@ complementoRouter.post("/", authenticateToken as any, upload.array("fotos"), san
  *               $ref: '#/components/schemas/ComplementoUpdateResponse'
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-complementoRouter.put("/:id", authenticateToken as any, upload.array("fotos"), sanitizeComplementoInput, update);
+complementoRouter.put("/:id", authenticateAdmin as any, upload.array("fotos"), sanitizeComplementoInput, update);
 
 /**
  * @swagger
@@ -207,7 +211,9 @@ complementoRouter.put("/:id", authenticateToken as any, upload.array("fotos"), s
  *                   example: "complemento eliminado"
  *       401:
  *         description: No autorizado
+ *       403:
+ *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-complementoRouter.delete("/:id", authenticateToken as any,remove);
+complementoRouter.delete("/:id", authenticateAdmin as any,remove);
