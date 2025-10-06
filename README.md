@@ -10,7 +10,7 @@
 
 ## Indice:
 
-<a href="#1-instrucciones-de-instalacion"><u>1. Instrucciones de instalación</u></a>
+<a href="#1-instrucciones-de-instalación"><u>1. Instrucciones de instalación</u></a>
 <a href="#2-instrucciones-para-su-uso"><u>2. Instrucciones para su uso</u></a>
 <a href="#3-documentación-de-los-endpoints"><u>3. Documentación de los endpoints</u></a>
 <a href="#4-fotos-de-los-tests"><u>4. Fotos de los tests</u></a>
@@ -40,11 +40,7 @@ Una vez corriendo el contenedor bastará con dirigirse dentro del proyecto de BE
 
 Como primera instancia debemos crear un archivo **.env** dentro de la carpeta **backend** el cual definiremos las siguientes variables de entorno:
 
-_Ejemplo del archivo .env_
-
-```
-
-```
+_Ejemplo en el archivo .env.ejemplo_
 
 Como segunda instancia para poder "correr" el backend de nuestra aplicación debemos levantar nuestro contenedor de Docker que tiene la base de datos ya populada.
 
@@ -66,3 +62,23 @@ Allí encontrará toda la información detallada de los endpoints que usa nuestr
 
 - Para poder hacer uso de los endpoints protegidos del cliente bastará con utilizar el endpoint Auth-Login con el ejemplo que está disponible y copiando el token de la respuesta.
 - Para poder hacer uso de las rutas protegidas para el admin tendrá que usar el mismo endpoint pero con las credenciales que le fueron dadas para manejar el sitio como Administrador.
+
+---
+
+## 4. Fotos de los tests
+
+---
+
+## 5. Servicios externos
+
+En este apartado consideramos importante aclarar qué servicios externos utilizamos para completar funcionalidades de la página web.
+
+Para procesar pagos utilizamos la **API** de **MercadoPago** (presente en el apartado de **Checkout**) en dónde luego de una respuesta exitosa del pago creamos y mostramos la venta en la UI.
+
+_Nota: Para los pagos utilizamos las cuentas de prueba que nos proporciona MercadoPago_
+
+Para manejar la subida y muestreo de fotos a través del sitio utilizamos un **blob storage** llamado **Cloudinary** en dónde registramos nuestra nube y utilizamos las credenciales que nos proporcionaron junto a su **API** para la subida y borrado de las fotos de los productos.
+
+Nos pareció también una buena idea mantener comunicación constante con los clientes para que estén enterados de todos los eventos relacionados con ellos, para esto utilizamos la **API** de **Nodemailer**. Creamos una cuenta de mail que es la encargada del envío de mails y a través de su **App Password** que creamos se hace uso de esta API.
+
+_Nota: Nos pareció buena idea tener separados los mails para el envío automático de notificaciones del que usa el administrador, por ende este mail mencionado arriba es distinto de al que le llegan las consultas hechas por los usuarios desde la UI (este es el del admin)._
