@@ -75,6 +75,7 @@ Valida el helper isValidEmail con muchos posibles correos válidos (subdominios,
 dominios cortos) e inválidos (sin @ , múltiples @ , espacios, sin dominio/local). Mockea MikroORM y Usuario para importar el controlador sin inicializar la base.
 
 _Foto éxito:_
+
 ![Foto test éxito](./assets/isValidaEmail-test-ts.png)
 
 **usuario.entity.test.ts**
@@ -85,6 +86,7 @@ bcrypt. Usa bcrypt.compare para verificar que los hashes corresponden a las cont
 originales.
 
 _Foto éxito:_
+
 ![Foto test éxito](./assets/usuario-entity-test-ts.png)
 
 **moderation.test.ts**
@@ -96,6 +98,7 @@ personalizado vía OPENAI_MODERATION_MODEL. Restaura variables de entorno entre
 pruebas.
 
 _Foto éxito:_
+
 ![Foto test éxito](./assets/moderation-test-ts.png)
 
 **checkout.sessionId.test.ts**
@@ -105,6 +108,7 @@ caracteres alfanuméricos, presencia del timestamp y longitud mínima que reduzc
 Sirve como regresión de la lógica de generación de IDs.
 
 _Foto éxito:_
+
 ![Foto test éxito](./assets/checkout-sessionId-tests-ts.png)
 
 ### 4.2 Test de integración
@@ -128,6 +132,7 @@ usuario admin precargado ( portalvideojuegos@yahoo.com / clave: **\*\*** ) y
 JWT_SECRET. Si falta el token imprime avisos y salta esos casos.
 
 _Foto éxito:_
+
 ![Foto test éxito](./assets/categoria-integration-test-ts.png)
 
 ## 5. Servicios externos usados
