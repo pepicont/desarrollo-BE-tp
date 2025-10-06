@@ -148,3 +148,5 @@ Para manejar la subida y muestreo de fotos a través del sitio utilizamos un **b
 Nos pareció también una buena idea mantener comunicación constante con los clientes para que estén enterados de todos los eventos relacionados con ellos, para esto utilizamos la **API** de **Nodemailer**. Creamos una cuenta de mail que es la encargada del envío de mails y a través de su **App Password** que creamos se hace uso de esta API.
 
 _Nota: Nos pareció buena idea tener separados los mails para el envío automático de notificaciones del que usa el administrador, por ende este mail mencionado arriba es distinto de al que le llegan las consultas hechas por los usuarios desde la UI (este es el del admin)._
+
+Para finalizar la funcionalidad de la página usamos la **API** de **OpenAI** con su modelo gratuito para moderar las reseñas que los usuarios crean y/o editan para que si el modelo evalúa que el comentario no es apropiado se lo rechaza inmediatamente respondiendo con las categorías que el modelo cree que está infringiendo (abuso verbal/odio/etc).
