@@ -6,17 +6,17 @@
 - 52850, Conti Stéfano
 - 53137, Vitali Bruno
 
----
-
 ## Indice:
 
 <a href="#1-instrucciones-de-instalación"><u>1. Instrucciones de instalación</u></a>
-<a href="#2-instrucciones-para-su-uso"><u>2. Instrucciones para su uso</u></a>
-<a href="#3-documentación-de-los-endpoints"><u>3. Documentación de los endpoints</u></a>
-<a href="#4-Tests"><u>4. Tests</u></a>
-<a href="#5-servicios-externos-usados"><u>5. Servicios externos usados</u></a>
 
----
+<a href="#2-instrucciones-para-su-uso"><u>2. Instrucciones para su uso</u></a>
+
+<a href="#3-documentación-de-los-endpoints"><u>3. Documentación de los endpoints</u></a>
+
+<a href="#4-Tests"><u>4. Tests</u></a>
+
+<a href="#5-servicios-externos-usados"><u>5. Servicios externos usados</u></a>
 
 ## 1. Instrucciones de instalación
 
@@ -34,8 +34,6 @@ docker run --name ps8-portal-videojuegos -v C:\Users\user\docker-volumes\ps8-por
 
 Una vez corriendo el contenedor bastará con dirigirse dentro del proyecto de BE a la ruta **desarrollo-BE-tp/backend** y ejecutar el comando **pnpm run seed** por única vez para popular dicha base de datos.
 
----
-
 ## 2. Instrucciones para su uso
 
 Como primera instancia debemos crear un archivo **.env** dentro de la carpeta **backend** el cual definiremos las siguientes variables de entorno:
@@ -47,8 +45,6 @@ Como segunda instancia para poder "correr" el backend de nuestra aplicación deb
 Luego dirigirnos a la ruta **desarrollo-BE-tp/backend** que tiene todos los scripts para poder manejar el repositorio y ejecutar nuestro script **pnpm run dev** definido en el **package.json** que comienza a correr el backend en modo tsc-watch.
 
 Como última medida se deberá en el apartado de puertos de VS Code crear un puerto que escuche al igual que nuestro backend en el **puerto 3000**, con visibilidad **pública** y método de comunicación **http**. Esto es necesario para poder hacer uso del **webhook** de MercadoPago cuando se trabaja en el ámbito de desarrollo.
-
----
 
 ## 3. Documentación de los endpoints
 
@@ -63,11 +59,10 @@ Allí encontrará toda la información detallada de los endpoints que usa nuestr
 - Para poder hacer uso de los endpoints protegidos del cliente bastará con utilizar el endpoint Auth-Login con el ejemplo que está disponible y copiando el token de la respuesta.
 - Para poder hacer uso de las rutas protegidas para el admin tendrá que usar el mismo endpoint pero con las credenciales que le fueron dadas para manejar el sitio como Administrador.
 
----
-
 ## 4. Tests
 
 <a href="#41-tests-unitarios"><u>4.1 Tests unitarios</u></a>
+
 <a href="#42-test-de-integración"><u>4.2 Test de integración</u></a>
 
 Como herramienta de testing en esta parte del proyecto usamos **Vitest.**
@@ -134,8 +129,6 @@ JWT_SECRET. Si falta el token imprime avisos y salta esos casos.
 
 _Foto éxito:_
 ![Foto test éxito](./assets/categoria-integration-test-ts.png)
-
----
 
 ## 5. Servicios externos usados
 
