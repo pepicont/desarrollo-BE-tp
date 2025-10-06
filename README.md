@@ -13,7 +13,7 @@
 <a href="#1-instrucciones-de-instalación"><u>1. Instrucciones de instalación</u></a>
 <a href="#2-instrucciones-para-su-uso"><u>2. Instrucciones para su uso</u></a>
 <a href="#3-documentación-de-los-endpoints"><u>3. Documentación de los endpoints</u></a>
-<a href="#4-fotos-de-los-tests"><u>4. Fotos de los tests</u></a>
+<a href="#4-Tests"><u>4. Tests</u></a>
 <a href="#5-servicios-externos-usados"><u>5. Servicios externos usados</u></a>
 
 ---
@@ -65,11 +65,79 @@ Allí encontrará toda la información detallada de los endpoints que usa nuestr
 
 ---
 
-## 4. Fotos de los tests
+## 4. Tests
+
+<a href="#41-tests-unitarios"><u>4.1 Tests unitarios</u></a>
+<a href="#42-test-de-integración"><u>4.2 Test de integración</u></a>
+
+Como herramienta de testing en esta parte del proyecto usamos **Vitest.**
+
+### 4.1 Tests unitarios
+
+**isValidEmail.test.ts**
+
+Valida el helper isValidEmail con muchos posibles correos válidos (subdominios, + ,
+dominios cortos) e inválidos (sin @ , múltiples @ , espacios, sin dominio/local). Mockea MikroORM y Usuario para importar el controlador sin inicializar la base.
+
+_Foto éxito:_
+![Foto test éxito](./assets/isValidaEmail-test-ts.png)
+
+**usuario.entity.test.ts**
+
+Comprueba que la entidad Usuario hashea contraseñas en hashPasswordOnCreate, rehace el
+hash si cambia en hashPasswordOnUpdate y evita rehashear cuando ya está en formato
+bcrypt. Usa bcrypt.compare para verificar que los hashes corresponden a las contraseñas
+originales.
+
+_Foto éxito:_
+![Foto test éxito](./assets/usuario-entity-test-ts.png)
+
+**moderation.test.ts**
+
+Mockea completamente la SDK de OpenAI para probar moderateText. Cubre: ausencia de
+OPENAI_API_KEY (se permite el contenido), respuesta con flagged=true (bloquea y devuelve
+categorías), flagged=false (permite), error de API (fallback permisivo) y uso de modelo
+personalizado vía OPENAI_MODERATION_MODEL. Restaura variables de entorno entre
+pruebas.
+
+_Foto éxito:_
+![Foto test éxito](./assets/moderation-test-ts.png)
+
+**checkout.sessionId.test.ts**
+
+Replica la implementación de makeSessionId para verificar formato sess\_ , unicidad,
+caracteres alfanuméricos, presencia del timestamp y longitud mínima que reduzca colisiones.
+Sirve como regresión de la lógica de generación de IDs.
+
+_Foto éxito:_
+![Foto test éxito](./assets/checkout-sessionId-tests-ts.png)
+
+### 4.2 Test de integración
+
+**categoria.integration.test.ts**
+
+Levanta una app Express con MikroORM (MySQL) y entidades reales para testear el CRUD de
+/api/categoria junto con el login /api/auth/login .
+Cobertura:
+_POST :_ éxito con token, fallo sin token, comportamiento actual con nombre vacío.
+_GET listado y detalle:_ verifica presencia de campos y respuesta 500 en IDs inexistentes.
+_PUT :_ actualización válida, error sin token y al apuntar a IDs que no existen.
+_DELETE :_ elimina categorías, devuelve 401 sin token y confirma que hoy responde 200
+aunque la categoría ya no exista.
+
+_Flujo completo:_
+crear→listar→obtener→actualizar→eliminar→verificar ausencia.
+
+_Requisitos:_ MySQL accesible (por defecto localhost:3307 , user/pass dsw ),
+usuario admin precargado ( portalvideojuegos@yahoo.com / clave: **\*\*** ) y
+JWT_SECRET. Si falta el token imprime avisos y salta esos casos.
+
+_Foto éxito:_
+![Foto test éxito](./assets/categoria-integration-test-ts.png)
 
 ---
 
-## 5. Servicios externos
+## 5. Servicios externos usados
 
 En este apartado consideramos importante aclarar qué servicios externos utilizamos para completar funcionalidades de la página web.
 
