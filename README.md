@@ -67,6 +67,10 @@ Allí encontrará toda la información detallada de los endpoints que usa nuestr
 
 Como herramienta de testing en esta parte del proyecto usamos **Vitest.**
 
+_Aclaración: todos los posibles scripts para correr los diferentes tests se encuentran bien explicados en el package.json. Nosotros siempre usamos los comandos para ejecutarlos con interfaces gráficas pero la elección está en las manos del tester._
+
+_Si la elección del tester es la misma que la nuestra, al ejecutar el comando para correr tests de Vitest con interfaz gráfica deberá escribir "y" en la consola para aceptar instalar la interfaz gráfica de Vitest ya que no viene instalada por defecto._
+
 ### 4.1 Tests unitarios
 
 **isValidEmail.test.ts**
