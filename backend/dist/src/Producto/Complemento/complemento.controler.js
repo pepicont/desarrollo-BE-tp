@@ -51,7 +51,12 @@ async function findOne(req, res) {
         res.status(200).json({ message: "found complemento", data: serialized });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === "NotFoundError") {
+            res.status(404).json({ message: "Complemento no encontrado" });
+        }
+        else {
+            res.status(500).json({ message: "Error interno del servidor" });
+        }
     }
 }
 async function add(req, res) {

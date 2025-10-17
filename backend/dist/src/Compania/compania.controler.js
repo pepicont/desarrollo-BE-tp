@@ -13,18 +13,6 @@ async function findAll(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-async function findOne(req, res) {
-    try {
-        const id = Number.parseInt(req.params.id);
-        const compania = await em.findOneOrFail(Compania, { id });
-        res
-            .status(200)
-            .json({ message: 'found company', data: compania });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 function sanitizeCompaniaInput(req, res, next) {
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
@@ -101,5 +89,5 @@ async function remove(req, res) {
         res.status(500).json({ message: `Error al eliminar compañía: ${error.message}` });
     }
 }
-export { sanitizeCompaniaInput, findAll, findOne, add, update, remove };
+export { sanitizeCompaniaInput, findAll, add, update, remove };
 //# sourceMappingURL=compania.controler.js.map

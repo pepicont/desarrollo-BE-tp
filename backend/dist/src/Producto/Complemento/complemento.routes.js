@@ -43,8 +43,10 @@ complementoRouter.get("/", findAll);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ComplementoConVentasCountResponse'
+ *       404:
+ *         description: Complemento no encontrado
  *       500:
- *         description: Complemento no encontrado / Error del server
+ *         description: Error del servidor
  */
 complementoRouter.get("/:id", findOne);
 /**

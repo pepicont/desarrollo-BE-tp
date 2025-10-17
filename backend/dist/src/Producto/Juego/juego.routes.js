@@ -43,8 +43,10 @@ juegoRouter.get("/", findAll);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/JuegoConVentasCount'
+ *       404:
+ *         description: Juego no encontrado
  *       500:
- *         description: Juego no encontrado / Error del server
+ *         description: Error del servidor
  */
 juegoRouter.get("/:id", findOne);
 /**

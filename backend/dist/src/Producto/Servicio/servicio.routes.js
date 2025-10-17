@@ -43,8 +43,10 @@ servicioRouter.get("/", findAll);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ServicioConVentasCount'
+ *       404:
+ *         description: Servicio no encontrado
  *       500:
- *         description: Servicio no encontrado / Error del server
+ *         description: Error del servidor
  */
 servicioRouter.get("/:id", findOne);
 /**

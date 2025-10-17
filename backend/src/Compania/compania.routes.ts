@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import {findAll, findOne, add, sanitizeCompaniaInput, update, remove} from './compania.controler.js';
+import {findAll, add, sanitizeCompaniaInput, update, remove} from './compania.controler.js';
 import { authenticateAdmin } from '../Auth/auth.middleware.js';
 
 export const companiaRouter = Router();
@@ -31,38 +31,6 @@ export const companiaRouter = Router();
  *         description: Error del servidor
  */
 companiaRouter.get('/', findAll);
-
-/**
- * @swagger
- * /api/compania/{id}:
- *   get:
- *     summary: Obtiene una compañía por ID
- *     tags:
- *       - Compañía
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID de la compañia
- *     responses:
- *       200:
- *         description: Compañía encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "found company"
- *                 data:
- *                   $ref: '#/components/schemas/Compania'
- *       500:
- *         description: Compañía no encontrada / Error del servidor
- */
-companiaRouter.get('/:id', findOne);
 
 /**
  * @swagger
