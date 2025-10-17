@@ -52,7 +52,7 @@ async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const categoriaToUpdate = await em.findOneOrFail(Categoria, { id });
-        em.assign(categoriaToUpdate, req.body);
+        em.assign(categoriaToUpdate, req.body.sanitizedInput);
         await em.flush();
         res.status(200).json({ message: 'category updated', data: categoriaToUpdate });
     }

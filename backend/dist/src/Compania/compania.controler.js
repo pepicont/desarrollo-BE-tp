@@ -53,7 +53,7 @@ async function update(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const companiaToUpdate = await em.findOneOrFail(Compania, { id });
-        em.assign(companiaToUpdate, req.body);
+        em.assign(companiaToUpdate, req.body.sanitizedInput);
         await em.flush();
         res.status(200).json({ message: 'company updated', data: companiaToUpdate });
     }
