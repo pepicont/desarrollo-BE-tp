@@ -3,9 +3,6 @@ import { search, topSellers } from './search.controller.js';
 
 export const searchRouter = Router();
 
-// GET /api/search
-
-/*aca*/
 /**
  * @swagger
  * /api/search:

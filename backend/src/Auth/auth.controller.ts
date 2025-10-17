@@ -248,10 +248,7 @@ class AuthController {
     }
   }
 
-  // Endpoint para obtener el perfil completo del usuario autenticado
-  //🛡️ "¿Tienes credencial válida?" ✅ "Sí, pasa" (esto es lo que hizo el middleware)
-  //"¿Tu cuenta existe realmente?" "¿No fue cerrada?" "¿Los datos son correctos?" (esto es lo que hace el principio de getProfile)
-  
+
 }
 
 export { AuthController };

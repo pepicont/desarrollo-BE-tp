@@ -19,8 +19,6 @@ const NODE_ENV = process.env.NODE_ENV ?? 'development'
 const isProd = NODE_ENV === 'production'
 
 export const orm = await MikroORM.init({
-  //entities: ['dist/**/*.entity.js'],
-  //entitiesTs: ['src/**/*.entity.ts'],
   entities: [
     Categoria, Compania, Servicio, Juego, Complemento, Usuario, Venta, Resenia, FotoProducto
   ],

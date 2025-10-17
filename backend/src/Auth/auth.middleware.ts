@@ -75,45 +75,4 @@ export const authenticateToken = (
       return res.status(403).json({ message: 'Acceso solo para clientes', error: 'FORBIDDEN' });
     });
   };
-//IGNORAR
-// Middleware opcional que no falla si no hay token (útil para rutas semi-públicas)
-export const optionalAuth = (
-  req: AuthenticatedRequest, 
-  res: Response, 
-  next: NextFunction
-) => {
-  try {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) {
-      return next(); // Continúa sin usuario autenticado
-    }
-
-    jwt.verify(token, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
-      if (!err) {
-        req.user = decoded as JwtPayload;
-      }
-      next(); // Continúa independientemente del resultado
-    });
-
-  } catch (error) {
-    next(); // Continúa en caso de error
-  }
-};
-
-// Ejemplo de cómo se recibiría y verificaría una petición
-// 1. Cliente envía: GET /api/auth/verify
-//    Headers: Authorization: Bearer TOKEN123
-
-// 2. authenticateToken recibe la petición
-
-// 3. Extrae "TOKEN123" del header
-
-// 4. jwt.verify() verifica el token
-
-// 5. Si es válido:
-//    - req.user = { id: 1, mail: "user@mail.com", nombre: "Juan" }
-//    - next() → Continúa al controller
-
-// 6. Controller recibe req con req.user ya populado

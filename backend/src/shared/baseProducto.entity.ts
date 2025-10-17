@@ -1,13 +1,8 @@
 import {
-  Entity,
   ManyToOne,
   Property,
   Rel,
   PrimaryKey,
-  ManyToMany,
-  Cascade,
-  Collection,
-  OneToMany,
 } from '@mikro-orm/core';
 import { Compania } from '../Compania/compania.entity.js';
 export abstract class BaseProducto {
@@ -26,6 +21,5 @@ export abstract class BaseProducto {
   @ManyToOne(() => Compania, { nullable: false })
   compania!: Rel<Compania>;
   
-
 }
 
