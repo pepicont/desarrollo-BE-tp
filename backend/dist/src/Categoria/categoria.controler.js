@@ -12,18 +12,6 @@ async function findAll(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-async function findOne(req, res) {
-    try {
-        const id = Number.parseInt(req.params.id);
-        const categoria = await em.findOneOrFail(Categoria, { id });
-        res
-            .status(200)
-            .json({ message: 'found category', data: categoria });
-    }
-    catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-}
 function sanitizeCategoriaInput(req, res, next) {
     req.body.sanitizedInput = {
         nombre: req.body.nombre,
@@ -71,5 +59,5 @@ async function remove(req, res) {
         res.status(500).json({ message: error.message });
     }
 }
-export { sanitizeCategoriaInput, findAll, findOne, add, update, remove };
+export { sanitizeCategoriaInput, findAll, add, update, remove };
 //# sourceMappingURL=categoria.controler.js.map

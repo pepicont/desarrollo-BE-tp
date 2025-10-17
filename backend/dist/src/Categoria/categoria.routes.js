@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { findAll, findOne, add, sanitizeCategoriaInput, update, remove } from './categoria.controler.js';
+import { findAll, add, sanitizeCategoriaInput, update, remove } from './categoria.controler.js';
 import { authenticateAdmin } from '../Auth/auth.middleware.js';
 export const categoriaRouter = Router();
 // RUTAS GENERALES
@@ -29,37 +29,6 @@ export const categoriaRouter = Router();
  *         description: Error del servidor
  */
 categoriaRouter.get('/', findAll);
-/**
- * @swagger
- * /api/categoria/{id}:
- *   get:
- *     summary: Obtiene una categoría por ID
- *     tags:
- *       - Categoría
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID de la categoría
- *     responses:
- *       200:
- *         description: Categoría encontrada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "found category"
- *                 data:
- *                   $ref: '#/components/schemas/Categoria'
- *       500:
- *         description: Categoría no encontrada / Error del servidor
- */
-categoriaRouter.get('/:id', findOne);
 /**
  * @swagger
  * /api/categoria:

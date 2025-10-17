@@ -15,18 +15,6 @@ async function findAll(req: Request, res: Response) {
   }
 }
 
-async function findOne(req: Request, res: Response) {
-  try {
-    const id = Number.parseInt(req.params.id);
-    const categoria = await em.findOneOrFail(Categoria, { id });
-    res
-      .status(200)
-      .json({ message: 'found category', data: categoria });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
-  }
-}
-
 function sanitizeCategoriaInput(
   req: Request,
   res: Response,
@@ -81,4 +69,4 @@ async function remove(req: Request, res: Response) {
 }
 
 
-export { sanitizeCategoriaInput, findAll, findOne, add, update, remove };
+export { sanitizeCategoriaInput, findAll, add, update, remove };
