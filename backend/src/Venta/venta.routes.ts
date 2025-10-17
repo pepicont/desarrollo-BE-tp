@@ -159,6 +159,8 @@ ventaRouter.get('/', authenticateAdmin as any,findAll);
  *     summary: Obtener venta por ID
  *     tags:
  *       - Venta
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -211,10 +213,12 @@ ventaRouter.get('/', authenticateAdmin as any,findAll);
  *                     codActivacion:
  *                       type: string
  *                       example: 'ACT-NSJZN5HQZ9NW7W95'
+ *       404:
+ *         description: Venta no encontrada
  *       500:
- *         description: Venta no encontrada / Error del server
+ *         description: Error del server
  */
-ventaRouter.get('/:id', findOne);
+ventaRouter.get('/:id', authenticateCliente as any, findOne);
 
 
 export { ventaRouter };

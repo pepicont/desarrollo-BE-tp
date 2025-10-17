@@ -29,10 +29,13 @@ async function findOne(req: Request, res: Response) {
 		const venta = await em.findOneOrFail(Venta, { id },{populate: ['complemento','juego','servicio']});
 		res.status(200).json({ message: 'found venta', data: venta });
 	} catch (error: any) {
-		res.status(500).json({ message: error.message });
-	}
+    if (error.name === "NotFoundError") {
+      res.status(404).json({ message: "Venta no encontrada" });
+    } else {
+      res.status(500).json({ message: "Error interno del servidor" });
+    }
+  }
 }
-
 
 // NUEVA FUNCIÓN: Obtener ventas del usuario autenticado (sus compras)
 async function getMyVentas(req: AuthenticatedRequest, res: Response): Promise<void> {

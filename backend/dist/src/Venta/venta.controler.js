@@ -26,7 +26,12 @@ async function findOne(req, res) {
         res.status(200).json({ message: 'found venta', data: venta });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.name === "NotFoundError") {
+            res.status(404).json({ message: "Venta no encontrada" });
+        }
+        else {
+            res.status(500).json({ message: "Error interno del servidor" });
+        }
     }
 }
 // NUEVA FUNCIÓN: Obtener ventas del usuario autenticado (sus compras)
