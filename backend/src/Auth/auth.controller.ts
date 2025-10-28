@@ -233,22 +233,6 @@ class AuthController {
     }
   }
 
-  // Endpoint para verificar si el token es válido
-  async verifyToken(req: AuthenticatedRequest, res: Response) {
-    try {
-      res.status(200).json({ 
-        message: 'Token válido',
-        user: req.user 
-      });
-    } catch (error) {
-      console.error('Error en verificación:', error);
-      res.status(500).json({ 
-        message: 'Error interno del servidor' 
-      });
-    }
-  }
-
-
 }
 
 export { AuthController };
