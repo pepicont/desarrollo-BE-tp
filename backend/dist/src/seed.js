@@ -12,10 +12,6 @@ import { Resenia } from './Resenia/resenia.entity.js';
 import { FotoProducto } from './Producto/FotoProducto/fotoProducto.entity.js';
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
-// ==============================
-// Imágenes (URLs estáticas)
-// ==============================
-// NOTA de licencias: usamos Pexels (libre uso) para imágenes temáticas y Wikimedia para logos de servicios.
 // Helper para normalizar nombres para Cloudinary
 function normalizeCloudinaryName(nombre) {
     return nombre

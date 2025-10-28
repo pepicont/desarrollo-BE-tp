@@ -23,7 +23,6 @@ function sanitizeJuegoInput(req, res, next) {
         fechaLanzamiento: req.body.fechaLanzamiento,
         edadPermitida: req.body.edadPermitida
     };
-    //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
             delete req.body.sanitizedInput[key];
@@ -46,7 +45,7 @@ async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania", "fotos"] });
-        // Count number of sales for this game
+        // Cuenta cantidad de ventas del juego
         const ventasCount = await em.count(Venta, { juego: id });
         const serialized = JSON.parse(JSON.stringify(juego));
         serialized.ventasCount = ventasCount;

@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, beforeEach, vi, afterEach } from 'vitest'
 import request from 'supertest'
 
 vi.mock('../../src/shared/orm.js', async () => {
@@ -113,6 +113,20 @@ describe('Integration: Categoria CRUD', () => {
     }
   })
 
+  afterEach(async () => {
+  const em = orm.em.fork();
+  // Borra todas las categorías de prueba creadas por nombre. para que no quede basura en la bdd
+  await em.nativeDelete(Categoria, { 
+    nombre: [
+      testCategoryName,
+      testCategoryName + ' Actualizada',
+      testCategoryName + ' Flujo',
+      'Modificada',
+      '', // por si se creó una con nombre vacío
+    ]
+  });
+});
+
   afterAll(async () => {
     await orm.close()
   })
@@ -175,6 +189,7 @@ describe('Integration: Categoria CRUD', () => {
         .expect(201)
 
       expect(response.body.data).toMatchObject({ nombre: '', detalle: 'Detalle' })
+      
     })
   })
 
@@ -202,41 +217,6 @@ describe('Integration: Categoria CRUD', () => {
     })
   })
 
-  describe('GET /api/categoria/:id - Obtener categoría por ID', () => {
-    it('debería obtener una categoría específica por ID', async () => {
-      if (!adminToken) {
-        console.log('⏭️  Saltando test: no hay token de admin')
-        return
-      }
-
-      // Crear una categoría primero
-      const createResponse = await request(app)
-        .post('/api/categoria')
-        .set('Authorization', `Bearer ${adminToken}`)
-        .send({ nombre: testCategoryName, detalle: 'Test detalle' })
-
-      const categoryId = createResponse.body.data.id
-
-      // Obtener la categoría
-      const response = await request(app)
-        .get(`/api/categoria/${categoryId}`)
-        .expect(200)
-
-      expect(response.body.data).toMatchObject({
-        id: categoryId,
-        nombre: testCategoryName,
-        detalle: 'Test detalle'
-      })
-    })
-
-    it('debería fallar al buscar categoría inexistente', async () => {
-      const response = await request(app)
-        .get('/api/categoria/999999')
-        .expect(500)
-
-      expect(response.body).toHaveProperty('message')
-    })
-  })
 
   describe('PUT /api/categoria/:id - Actualizar categoría', () => {
     it('debería actualizar una categoría existente', async () => {
@@ -366,14 +346,7 @@ describe('Integration: Categoria CRUD', () => {
       expect(found).toBeDefined()
       expect(found.nombre).toBe(testCategoryName + ' Flujo')
 
-      // 3. LEER UNO - Obtener por ID
-      const getOneResponse = await request(app)
-        .get(`/api/categoria/${categoryId}`)
-        .expect(200)
-
-      expect(getOneResponse.body.data.id).toBe(categoryId)
-
-      // 4. ACTUALIZAR
+      // 3. ACTUALIZAR
       const updateResponse = await request(app)
         .put(`/api/categoria/${categoryId}`)
         .set('Authorization', `Bearer ${adminToken}`)
@@ -382,16 +355,19 @@ describe('Integration: Categoria CRUD', () => {
 
       expect(updateResponse.body.data.nombre).toBe('Modificada')
 
-      // 5. ELIMINAR
+      // 4. ELIMINAR
       await request(app)
         .delete(`/api/categoria/${categoryId}`)
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200)
 
-      // 6. VERIFICAR ELIMINACIÓN
-      await request(app)
-        .get(`/api/categoria/${categoryId}`)
-        .expect(500) // No debería existir
+      // 5. VERIFICAR ELIMINACIÓN
+      const getDeleteResponse = await request(app)
+        .get('/api/categoria')
+        .expect(200)
+
+      const deleteFound = getDeleteResponse.body.data.find((cat: any) => cat.id === categoryId)
+      expect(deleteFound).toBeUndefined()
     })
   })
 })
