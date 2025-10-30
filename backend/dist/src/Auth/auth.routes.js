@@ -142,9 +142,8 @@ authRouter.post('/login', authController.login.bind(authController));
  *         description: Error del servidor
  */
 authRouter.post('/register', authController.register.bind(authController));
-// GET /api/auth/verify - Verificar token (ruta protegida)  
+// GET /api/auth/verify - Verificar token (ruta protegida)
 /* http://localhost:3000/api/auth/verify */
-/*Esto lo que hace es verificar si el token JWT enviado en la cabecera de la petición es válido y, en caso afirmativo, recién ahí se ejecuta el verifyToken (RUTA PROTEGIDA) */
 /**
  * @swagger
  * /api/auth/verify:
@@ -196,10 +195,4 @@ authRouter.post('/register', authController.register.bind(authController));
  *         description: Error del servidor
  */
 authRouter.get('/verify', authenticateToken, authController.verifyToken.bind(authController));
-/* Flujo completo de una petición:
-1. Cliente envía: POST /api/auth/login
-2. Express busca: authRouter.post('/login', ...)
-3. Express ejecuta: authController.login()
-4. Controller procesa y responde
-*/
 //# sourceMappingURL=auth.routes.js.map
