@@ -43,19 +43,19 @@ describe('moderateText', () => {
   })
 
   it('debe permitir contenido cuando OPENAI_API_KEY no está configurada', async () => {
-    // Arrange
+    
     delete process.env.OPENAI_API_KEY
 
-    // Act
+  
     const resultado = await moderateText('Este es un texto normal')
 
-    // Assert
+   
     expect(resultado).toEqual({ allowed: true, reasons: [] })
     expect(mockCreate).not.toHaveBeenCalled()
   })
 
   it('debe bloquear contenido cuando OpenAI responde flagged=true', async () => {
-    // Arrange
+   
     process.env.OPENAI_API_KEY = 'sk-test-key'
     mockCreate.mockResolvedValue({
       results: [{
@@ -67,10 +67,10 @@ describe('moderateText', () => {
       }]
     })
 
-    // Act
+   
     const resultado = await moderateText('texto ofensivo')
 
-    // Assert
+  
     expect(resultado).toEqual({ 
       allowed: false, 
       reasons: ['hate'] 
@@ -82,7 +82,7 @@ describe('moderateText', () => {
   })
 
   it('debe permitir contenido cuando OpenAI responde flagged=false', async () => {
-    // Arrange
+   
     process.env.OPENAI_API_KEY = 'sk-test-key'
     mockCreate.mockResolvedValue({
       results: [{
@@ -94,10 +94,10 @@ describe('moderateText', () => {
       }]
     })
 
-    // Act
+ 
     const resultado = await moderateText('texto normal')
 
-    // Assert
+  
     expect(resultado).toEqual({ 
       allowed: true, 
       reasons: [] 
@@ -105,29 +105,29 @@ describe('moderateText', () => {
   })
 
   it('debe permitir contenido por fallback cuando OpenAI da error', async () => {
-    // Arrange
+ 
     process.env.OPENAI_API_KEY = 'sk-test-key'
     mockCreate.mockRejectedValue(new Error('API Error'))
 
-    // Act
+
     const resultado = await moderateText('cualquier texto')
 
-    // Assert
+
     expect(resultado).toEqual({ allowed: true, reasons: [] })
   })
 
   it('debe usar el modelo personalizado cuando está configurado', async () => {
-    // Arrange
+   
     process.env.OPENAI_API_KEY = 'sk-test-key'
     process.env.OPENAI_MODERATION_MODEL = 'text-moderation-stable'
     mockCreate.mockResolvedValue({
       results: [{ flagged: false, categories: {} }]
     })
 
-    // Act
+  
     await moderateText('texto de prueba')
 
-    // Assert
+   
     expect(mockCreate).toHaveBeenCalledWith({
       model: expect.any(String),
       input: 'texto de prueba'

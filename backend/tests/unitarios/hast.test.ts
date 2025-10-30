@@ -18,14 +18,14 @@ describe('Usuario Entity - Hasheo de Contraseñas', () => {
   })
 
   it('debe hashear la contraseña al crear el usuario', async () => {
-    // Arrange
+    
     const contraseniaPlana = 'miPasswordSegura123'
     usuario.contrasenia = contraseniaPlana
 
-    // Act
+    
     await usuario.hashPasswordOnCreate()
 
-    // Assert
+   
     expect(usuario.contrasenia).not.toBe(contraseniaPlana)
     expect(usuario.contrasenia.startsWith('$2b$')).toBe(true)
     const match = await bcrypt.compare(contraseniaPlana, usuario.contrasenia)
@@ -33,17 +33,17 @@ describe('Usuario Entity - Hasheo de Contraseñas', () => {
   })
 
   it('debe hashear la contraseña al actualizar si cambió', async () => {
-    // Arrange
+   
     const contraseniaOriginal = 'original123'
     usuario.contrasenia = contraseniaOriginal
     await usuario.hashPasswordOnCreate()
     const nuevaContrasenia = 'nuevaPassword456'
     usuario.contrasenia = nuevaContrasenia
 
-    // Act
+   
     await usuario.hashPasswordOnUpdate()
 
-    // Assert
+   
     expect(usuario.contrasenia).not.toBe(nuevaContrasenia)
     expect(usuario.contrasenia.startsWith('$2b$')).toBe(true)
     const match = await bcrypt.compare(nuevaContrasenia, usuario.contrasenia)
@@ -51,15 +51,15 @@ describe('Usuario Entity - Hasheo de Contraseñas', () => {
   })
 
   it('no debe volver a hashear si la contraseña ya está hasheada', async () => {
-    // Arrange
+  
     const contraseniaPlana = 'yaHasheada123'
     usuario.contrasenia = await bcrypt.hash(contraseniaPlana, 10)
     const contraseniaHasheadaAntes = usuario.contrasenia
 
-    // Act
+  
     await usuario.hashPasswordOnUpdate()
 
-    // Assert
+    
     expect(usuario.contrasenia).toBe(contraseniaHasheadaAntes)
   })
 })

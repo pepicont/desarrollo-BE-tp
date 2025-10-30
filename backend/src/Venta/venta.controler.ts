@@ -37,7 +37,7 @@ async function findOne(req: Request, res: Response) {
   }
 }
 
-// NUEVA FUNCIÓN: Obtener ventas del usuario autenticado (sus compras)
+// Obtener ventas del usuario autenticado (sus compras)
 async function getMyVentas(req: AuthenticatedRequest, res: Response): Promise<void> {
 	try {
 		const userId = req.user?.id;

@@ -34,7 +34,7 @@ async function findOne(req, res) {
         }
     }
 }
-// NUEVA FUNCIÓN: Obtener ventas del usuario autenticado (sus compras)
+// Obtener ventas del usuario autenticado (sus compras)
 async function getMyVentas(req, res) {
     try {
         const userId = req.user?.id;
