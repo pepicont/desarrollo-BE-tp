@@ -98,11 +98,8 @@ async function remove(req: Request, res: Response) {
     if (servicioIds.length > 0) {
       await em.nativeDelete('Venta', { servicio: { $in: servicioIds } });
     }
-
-    // Eliminar todos los productos asociados
-    await em.removeAndFlush([...compania.juegos, ...compania.complementos, ...compania.servicios]);
     
-    // Ahora eliminar la compañía
+    // Ahora eliminar la compañía que tmb elimina productos por cascade
     await em.removeAndFlush(compania);
     
     res.status(200).send({ message: 'Compañía y todos sus productos eliminados correctamente' });
