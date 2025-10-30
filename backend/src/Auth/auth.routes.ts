@@ -147,3 +147,57 @@ authRouter.post('/login', (authController.login as any).bind(authController));
  */
 authRouter.post('/register', (authController.register as any).bind(authController));
 
+
+// GET /api/auth/verify - Verificar token (ruta protegida)
+/* http://localhost:3000/api/auth/verify */
+/**
+ * @swagger
+ * /api/auth/verify:
+ *   get:
+ *     summary: Verificar si el token JWT es válido
+ *     tags:
+ *       - Auth
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Token válido"
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 130
+ *                     mail:
+ *                       type: string
+ *                       example: "stefano.repositorioutn@gmail.com"
+ *                     nombre:
+ *                       type: string
+ *                       example: "yoooo"
+ *                     tipoUsuario:
+ *                       type: string
+ *                       example: "cliente"
+ *                     urlFoto:
+ *                       type: string
+ *                       format: uri
+ *                       example: "https://res.cloudinary.com/dbrfi383s/image/upload/usuario/yoda.jpg"
+ *                     iat:
+ *                       type: integer
+ *                       example: 1759343066
+ *                     exp:
+ *                       type: integer
+ *                       example: 1759947866
+ *       401:
+ *         description: Token inválido o no proporcionado
+ *       500:
+ *         description: Error del servidor
+ */
+authRouter.get('/verify', authenticateToken as any, (authController.verifyToken as any).bind(authController));
