@@ -10,8 +10,6 @@ export const categoriaRouter = Router();
  *     summary: Obtiene todas las categorías
  *     tags:
  *       - Categoría
- *    security:
- *     - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de categorías
@@ -27,14 +25,10 @@ export const categoriaRouter = Router();
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Categoria'
- *       401:
- *         description: No autorizado
- *       403:
- *         description: Prohibido, solo administradores pueden acceder a esta ruta
  *       500:
  *         description: Error del servidor
  */
-categoriaRouter.get('/', authenticateAdmin, findAll);
+categoriaRouter.get('/', findAll);
 /**
  * @swagger
  * /api/categoria:
