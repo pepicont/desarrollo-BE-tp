@@ -21,6 +21,7 @@ function sanitizeServicioInput(req, res, next) {
         categorias,
         compania: req.body.compania
     };
+    //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
             delete req.body.sanitizedInput[key];
@@ -49,12 +50,7 @@ async function findOne(req, res) {
         res.status(200).json({ message: "found service", data: serialized });
     }
     catch (error) {
-        if (error.name === "NotFoundError") {
-            res.status(404).json({ message: "Servicio no encontrado" });
-        }
-        else {
-            res.status(500).json({ message: "Error interno del servidor" });
-        }
+        res.status(500).json({ message: error.message });
     }
 }
 async function add(req, res) {
@@ -69,6 +65,7 @@ async function add(req, res) {
         await em.flush(); // para obtener el id
         // Subir fotos y guardar en FotoProducto
         const fotoPrincipalNombre = req.body.fotoPrincipal;
+        let fotosCreadas = [];
         for (const file of fotosFiles) {
             const url = await new Promise((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream({ folder: "servicio" }, (error, result) => {
@@ -86,6 +83,11 @@ async function add(req, res) {
             });
             // Asociar la foto al servicio
             servicio.fotos.add(foto);
+            fotosCreadas.push(foto);
+        }
+        // Si no se marcó ninguna como principal, marcar la primera
+        if (fotosCreadas.length > 0 && !fotosCreadas.some(f => f.esPrincipal)) {
+            fotosCreadas[0].esPrincipal = true;
         }
         await em.flush();
         res.status(201).json({ message: "servicio created", data: servicio });
@@ -164,9 +166,9 @@ async function update(req, res) {
                     break;
                 }
             }
-            // Si no se encuentra, marcar la última agregada como principal
+            // Si no se encuentra, marcar la primera agregada como principal
             if (!principalFoto && servicioToUpdate.fotos.length > 0) {
-                principalFoto = servicioToUpdate.fotos[servicioToUpdate.fotos.length - 1];
+                principalFoto = servicioToUpdate.fotos[0];
             }
             if (principalFoto) {
                 principalFoto.esPrincipal = true;

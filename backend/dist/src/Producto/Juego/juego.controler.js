@@ -23,6 +23,7 @@ function sanitizeJuegoInput(req, res, next) {
         fechaLanzamiento: req.body.fechaLanzamiento,
         edadPermitida: req.body.edadPermitida
     };
+    //more checks here
     Object.keys(req.body.sanitizedInput).forEach((key) => {
         if (req.body.sanitizedInput[key] === undefined) {
             delete req.body.sanitizedInput[key];
@@ -45,19 +46,14 @@ async function findOne(req, res) {
     try {
         const id = Number.parseInt(req.params.id);
         const juego = await em.findOneOrFail(Juego, { id }, { populate: ["categorias", "compania", "fotos"] });
-        // Cuenta cantidad de ventas del juego
+        // Count number of sales for this game
         const ventasCount = await em.count(Venta, { juego: id });
         const serialized = JSON.parse(JSON.stringify(juego));
         serialized.ventasCount = ventasCount;
         res.status(200).json({ message: "found game", data: serialized });
     }
     catch (error) {
-        if (error.name === "NotFoundError") {
-            res.status(404).json({ message: "Juego no encontrado" });
-        }
-        else {
-            res.status(500).json({ message: "Error interno del servidor" });
-        }
+        res.status(500).json({ message: error.message });
     }
 }
 async function add(req, res) {
@@ -72,6 +68,7 @@ async function add(req, res) {
         await em.flush(); // para obtener el id
         // Subir fotos y guardar en FotoProducto
         const fotoPrincipalNombre = req.body.fotoPrincipal;
+        let fotosCreadas = [];
         for (const file of fotosFiles) {
             const url = await new Promise((resolve, reject) => {
                 const stream = cloudinary.uploader.upload_stream({ folder: "juego" }, (error, result) => {
@@ -89,6 +86,11 @@ async function add(req, res) {
             });
             // Asociar la foto al juego
             juego.fotos.add(foto);
+            fotosCreadas.push(foto);
+        }
+        // Si no se marcó ninguna como principal, marcar la primera
+        if (fotosCreadas.length > 0 && !fotosCreadas.some(f => f.esPrincipal)) {
+            fotosCreadas[0].esPrincipal = true;
         }
         await em.flush();
         res.status(201).json({ message: "game created", data: juego });
@@ -167,9 +169,9 @@ async function update(req, res) {
                     break;
                 }
             }
-            // Si no se encuentra, marcar la última agregada como principal
+            // Si no se encuentra, marcar la primera agregada como principal
             if (!principalFoto && juegoToUpdate.fotos.length > 0) {
-                principalFoto = juegoToUpdate.fotos[juegoToUpdate.fotos.length - 1];
+                principalFoto = juegoToUpdate.fotos[0];
             }
             if (principalFoto) {
                 principalFoto.esPrincipal = true;
