@@ -172,7 +172,6 @@ function makeCode(prefix: string) {
 }
 
 async function main() {
-  console.log('Seeding: reset schema...')
   await resetSchema()
 
   const em = orm.em.fork()
@@ -275,7 +274,7 @@ async function main() {
   admin.tipoUsuario = 'admin'
   admin.urlFoto = 'https://res.cloudinary.com/dbrfi383s/image/upload/usuario/avatar_cabra.jpg'
   await em.persistAndFlush([admin])
-  console.log(`Usuarios: ${usuarios.length}`)
+  
 
   // Juegos (>=30)
   const gameTitles = [
@@ -300,7 +299,7 @@ async function main() {
     juegos.push(j)
   }
   await em.persistAndFlush(juegos)
-  console.log(`Juegos: ${juegos.length}`)
+  
 
   // Fotos para Juegos (1–3, principal la primera); fallback temático si no hay mapeo
   const fotosJuegos: FotoProducto[] = []
@@ -335,7 +334,7 @@ async function main() {
     servicios.push(s)
   }
   await em.persistAndFlush(servicios)
-  console.log(`Servicios: ${servicios.length}`)
+  
 
   // Fotos para Servicios (1–2 según mapeo); mantenemos los logos curados
   const fotosServicios: FotoProducto[] = []
@@ -374,7 +373,7 @@ async function main() {
     complementos.push(c)
   }
   await em.persistAndFlush(complementos)
-  console.log(`Complementos: ${complementos.length}`)
+  
 
   // Fotos para Complementos (1–2 desde mapeo Pexels; fallback temático si falta)
   const fotosComplementos: FotoProducto[] = []
@@ -409,7 +408,7 @@ async function main() {
     ventas.push(v)
   }
   await em.persistAndFlush(ventas)
-  console.log(`Ventas: ${ventas.length}`)
+  
 
   // Reseñas: crear para ~60% de ventas, con variedad realista
   const reviewTexts: Record<number, string[]> = {
@@ -471,9 +470,8 @@ async function main() {
     resenias.push(r)
   }
   await em.persistAndFlush(resenias)
-  console.log(`Reseñas: ${resenias.length}`)
-
-  console.log('Seed completo.')
+  
+  
 }
 
 main()

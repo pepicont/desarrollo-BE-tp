@@ -7,14 +7,10 @@ export function isValidEmail(email) {
 }
 class AuthController {
     async login(req, res) {
-        console.log(' Login request recibido:', req.body);
-        console.log(' JWT_SECRET está configurado:', !!process.env.JWT_SECRET);
         try {
             const { mail, contrasenia } = req.body;
-            console.log(' Mail:', mail, ' Password length:', contrasenia ? contrasenia.length : 'undefined');
             // Validar que se enviaron los datos requeridos
             if (!mail || !contrasenia) {
-                console.log(' Faltan datos requeridos');
                 return res.status(400).json({
                     message: 'Email y contraseña son requeridos'
                 });

@@ -26,7 +26,6 @@ export async function moderateText(text: string): Promise<ModerationResult> {
   }
 
   try {
-    console.log('[moderation] calling OpenAI Moderations API. length=', text?.length ?? 0)
     const resp = await openai.moderations.create({
       model: OPENAI_MODERATION_MODEL,
       input: text,
@@ -37,7 +36,6 @@ export async function moderateText(text: string): Promise<ModerationResult> {
     const flagged: boolean = Boolean(result?.flagged)
     const categories = result?.categories ?? {}
     const reasons = Object.keys(categories).filter((k) => categories[k])
-    console.log('[moderation] result:', { flagged, reasons })
     return { allowed: !flagged, reasons }
   } catch (err) {
     console.warn('[moderation] error al llamar a OpenAI, permitiendo contenido por fallback (modo tolerante):', err)

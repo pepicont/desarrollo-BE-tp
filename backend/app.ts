@@ -74,6 +74,4 @@ await syncSchema() //nunca en producción. cambia los datos del schema según nu
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(` Server running on http://localhost:${PORT}/`)
-  console.log(` [moderation] enabled=${MODERATION_ENABLED} model=${process.env.OPENAI_MODERATION_MODEL || 'omni-moderation-latest'}`)
 })

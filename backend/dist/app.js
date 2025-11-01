@@ -15,7 +15,6 @@ import { mailRouter } from './src/Mail/mail.routes.js';
 import 'reflect-metadata';
 import { orm, syncSchema } from './src/shared/orm.js';
 import { RequestContext } from '@mikro-orm/core';
-import { MODERATION_ENABLED } from './src/shared/moderation.js';
 import { swaggerUi, swaggerSpec } from './swagger.js';
 const app = express();
 // CORS
@@ -62,7 +61,5 @@ app.use((_, res) => {
 await syncSchema(); //nunca en producción. cambia los datos del schema según nuestro código automáticamente
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(` Server running on http://localhost:${PORT}/`);
-    console.log(` [moderation] enabled=${MODERATION_ENABLED} model=${process.env.OPENAI_MODERATION_MODEL || 'omni-moderation-latest'}`);
 });
 //# sourceMappingURL=app.js.map

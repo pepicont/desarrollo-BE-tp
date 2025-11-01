@@ -227,7 +227,7 @@ export async function startMpPreference(req: AuthenticatedRequest, res: Response
     console.warn('MP auto_return forced but success URL is not https; Mercado Pago podría rechazarlo')
   }
     
-  console.log('MP start pref:', { userId, tipo, id, title, unit_price, FRONTEND_BASE_URL, BACKEND_BASE_URL, WEBHOOK_BASE_URL, notificationUrl, useAutoReturn, back_urls })
+  
     const result = await preference.create({
       body: {
         items: [
@@ -278,7 +278,7 @@ export async function mpWebhook(req: Request, res: Response) {
 
     const isPayment = typeOrTopic === 'payment' || (typeof action === 'string' && action.startsWith('payment.'))
     if (!isPayment || !paymentId) {
-      console.log('MP webhook ignored:', { typeOrTopic, paymentId, query: req.query, body: req.body })
+      
       return res.status(200).send('ok')
     }
   const mpClient = getMpClient()
@@ -292,7 +292,7 @@ export async function mpWebhook(req: Request, res: Response) {
 
     const payment = new Payment(mpClient)
     const info = await payment.get({ id: paymentId })
-    console.log('MP payment info:', { id: paymentId, status: (info as any).status, metadata: (info as any).metadata })
+    
     if (processedPayments.has(paymentId) || paymentVentaMap.has(paymentId)) {
       inFlight.delete(paymentId)
       return res.status(200).send('ok')
@@ -314,7 +314,7 @@ export async function mpWebhook(req: Request, res: Response) {
         await em.persistAndFlush(venta)
         processedPayments.add(paymentId)
         if (venta.id) paymentVentaMap.set(paymentId, venta.id)
-        console.log('Venta creada desde webhook:', { paymentId, userId, tipo, productId, ventaId: venta.id })
+        
       } else {
         console.warn('MP webhook approved but metadata incomplete:', { metadata: md })
       }
@@ -360,7 +360,7 @@ export async function mpSuccessCallback(req: Request, res: Response) {
       await em.persistAndFlush(venta)
       processedPayments.add(paymentId)
       if (venta.id) paymentVentaMap.set(paymentId, venta.id)
-      console.log('Venta creada desde success callback:', { paymentId, userId, tipo, productId, ventaId: venta.id })
+      
     }
     {
       const ventaId = paymentVentaMap.get(paymentId)
